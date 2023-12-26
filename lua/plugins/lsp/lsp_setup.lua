@@ -1,4 +1,17 @@
+local mlsp_server_names = { "typos_lsp", "bashls", "biome", "html", "cssls", "clangd",
+	"marksman", "texlab", "lua_ls", "pyright", "vimls", "yamlls", }
+local linters = { "selene", }
+local formatters = { "stylua", "black", }
+local others = {}
+
+local mason_nonlsp_pkgs = vim.tbl_extend( "keep", linters, formatters, others)
+local mason_all_pkgs = vim.tbl_extend( "keep", mlsp_server_names, mason_nonlsp_pkgs)
+
 local lspconfig = require('lspconfig')
+
+local lsp_defaults = lspconfig.util.default_config
+lsp_defaults.capabilities = vim.tbl_deep_extend('force', lsp_defaults.capabilities, require('cmp_nvim_lsp').default_capabilities())
+
 local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
 
 vim.api.nvim_create_autocmd('LspAttach', {
@@ -25,15 +38,23 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
 local default_setup = function(server)
   lspconfig[server].setup({
-    capabilities = lsp_capabilities,
+    -- capabilities = lsp_capabilities,
   })
 end
 
 require('mason').setup({})
-require('mason-lspconfig').setup({
-  ensure_installed = {},
-  handlers = {default_setup},
-})
+-- require('mason-lspconfig').setup({
+--   ensure_installed = mlsp_server_names,
+--   handlers = {default_setup},
+-- })
+require('mason-lspconfig').setup()
+
+-- Set up each server in a loop
+for _, lsp in ipairs(mlsp_server_names) do
+	lspconfig[lsp].setup {
+		on_attach = on_attach
+	}
+end
 
 local cmp = require('cmp')
 
