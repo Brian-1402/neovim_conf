@@ -111,7 +111,6 @@ return {
 			"williamboman/mason-lspconfig.nvim",
 			"williamboman/mason.nvim",
 			{ "folke/neodev.nvim", config = true, },
-			"SmiteshP/nvim-navic",
 		},
 
 		config = function()
@@ -137,13 +136,23 @@ return {
 
 			lsp_settings()
 
+			-- local navic_on_attach = function(client, bufnr)
+			-- 	if client.server_capabilities.documentSymbolProvider then
+			-- 		navic.attach(client, bufnr)
+			-- 	end
+			-- end
+
 			local default_setup = function(server)
-				lspconfig[server].setup({ })
+				lspconfig[server].setup({
+					-- on_attach = navic_on_attach,
+				})
 			end
 
 			require('mason-lspconfig').setup({
 			ensure_installed = mason_all_pkgs,
-			handlers = {default_setup},
+			handlers = {
+				default_setup,
+			},
 			})
 
 			attach_lsp_to_existing_buffers()
@@ -167,10 +176,4 @@ return {
 		config = true,
 	},
 
-	{
-		"SmiteshP/nvim-navic",
-		-- event = "VeryLazy",
-		lazy = true,
-		dependencies = {"neovim/nvim-lspconfig",},
-	},
 }

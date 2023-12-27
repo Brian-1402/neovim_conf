@@ -1,15 +1,14 @@
 	-- Scrollbar
 return {
 	"petertriho/nvim-scrollbar",
-	event = "VeryLazy",
-	priority = 100,
+	event = { "UIEnter", "VeryLazy",},
 
 	dependencies = {
 		-- hlslens for scrollbar
 		{
 			"kevinhwang91/nvim-hlslens",
 			config = function()
-				-- require('hlslens').setup() is not required
+				require('hlslens').setup() -- is not required
 				require("scrollbar.handlers.search").setup({
 					override_lens = function() end,
 				})

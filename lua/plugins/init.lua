@@ -1,5 +1,3 @@
--- This file can be loaded by calling `lua require('plugins')` from your init.vim
-
 return {
 	-- Vimscript plugins
 
@@ -86,36 +84,35 @@ return {
 	},
 
 	{
-		'dense-analysis/ale',
-		enabled = false,
-		ft = { 'c', 'cpp', 'markdown', 'vim', 'tex'},
-		cmd = 'ALEEnable',
-		config = function() vim.cmd([[ALEEnable]]) end,
+		'airblade/vim-rooter', -- Changes vim directory to project directory
+		event = "VeryLazy",
 	},
 
-	-- Lua plugins
-
 	{
-		"debugloop/telescope-undo.nvim",
+		'akinsho/bufferline.nvim',
 		enabled = false,
-		dependencies = { -- note how they're inverted to above example
-			"nvim-telescope/telescope.nvim",
-				dependencies = { "nvim-lua/plenary.nvim" },
-			},
-		keys = {
-			{ -- lazy style key map
-				"<leader>u",
-				"<cmd>Telescope undo<cr>",
-				desc = "undo history",
-			},
+		version = "*", dependencies = 'nvim-tree/nvim-web-devicons',
+		event = "VeryLazy",
+		opts = {
+			-- diagnostics = "nvim_lsp",
 		},
-		config = function(_, opts)
-			-- Calling telescope's setup from multiple specs does not hurt, it will happily merge the
-			-- configs for us. We won't use data, as everything is in it's own namespace (telescope
-			-- defaults, as well as each extension).
-			require("telescope").setup(opts)
-			require("telescope").load_extension("undo")
-		end,
+		config = function (_, opts)
+			vim.opt.termguicolors = true
+			require("bufferline").setup(opts)
+		end
+	},
+
+	-- Coding usage tracking
+	{
+		'wakatime/vim-wakatime',
+		event = "VeryLazy",
+	},
+
+	-- To improve the UI used by other plugins like telescope etc.
+	{
+		'stevearc/dressing.nvim',
+		event = "VeryLazy",
+		opts = {},
 	},
 
 	{
@@ -128,8 +125,7 @@ return {
 	-- Status line plugin
 	{
 		'nvim-lualine/lualine.nvim',
-		event = "VeryLazy",
-		priority = 100,
+		event = {"UIEnter", "VeryLazy"},
 		dependencies = { 'nvim-tree/nvim-web-devicons', lazy = true, },
 		opts = {
 			options = { theme = 'nightfly' },
