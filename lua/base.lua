@@ -109,9 +109,6 @@ vim.o.shiftwidth = 4
 
 vim.o.encoding = "utf-8"
 
--- HardTime customizations
-vim.g.hardtime_default_on = 0 -- Set it to be off by default
-
 -- vimtex config
 vim.g.tex_flavor = 'latex'
 vim.g.vimtex_quickfix_mode = 0
@@ -170,10 +167,13 @@ vim.g.vim_json_conceal = 0
 -- vim.g.markdown_syntax_conceal = 0
 
 ---- To prevent pasting from being messed up by autoindent, etc
--- vim.o.pastetoggle = "<F3>"
+vim.o.pastetoggle = "zP"
 vim.keymap.set("n", "<Leader>v", ':set paste<CR>"+p:set nopaste<CR>')
--- nnoremap <silent> <leader>v ":set paste<CR>--+p:set nopaste<CR>"
 
+-- For setting ctrl backspace remap in insert mode for Neovim-qt
+vim.keymap.set('i', '<C-BS>', '<C-w>', { noremap = true, silent = true })
+
+-- Setting leader key as Space
 vim.g.mapleader = ' '
 
 
@@ -185,3 +185,5 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
+-- For configuring python
+vim.g.python3_host_prog = "C:/Users/brian/AppData/Local/Programs/Python/Python312/python.exe"

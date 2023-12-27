@@ -21,7 +21,11 @@ return {
 
 	{
 		'takac/vim-hardtime', -- Puts time delay for hjkl keys
+		enabled = false,
 		event = "VeryLazy",
+		config = function()
+			vim.g.hardtime_default_on = 0 -- Set it to be off by default
+		end,
 	},
 
 	{
@@ -35,13 +39,12 @@ return {
 
 	{
 		'tpope/vim-fugitive', -- Git support
-		event = "VeryLazy",
+		cmd = "Git",
 	},
 
 	{
 		'tpope/vim-rhubarb', -- GitHub support
-		enabled = false,
-		event = "VeryLazy",
+		cmd = "GBrowse",
 	},
 
 	{
@@ -74,7 +77,6 @@ return {
 
 	{
 		'tmhedberg/SimpylFold', -- Folds for python
-		event = "VeryLazy",
 		ft = {'python'},
 	},
 
@@ -95,6 +97,7 @@ return {
 
 	{
 		"debugloop/telescope-undo.nvim",
+		enabled = false,
 		dependencies = { -- note how they're inverted to above example
 			"nvim-telescope/telescope.nvim",
 				dependencies = { "nvim-lua/plenary.nvim" },
@@ -117,7 +120,6 @@ return {
 
 	{
 		'iamcco/markdown-preview.nvim',
-		event = "VeryLazy",
 		build = 'cd app && npm install',
 		init = function() vim.g.mkdp_filetypes = { 'markdown' } end,
 		ft = { 'markdown' },
@@ -161,15 +163,6 @@ return {
 			codewindow.apply_default_keybinds()
 			vim.api.nvim_set_hl(0, 'CodewindowBorder', {fg = '#012b4d'}) -- Doesn't seem to work
 		end
-	},
-
-	-- GitHub Copilot support
-	{
-		"zbirenbaum/copilot.lua",
-		enabled = false,
-		cmd = "Copilot",
-		event = "InsertEnter",
-		config = true,
 	},
 
 	{

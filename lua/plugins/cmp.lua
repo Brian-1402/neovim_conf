@@ -7,20 +7,24 @@ end
 return {
 	{
 		'hrsh7th/nvim-cmp',
-		event = { "InsertEnter", "VeryLazy"},
+		event = { "InsertEnter" },
 		dependencies = {
 			'neovim/nvim-lspconfig',
 			'saadparwaiz1/cmp_luasnip',
 			'hrsh7th/cmp-buffer',
 			'hrsh7th/cmp-path',
-			'hrsh7th/cmp-cmdline'
+			'hrsh7th/cmp-cmdline',
+			'onsails/lspkind.nvim',
 		},
+
 		config = function()
 			local cmp = require('cmp')
 			local luasnip = require("luasnip")
+			local lspkind = require("lspkind")
 
 			cmp.setup {
 				sources = {
+					{ name = "copilot", group_index = 2 },
 					{name = 'nvim_lsp'}, --mention other additional sources like copilot, etc
 					{name = 'luasnip'},
 					{name = 'buffer'},
@@ -43,7 +47,7 @@ return {
 					-- end),
 
 					['<Tab>'] = cmp.mapping(function(fallback)
-						if cmp.visible() then
+						if cmp.visible() and has_words_before() then
 							cmp.select_next_item({behavior = 'insert'}) -- Select and also insert entry
 						elseif luasnip.expand_or_jumpable() then
 							luasnip.expand_or_jump()
@@ -65,11 +69,45 @@ return {
 					end, { "i", "s" }),
 
 					-- confirm selection
-					['<CR>'] = cmp.mapping.confirm({select = false}),
+					['<CR>'] = cmp.mapping.confirm({
+						behavior = cmp.ConfirmBehavior.Replace,
+						select = false,
+					}),
 
 					-- cancel completion
 					['<S-Esc>'] = cmp.mapping.abort(),
 				}),
+
+				formatting = {
+					expandable_indicator = true,
+					fields = {'abbr', 'kind', 'menu'},
+					format = lspkind.cmp_format({
+						mode = "symbol",
+						max_width = 50,
+						ellipsis_char = '...',
+						symbol_map = { Copilot = "" }
+					})
+				},
+
+				sorting = {
+					priority_weight = 2,
+					comparators = {
+						require("copilot_cmp.comparators").prioritize,
+
+						-- Below is the default comparator list and order for nvim-cmp
+						cmp.config.compare.offset,
+						-- cmp.config.compare.scopes, --this is commented in nvim-cmp too
+						cmp.config.compare.exact,
+						cmp.config.compare.score,
+						cmp.config.compare.recently_used,
+						cmp.config.compare.locality,
+						cmp.config.compare.kind,
+						cmp.config.compare.sort_text,
+						cmp.config.compare.length,
+						cmp.config.compare.order,
+					},
+				},
+
 				snippet = {
 					expand = function(args)
 						require('luasnip').lsp_expand(args.body)
@@ -81,9 +119,30 @@ return {
 
 	{
 		'saadparwaiz1/cmp_luasnip',
-		event = "VeryLazy",
+		lazy = true,
 		dependencies = {
 			{'L3MON4D3/LuaSnip', build = "make install_jsregexp",},
 		},
 	},
+
+	{
+		"zbirenbaum/copilot-cmp",
+		lazy = true,
+		config = function ()
+			require("copilot_cmp").setup()
+		end
+	},
+
+	{
+		"zbirenbaum/copilot.lua",
+		cmd = "Copilot",
+		event = "InsertEnter",
+		config = function()
+		require("copilot").setup({
+			suggestion = { enabled = false },
+			panel = { enabled = false },
+		})
+		end,
+	},
+
 }
