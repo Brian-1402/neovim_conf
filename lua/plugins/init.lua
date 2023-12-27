@@ -9,6 +9,12 @@ return {
 	}, -- Color theme
 
 	{
+		"oxfist/night-owl.nvim", lazy = false, priority = 1000,
+		config = function() vim.cmd.colorscheme("night-owl") end,
+		enabled = false,
+	},
+
+	{
 		'dstein64/vim-startuptime', -- Plugin to measure startup times
 		cmd = "StartupTime",
 	},
@@ -175,5 +181,8 @@ return {
 		},
 		cmd = { "LazyGit", "LazyGitConfig", "LazyGitCurrentFile", "LazyGitFilter", "LazyGitFilterCurrentFile" },
 	},
+	
+	{'VonHeikemen/lsp-zero.nvim', branch = 'v3.x'},
+	{'L3MON4D3/LuaSnip'},
 }
 

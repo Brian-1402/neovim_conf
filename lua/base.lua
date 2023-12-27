@@ -153,7 +153,7 @@ vim.opt.listchars = {
 
 -- line wrap settings
 -- Activate wrapping
-vim.o.wrap = true
+vim.o.wrap = false
 -- Break by word and not character
 vim.o.linebreak = true
 -- set visual indents when long lines are wrapped
