@@ -5,8 +5,14 @@ return {
 
 	{
 		'bluz71/vim-nightfly-colors', name = 'nightfly', lazy = false, priority = 1000,
-		config = function () vim.cmd.colorscheme("nightfly") end,
+		config = function() vim.cmd.colorscheme("nightfly") end,
 	}, -- Color theme
+
+	{
+		"oxfist/night-owl.nvim", lazy = false, priority = 1000,
+		config = function() vim.cmd.colorscheme("night-owl") end,
+		enabled = false,
+	},
 
 	{
 		'dstein64/vim-startuptime', -- Plugin to measure startup times
@@ -121,10 +127,11 @@ return {
 	{
 		'nvim-lualine/lualine.nvim',
 		event = "VeryLazy",
+		priority = 100,
 		dependencies = { 'nvim-tree/nvim-web-devicons', lazy = true, },
-		config = function()
-			require('lualine').setup {options = { theme = 'nightfly' } }
-		end
+		opts = {
+			options = { theme = 'nightfly' },
+		},
 	},
 
 	-- Neovim interface in browser text boxes
@@ -162,7 +169,7 @@ return {
 		enabled = false,
 		cmd = "Copilot",
 		event = "InsertEnter",
-		config = function() require("copilot").setup({}) end,
+		config = true,
 	},
 
 	{

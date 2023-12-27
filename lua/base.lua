@@ -135,8 +135,12 @@ end
 -- Highlight matching parentheses
 vim.o.showmatch = true
 
----- disable startup message
+-- disable startup message
 vim.opt.shortmess:append({ I = true })
+
+-- Setting up spelling correction
+-- vim.opt.spell = true
+-- vim.opt.spelllang = { 'en_us' }
 
 -- show invisible characters
 vim.o.list = true
@@ -153,7 +157,7 @@ vim.opt.listchars = {
 
 -- line wrap settings
 -- Activate wrapping
-vim.o.wrap = true
+vim.o.wrap = false
 -- Break by word and not character
 vim.o.linebreak = true
 -- set visual indents when long lines are wrapped
@@ -171,3 +175,13 @@ vim.keymap.set("n", "<Leader>v", ':set paste<CR>"+p:set nopaste<CR>')
 -- nnoremap <silent> <leader>v ":set paste<CR>--+p:set nopaste<CR>"
 
 vim.g.mapleader = ' '
+
+
+vim.api.nvim_create_autocmd("FileType", {
+  group = vim.api.nvim_create_augroup("WrapText", { clear = true }),
+  pattern = { "text" },
+  callback = function()
+	  vim.o.wrap = true
+  end,
+})
+

@@ -3,6 +3,7 @@
 return {
 	"lukas-reineke/indent-blankline.nvim",
 	event = "VeryLazy",
+	priority = 100,
 
 	dependencies = { "HiPhish/rainbow-delimiters.nvim", },
 

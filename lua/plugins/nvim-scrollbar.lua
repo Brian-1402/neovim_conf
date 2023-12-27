@@ -2,6 +2,7 @@
 return {
 	"petertriho/nvim-scrollbar",
 	event = "VeryLazy",
+	priority = 100,
 
 	dependencies = {
 		-- hlslens for scrollbar
