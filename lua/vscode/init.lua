@@ -6,3 +6,6 @@ require("defaults")
 
 -- Load defined commands and autocmds
 require("cmds")
+
+-- Load plugins
+require("vscode.plugins")

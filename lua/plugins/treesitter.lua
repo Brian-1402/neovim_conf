@@ -97,9 +97,9 @@ return {
 				enable = true,
 				keymaps = {
 					init_selection = "zv", -- set to `false` to disable one of the mappings
-					node_incremental = "K",
+					node_incremental = "J",
 					scope_incremental = "S",
-					node_decremental = "J",
+					node_decremental = "K",
 				},
 			},
 
@@ -107,7 +107,7 @@ return {
 				move = {
 					enable = true,
 					set_jumps = true, -- whether to set jumps in the jumplist
-					goto_next_start = {
+					goto_next_end = {
 						["]f"] = "@function.outer",
 						["]]"] = { query = "@class.outer", desc = "Next class start" },
 						--
@@ -120,7 +120,7 @@ return {
 						["]s"] = { query = "@scope", query_group = "locals", desc = "Next scope" },
 						["]z"] = { query = "@fold", query_group = "folds", desc = "Next fold" },
 					},
-					goto_next_end = {
+					goto_previous_end = {
 						["]F"] = "@function.outer",
 						["]["] = "@class.outer",
 					},
@@ -128,7 +128,7 @@ return {
 						["[f"] = "@function.outer",
 						["[["] = "@class.outer",
 					},
-					goto_previous_end = {
+					goto_next_start = {
 						["[F"] = "@function.outer",
 						["[]"] = "@class.outer",
 					},
