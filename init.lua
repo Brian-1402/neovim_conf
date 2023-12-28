@@ -1,13 +1,17 @@
--- init file whose content is specifically for neovim (and not VS Code neovim)
-
--- Source the defaults that come with Vim
-vim.cmd.source(vim.fn.stdpath("config") .. "/vim_sources/defaults.vim")
+-- Load the keymaps
+require("keymaps")
 
 -- Load base settings
-require("base")
+require("defaults")
 
--- Load the plugins
-require("lazynvim")
+-- Load defined commands and autocmds
+require("cmds")
+
+-- Load appearance related settings
+require("ui")
 
 -- Load GUI settings
 require("gui")
+
+-- Load the plugins
+require("lazynvim")

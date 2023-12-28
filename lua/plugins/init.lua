@@ -28,6 +28,24 @@ return {
 
 	{
 		'lervag/vimtex', -- Latex features
+		config = function ()
+			-- vimtex config
+			vim.g.tex_flavor = 'latex'
+			vim.g.vimtex_quickfix_mode = 0
+			vim.o.conceallevel = 0
+			vim.g.tex_conceal = 'admgs'
+			-- -- Setting vimtex default pdf viewer as sumatrapdf
+			-- vim.g.vimtex_view_general_viewer = 'SumatraPDF'
+			-- vim.g.vimtex_view_general_options = '-reuse-instance -forward-search @tex @line @pdf'
+			-- -- vimtex config for okular
+			-- vim.g.vimtex_view_general_viewer = 'zathura'
+		end
+
+	},
+
+	{
+		'chrisbra/matchit',
+		event = "VeryLazy",
 	},
 
 	{
@@ -130,6 +148,10 @@ return {
 		opts = {
 			options = { theme = 'nightfly' },
 		},
+		config = function(_, opts)
+			vim.opt.showmode = false
+			require('lualine').setup(opts)
+		end
 	},
 
 	-- Neovim interface in browser text boxes

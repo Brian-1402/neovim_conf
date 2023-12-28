@@ -3,7 +3,6 @@
 return {
 	"lukas-reineke/indent-blankline.nvim",
 	event = { "UIEnter", "VeryLazy",},
-	priority = 100,
 
 	dependencies = { "HiPhish/rainbow-delimiters.nvim", },
 

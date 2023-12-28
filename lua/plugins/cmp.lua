@@ -7,7 +7,7 @@ end
 return {
 	{
 		'hrsh7th/nvim-cmp',
-		event = { "InsertEnter" },
+		event = { "InsertEnter", "CmdlineEnter"},
 		dependencies = {
 			'neovim/nvim-lspconfig',
 			'saadparwaiz1/cmp_luasnip',
@@ -15,6 +15,7 @@ return {
 			'hrsh7th/cmp-path',
 			'hrsh7th/cmp-cmdline',
 			'onsails/lspkind.nvim',
+			"micangl/cmp-vimtex",
 		},
 
 		config = function()
@@ -23,13 +24,10 @@ return {
 			local lspkind = require("lspkind")
 
 			cmp.setup {
-				sources = {
+				sources = { -- For regular insert mode global setup. For filetype specific or cmdline etc, see further below
 					{ name = "copilot", group_index = 2 },
 					{name = 'nvim_lsp'}, --mention other additional sources like copilot, etc
 					{name = 'luasnip'},
-					{name = 'buffer'},
-					{name = 'path'},
-					{name = 'cmdline'},
 				},
 
 				-- mapping guide: https://github.com/hrsh7th/nvim-cmp/wiki/Example-mappings#luasnip
@@ -117,9 +115,43 @@ return {
 				window = {
 					completion = cmp.config.window.bordered(),
 					documentation = cmp.config.window.bordered(),
-				}
+				},
 
 			}
+
+			cmp.setup.filetype("tex", {
+				sources = {
+					{ name = 'vimtex' },
+					{ name = 'buffer' },
+				},
+			})
+
+			-- `/` cmdline setup.
+			cmp.setup.cmdline('/', {
+				mapping = cmp.mapping.preset.cmdline(),
+				completion = { autocomplete = false },
+				sources = {
+					{ name = 'buffer' }
+				}
+			})
+
+			-- `:` cmdline setup.
+			cmp.setup.cmdline(':', {
+				mapping = cmp.mapping.preset.cmdline(),
+				completion = { autocomplete = false },
+				sources = cmp.config.sources({
+					{ name = 'path' }
+				}, {
+					{
+						name = 'cmdline',
+						option = {
+							ignore_cmds = { 'Man', '!' }
+						}
+					}
+				})
+			})
+
+
 		end,
 	},
 
