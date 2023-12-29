@@ -18,6 +18,7 @@ vim.opt.shortmess:append({ I = true })
 
 -- Highlight matching parentheses
 vim.o.showmatch = true
+-- The above is also handled by sentiment.nvim plugin
 
 -- show invisible characters
 vim.o.list = true

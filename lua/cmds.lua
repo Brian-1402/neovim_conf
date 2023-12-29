@@ -1,3 +1,5 @@
+
+--The below functionality has been replaced with farmergreg/vim-lastplace plugin
 vim.cmd([[
 	" Put these in an autocmd group, so that you can revert them with:
 	" ":augroup vimStartup | exe 'au!' | augroup END"

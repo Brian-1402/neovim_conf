@@ -1,5 +1,26 @@
 return {
 
+	-- Returns cursor to the previous position. Works better than the autocmd
+	{
+		"farmergreg/vim-lastplace",
+		enabled = false, -- Doesn't seem to work
+		event = "VeryLazy",
+	},
+
+	-- For auto closing brackets
+	{
+		'windwp/nvim-autopairs',
+		event = "InsertEnter",
+		opts = {} -- this is equalent to setup({}) function
+	},
+
+	-- For peeking lines when mentioning them in command line
+	{
+		"nacro90/numb.nvim",
+		event = "VeryLazy",
+		config = true,
+	},
+
 	{
 		'takac/vim-hardtime', -- Puts time delay for hjkl keys
 		enabled = false,
@@ -9,6 +30,7 @@ return {
 		end,
 	},
 
+	-- The default vim % feature, added here for lazy loading
 	{
 		'chrisbra/matchit',
 		event = "VeryLazy",
@@ -50,6 +72,11 @@ return {
 	{
 		'tmhedberg/SimpylFold', -- Folds for python
 		ft = {'python'},
+		config = function()
+			vim.wo.foldenable = false
+			vim.wo.foldmethod = "expr"
+			vim.wo.foldexpr = "SimpylFold#FoldExpr(v:lnum)"
+		end,
 	},
 
 }

@@ -17,6 +17,7 @@ end
 local pluginSpecFiles = {
     'plugins.editing',
     'plugins.treesitter',
+    'no_ui.plugin_extras',
 }
 
 -- Function to load and modify a plugin spec file

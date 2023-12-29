@@ -1,4 +1,4 @@
-local mlsp_server_names = { "typos_lsp", "bashls", "biome", "html", "cssls", "clangd",
+local mlsp_server_names = { "bashls", "biome", "html", "cssls", "clangd",
 	"marksman", "texlab", "lua_ls", "pyright", "vimls", "yamlls", }
 local linters = { "selene", }
 local formatters = { "stylua", "black", }
@@ -111,11 +111,13 @@ return {
 			"williamboman/mason-lspconfig.nvim",
 			"williamboman/mason.nvim",
 			{ "folke/neodev.nvim", config = true, },
+			"SmiteshP/nvim-navic",
 		},
 
 		config = function()
 			require("neodev").setup()
 			local lspconfig = require('lspconfig')
+			local navic = require('nvim-navic')
 
 			lspconfig.util.on_setup = lspconfig.util.add_hook_after(
 				lspconfig.util.on_setup,
@@ -136,15 +138,15 @@ return {
 
 			lsp_settings()
 
-			-- local navic_on_attach = function(client, bufnr)
-			-- 	if client.server_capabilities.documentSymbolProvider then
-			-- 		navic.attach(client, bufnr)
-			-- 	end
-			-- end
+			local navic_on_attach = function(client, bufnr)
+				if client.server_capabilities.documentSymbolProvider then
+					navic.attach(client, bufnr)
+				end
+			end
 
 			local default_setup = function(server)
 				lspconfig[server].setup({
-					-- on_attach = navic_on_attach,
+					on_attach = navic_on_attach,
 				})
 			end
 

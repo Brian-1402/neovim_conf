@@ -20,7 +20,28 @@ return {
 	},
 
 	{
-		'unblevable/quick-scope', -- Highlights unique letter in each word for faster f
+		"utilyre/barbecue.nvim",
+		name = "barbecue",
+		event = "UIEnter",
+		version = "*",
+		dependencies = {
+			"SmiteshP/nvim-navic",
+			"nvim-tree/nvim-web-devicons", -- optional dependency
+		},
+		opts = {
+			-- configurations go here
+		},
+	},
+
+	-- Makes window separations colorful
+	{
+		"nvim-zh/colorful-winsep.nvim",
+		config = true,
+		event = { "WinNew" },
+	},
+
+	{
+		'unblevable/quick-scope', -- Highlights unique letter per word for faster f
 		event = "VeryLazy",
 	},
 

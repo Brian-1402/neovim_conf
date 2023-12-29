@@ -8,4 +8,4 @@ require("defaults")
 require("cmds")
 
 -- Load plugins
-require("vscode.plugins")
+require("no_ui.plugins")

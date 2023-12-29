@@ -10,47 +10,18 @@ return {
 		end,
 
 		dependencies = {
-			{
-			"nvim-treesitter/nvim-treesitter-textobjects",
-			config = function()
-				-- When in diff mode, we want to use the default
-				-- vim text objects c & C instead of the treesitter ones.
-				local move = require("nvim-treesitter.textobjects.move") ---@type table<string,fun(...)>
-				local configs = require("nvim-treesitter.configs")
-				for name, fn in pairs(move) do
-					if name:find("goto") == 1 then
-						move[name] = function(q, ...)
-							if vim.wo.diff then
-								local config = configs.get_module("textobjects.move")[name] ---@type table<string,string>
-								for key, query in pairs(config or {}) do
-									if q == query and key:find("[%]%[][cC]") then
-										vim.cmd("normal! " .. key)
-										return
-									end
-								end
-							end
-							return fn(q, ...)
-						end
-					end
-				end
-			end,
-			},
+			{ "nvim-treesitter/nvim-treesitter-textobjects" },
 			"RRethy/nvim-treesitter-textsubjects",
 		},
 
 		cmd = { "TSUpdateSync", "TSUpdate", "TSInstall" },
 
-		keys = {
-			{ "<c-space>", desc = "Increment selection" },
-			{ "<bs>", desc = "Decrement selection", mode = "x" },
-		},
-
 		opts = {
 
 			-- A list of parser names, or "all" (the five listed parsers should always be installed)
-			ensure_installed = { "c", "cpp", "gitignore",	"html", "java", "javascript",
-				"json", "latex", "lua", "make", "markdown", "markdown_inline", "python",
-				"regex", "typescript", "xml", "yaml", "vim", },
+			-- ensure_installed = { "c", "cpp", "gitignore",	"html", "java", "javascript",
+			-- 	"json", "latex", "lua", "make", "markdown", "markdown_inline", "python",
+			-- 	"regex", "typescript", "xml", "yaml", "vim", },
 			-- ensure_installed = "all",
 			-- Install parsers synchronously (only applied to `ensure_installed`)
 			sync_install = false,
@@ -195,6 +166,10 @@ return {
 					-- ['iJ'] = { 'textsubjects-container-inner', desc = "Select inside containers (classes, functions, etc.)" },
 				},
 			},
+
+			matchit = {
+				enable = true,
+			},
 		},
 
 		config = function(_, opts)
@@ -209,6 +184,12 @@ return {
 					return true
 				end, opts.ensure_installed)
 			end
+
+			-- For setting treesitter folding
+			vim.wo.foldmethod = "expr"
+			vim.wo.foldexpr = "nvim_treesitter#foldexpr()"
+			vim.wo.foldenable = false
+
 			require("nvim-treesitter.configs").setup(opts)
 		end,
 	},
@@ -227,6 +208,28 @@ return {
 		end,
 	},
 
+	-- Toggles splitting and joining blocks of code
+	{
+		'Wansmer/treesj',
+		event = "VeryLazy",
+		keys = { '<space>m', '<space>j', '<space>s' },
+		dependencies = { 'nvim-treesitter/nvim-treesitter' },
+		config = function()
+			require('treesj').setup({--[[ your config ]]})
+			vim.keymap.set('n', '<leader>s', require('treesj').toggle)
+		end,
+	},
+
+	-- Extended support for highlighting matching items. Replaces matchit and matchparen
+	-- Uses treesitter integration
+	{
+		'andymass/vim-matchup',
+		event = {"BufReadPre"}, -- Requires to be loaded at the start to work
+		config = function()
+			vim.g.loaded_matchit = 1
+			vim.g.matchup_matchparen_offscreen = { method = "popup" }
+		end
+	},
 
 	-- Automatically add closing tags for HTML and JSX
 	{

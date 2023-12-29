@@ -71,6 +71,25 @@ return {
 	},
 
 	{
+		"LukasPietzschmann/telescope-tabs",
+		dependencies = { "nvim-telescope/telescope.nvim", },
+		event = "VeryLazy",
+		config = function()
+			require("telescope-tabs").setup { }
+		end
+	},
+
+	{
+		"olimorris/persisted.nvim",
+		dependencies = { "nvim-telescope/telescope.nvim", },
+		event = "VeryLazy",
+		config = function()
+			require("persisted").setup { }
+			require('telescope').load_extension('persisted')
+		end
+	},
+
+	{
 		"desdic/agrolens.nvim",
 		dependencies = { "nvim-telescope/telescope.nvim", },
 		event = "VeryLazy",
