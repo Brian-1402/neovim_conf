@@ -22,6 +22,8 @@ return {
 	{
 		"utilyre/barbecue.nvim",
 		name = "barbecue",
+		enabled = false, -- Giving E36:Not enough room error everytime I scroll. But that error started recently only, 
+		-- probably conflicting with some recent settings changes. I think it's the treesitter top scope previewer bar.
 		event = "UIEnter",
 		version = "*",
 		dependencies = {
@@ -36,8 +38,39 @@ return {
 	-- Makes window separations colorful
 	{
 		"nvim-zh/colorful-winsep.nvim",
-		config = true,
 		event = { "WinNew" },
+		opt = {
+			no_exec_files = {
+				"TelescopePrompt",
+				"alpha",
+				"dashboard",
+				"neo-tree",
+				"Trouble",
+				"lazy",
+				"terminal",
+				"neogitstatus",
+				"mason",
+			},
+		},
+	},
+
+	-- {
+	-- 	'goolord/alpha-nvim',
+	-- 	lazy = false,
+	-- 	config = function ()
+	-- 		require'alpha'.setup(require'alpha.themes.dashboard'.config)
+	-- 	end
+	-- },
+
+	{
+		"folke/twilight.nvim",
+		enabled = false, -- I do not like that it also disables the syntax highlighting in dimmed lines
+		event = "VeryLazy",
+		opts = {
+			dimming = {
+				-- alpha = 0.55,
+			},
+		},
 	},
 
 	{

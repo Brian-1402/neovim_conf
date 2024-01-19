@@ -60,6 +60,7 @@ return {
 				-- Instead of true it can also be a list of languages
 				additional_vim_regex_highlighting = { "latex" },
 			},
+
 			indent = {
 				enable = false
 			},
@@ -69,7 +70,7 @@ return {
 				keymaps = {
 					init_selection = "zv", -- set to `false` to disable one of the mappings
 					node_incremental = "J",
-					scope_incremental = "S",
+					-- scope_incremental = "S",
 					node_decremental = "K",
 				},
 			},
@@ -195,15 +196,15 @@ return {
 	},
 
 
-	-- Show context of the current function
+	-- Show context of the current function on the top of the editor
 	{
 		"nvim-treesitter/nvim-treesitter-context",
 		event = "VeryLazy",
 		opts = { mode = "cursor", max_lines = 3 },
 		config = function (_, opts)
 			vim.keymap.set("n", "[C", function()
-				require("treesitter-context").go_to_context(vim.v.count1)
-			end, { silent = true })
+					require("treesitter-context").go_to_context(vim.v.count1)
+				end, { silent = true })
 			require'treesitter-context'.setup(opts)
 		end,
 	},
@@ -213,10 +214,10 @@ return {
 		'Wansmer/treesj',
 		event = "VeryLazy",
 		keys = { '<space>m', '<space>j', '<space>s' },
+		-- leader s for split, j for join, m for toggling
 		dependencies = { 'nvim-treesitter/nvim-treesitter' },
 		config = function()
 			require('treesj').setup({--[[ your config ]]})
-			vim.keymap.set('n', '<leader>s', require('treesj').toggle)
 		end,
 	},
 
@@ -224,7 +225,8 @@ return {
 	-- Uses treesitter integration
 	{
 		'andymass/vim-matchup',
-		event = {"BufReadPre"}, -- Requires to be loaded at the start to work
+		-- It has to load before the rtp plugins (matchit, matchparen) loads, so BufReadPre event is not enough, it should be non-lazy
+		lazy = false,
 		config = function()
 			vim.g.loaded_matchit = 1
 			vim.g.matchup_matchparen_offscreen = { method = "popup" }
@@ -235,6 +237,37 @@ return {
 	{
 		"windwp/nvim-ts-autotag",
 		event = "VeryLazy",
+		dependencies = { 'nvim-treesitter/nvim-treesitter' },
 		opts = {},
 	},
+
+	-- Adds treesitter based context to comments, and decides style of comment accordingly
+	{
+		'JoosepAlviste/nvim-ts-context-commentstring',
+		event = "VeryLazy",
+		dependencies = {
+			'nvim-treesitter/nvim-treesitter',
+			'numToStr/Comment.nvim',
+		},
+		opts = {
+			enable_autocmd = false,
+		},
+		config = function(_, opts)
+			require('ts_context_commentstring').setup(opts)
+			require('Comment').setup {
+				pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
+			}
+		end
+	},
+
+	-- Structural search and replace
+	{
+		"cshuaimin/ssr.nvim",
+		name = "ssr",
+		config = function()
+			-- require("ssr").setup() -- optional
+			vim.keymap.set({ "n", "x" }, "<leader>sr", function() require("ssr").open() end)
+		end
+	},
+
 }

@@ -7,18 +7,31 @@ local others = {}
 local mason_nonlsp_pkgs = vim.tbl_extend( "keep", linters, formatters, others)
 local mason_all_pkgs = vim.tbl_extend( "keep", mlsp_server_names, mason_nonlsp_pkgs)
 
+-- Custom config opts for each server
+local lsp_opts = {
+	-- grammarly = {
+	-- 	filetypes = { "markdown", "text" },
+	-- },
+}
+
+-- Add empty opts for each server already not having any
+for _, pkg in ipairs(mlsp_server_names) do
+	if not lsp_opts[pkg] then
+		lsp_opts[pkg] = {}
+	end
+end
 
 -- LSP requires to be loaded before buffer to get attached, but this prevents it to be lazy loaded.
 -- As a workaround, this function allows LSP to be lazy loaded, and when it loads, it attaches to already loaded buffers.
 -- https://www.reddit.com/r/neovim/comments/15s3fxk/comment/jwdgdcp/
 local attach_lsp_to_existing_buffers = vim.schedule_wrap(function()
-  for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
-    local valid = vim.api.nvim_buf_is_valid(bufnr) and vim.api.nvim_buf_get_option(bufnr, 'buflisted')
-    if valid and vim.bo[bufnr].buftype == "" then
-      local augroup_lspconfig = vim.api.nvim_create_augroup('lspconfig', { clear = false })
-      vim.api.nvim_exec_autocmds("FileType", { group = augroup_lspconfig, buffer = bufnr })
-    end
-  end
+	for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
+	local valid = vim.api.nvim_buf_is_valid(bufnr) and vim.api.nvim_buf_get_option(bufnr, 'buflisted')
+	if valid and vim.bo[bufnr].buftype == "" then
+		local augroup_lspconfig = vim.api.nvim_create_augroup('lspconfig', { clear = false })
+		vim.api.nvim_exec_autocmds("FileType", { group = augroup_lspconfig, buffer = bufnr })
+	end
+	end
 end)
 
 local function lsp_settings()
@@ -144,17 +157,22 @@ return {
 				end
 			end
 
+			-- Add the on_attach function to each server config
+			for _, opts in pairs(lsp_opts) do
+				if type(opts) == "table" then
+					opts.on_attach = navic_on_attach
+				end
+			end
+
 			local default_setup = function(server)
-				lspconfig[server].setup({
-					on_attach = navic_on_attach,
-				})
+				lspconfig[server].setup(lsp_opts[server])
 			end
 
 			require('mason-lspconfig').setup({
-			ensure_installed = mason_all_pkgs,
-			handlers = {
-				default_setup,
-			},
+				ensure_installed = mason_all_pkgs,
+				handlers = {
+					default_setup,
+				},
 			})
 
 			attach_lsp_to_existing_buffers()
@@ -162,7 +180,7 @@ return {
 		end
 	},
 
-	 {
+	{
 		"williamboman/mason-lspconfig.nvim",
 		lazy = true,
 		dependencies = "mason.nvim",

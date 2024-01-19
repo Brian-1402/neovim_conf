@@ -7,7 +7,7 @@ vim.g.nightflyCursorColor = true --Doesn't seem to make any difference though
 
 -- Display line numbers
 vim.o.number = true
-vim.o.norelativenumber = true
+vim.o.relativenumber = false
 
 -- Highlight the cursor horizontal line
 vim.o.cursorline = true

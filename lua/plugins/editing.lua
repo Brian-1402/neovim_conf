@@ -1,6 +1,6 @@
 return {
 
-	-- Returns cursor to the previous position. Works better than the autocmd
+	-- Returns cursor to the previous position.
 	{
 		"farmergreg/vim-lastplace",
 		enabled = false, -- Doesn't seem to work
@@ -33,11 +33,7 @@ return {
 	-- The default vim % feature, added here for lazy loading
 	{
 		'chrisbra/matchit',
-		event = "VeryLazy",
-	},
-
-	{
-		'tpope/vim-surround',
+		enabled = false, -- Replaced by vim-matchup
 		event = "VeryLazy",
 	},
 
@@ -48,14 +44,16 @@ return {
 	},
 
 	{
-		'tpope/vim-commentary', -- Adding comments feature
+		'numToStr/Comment.nvim',
+		opts = { },
 		event = "VeryLazy",
 	},
 
 	{
-		'tpope/vim-sensible', -- Add some basic default vim configs
-		enabled = false,
+		"kylechui/nvim-surround",
+		version = "*",
 		event = "VeryLazy",
+		config = true,
 	},
 
 	{

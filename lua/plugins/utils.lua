@@ -24,6 +24,36 @@ return {
 	},
 
 	{
+		"epwalsh/obsidian.nvim",
+		version = "*",  -- recommended, use latest release instead of latest commit
+		lazy = true,
+		-- ft = "markdown",
+		-- Replace the above line with this if you only want to load obsidian.nvim for markdown files in your vault:
+		event = {
+		  -- If you want to use the home shortcut '~' here you need to call 'vim.fn.expand'.
+		  -- E.g. "BufReadPre " .. vim.fn.expand "~" .. "/my-vault/**.md"
+		  "VeryLazy",
+		  "BufReadPre C:/Users/brian/My Files/Study/Work/_Obsidian study notes/**.md",
+		  -- "BufNewFile C:/Users/brian/AppData/Roaming/Portable Chrome/Obsidian/Mind Map/**.md",
+		},
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+		},
+		opts = {
+			workspaces = {
+				{
+					name = "work",
+					path = "C:/Users/brian/My Files/Study/Work/_Obsidian study notes",
+				},
+				-- {
+				-- 	name = "work",
+				-- 	path = "~/vaults/work",
+				-- },
+			},
+		},
+	},
+
+	{
 		"folke/which-key.nvim",
 		event = "VeryLazy",
 		init = function()
@@ -35,6 +65,18 @@ return {
 			-- or leave it empty to use the default settings
 			-- refer to the configuration section below
 		}
+	},
+
+	-- Window to show all errors and warnings
+	{
+		"folke/trouble.nvim",
+		dependencies = { "nvim-lua/plenary.nvim" },
+		cmd = "TroubleToggle",
+		config = function()
+			require("trouble").setup {
+				vim.keymap.set("n", "<leader>xx", function() require("trouble").toggle() end)
+			}
+		end
 	},
 
 	-- Markdown preview directly in terminal
@@ -68,6 +110,7 @@ return {
 	-- Coding usage tracking
 	{
 		'wakatime/vim-wakatime',
+		enabled = false,
 		event = "VeryLazy",
 	},
 

@@ -61,3 +61,14 @@ vim.api.nvim_create_autocmd("FileType", {
 		vim.o.wrap = true
 	end,
 })
+
+-- To turn on conceal for markdown
+vim.api.nvim_create_autocmd("FileType", {
+	-- group = vim.api.nvim_create_augroup("Conceal", { clear = true }),
+	pattern = { "markdown" },
+	callback = function()
+		vim.o.conceallevel = 2
+		vim.o.wrap = false
+		vim.o.concealcursor = ""
+	end,
+})

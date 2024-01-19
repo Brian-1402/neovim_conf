@@ -13,9 +13,11 @@ vim.api.nvim_set_keymap('s', 'Q', 'gq', { noremap = true })
 vim.api.nvim_set_keymap('i', '<C-U>', '<C-G>u<C-U>', { noremap = true })
 
 
----- To prevent pasting from being messed up by autoindent, etc
-vim.keymap.set("n", "<Leader>v", ':set paste<CR>"+p:set nopaste<CR>', { noremap = true, silent = true })
--- Weird tho, \v works even though I had mapped leader to <Space>
+-- To prevent pasting from being messed up by autoindent, etc
+vim.keymap.set("n", "<leader>v", ':set paste<CR>"+p:set nopaste<CR>', { noremap = true, silent = true })
+
+-- To make jumping between windows easier
+vim.keymap.set("n", "<leader>w", '<C-w>', { noremap = true, silent = true })
 
 -- For setting ctrl backspace remap in insert mode for Neovim-qt
 vim.keymap.set('i', '<C-BS>', '<C-w>', { noremap = true, silent = true })
