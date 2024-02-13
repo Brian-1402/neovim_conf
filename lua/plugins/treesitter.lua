@@ -227,6 +227,7 @@ return {
 		'andymass/vim-matchup',
 		-- It has to load before the rtp plugins (matchit, matchparen) loads, so BufReadPre event is not enough, it should be non-lazy
 		lazy = false,
+		enabled = false,
 		config = function()
 			vim.g.loaded_matchit = 1
 			vim.g.matchup_matchparen_offscreen = { method = "popup" }
@@ -264,6 +265,7 @@ return {
 	{
 		"cshuaimin/ssr.nvim",
 		name = "ssr",
+		event = "VeryLazy",
 		config = function()
 			-- require("ssr").setup() -- optional
 			vim.keymap.set({ "n", "x" }, "<leader>sr", function() require("ssr").open() end)

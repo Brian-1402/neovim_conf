@@ -11,7 +11,7 @@ return {
 	{
 		'windwp/nvim-autopairs',
 		event = "InsertEnter",
-		opts = {} -- this is equalent to setup({}) function
+		config = true,
 	},
 
 	-- For peeking lines when mentioning them in command line

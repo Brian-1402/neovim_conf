@@ -40,9 +40,12 @@ if vim.fn.has("gui_running") == 1 then
 end
 
 vim.o.backup = true		-- keep a backup file (restore to previous version)
+vim.fn.mkdir(vim.fn.stdpath("data") .. "/backup", "p") -- make dir if it doesnt exist
 vim.o.backupdir = vim.fn.stdpath("data") .. "/backup//,."
+-- make dir if it doesnt exist
 if vim.fn.has('persistent_undo') == 1 then
 	vim.o.undofile = true	-- keep an undo file (undo changes after closing)
+	vim.fn.mkdir(vim.fn.stdpath("data") .. "/undo", "p")
 	vim.o.undodir = vim.fn.stdpath("data") .. "/undo//,."
 end
 vim.go.undolevels = 10000

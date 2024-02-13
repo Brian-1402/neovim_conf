@@ -41,10 +41,10 @@ return {
 		},
 		opts = {
 			workspaces = {
-				{
-					name = "work",
-					path = "C:/Users/brian/My Files/Study/Work/_Obsidian study notes",
-				},
+				-- {
+				-- 	name = "work",
+				-- 	path = "C:/Users/brian/My Files/Study/Work/_Obsidian study notes",
+				-- },
 				-- {
 				-- 	name = "work",
 				-- 	path = "~/vaults/work",
@@ -71,6 +71,7 @@ return {
 	{
 		"folke/trouble.nvim",
 		dependencies = { "nvim-lua/plenary.nvim" },
+		event = "VeryLazy",
 		cmd = "TroubleToggle",
 		config = function()
 			require("trouble").setup {

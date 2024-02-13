@@ -31,6 +31,9 @@ local function loadAndModifySpec(filePath)
         if plugin[1] == 'nvim-treesitter/nvim-treesitter' then
             plugin.opts.highlight.enable = false
         end
+		if plugin[1] == 'andymass/vim-matchup' then
+			plugin.enabled = false -- causing a bug which makes multiple brackets and completions on Esc
+		end
 
     end
     return pluginSpec
