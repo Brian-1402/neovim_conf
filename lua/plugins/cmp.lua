@@ -23,11 +23,15 @@ return {
 			local luasnip = require("luasnip")
 			local lspkind = require("lspkind")
 
+			-- Setup luasnip
+			require("luasnip.loaders.from_vscode").lazy_load()
+
 			cmp.setup {
 				sources = { -- For regular insert mode global setup. For filetype specific or cmdline etc, see further below
 					{ name = "copilot", group_index = 2 },
-					{name = 'nvim_lsp'}, --mention other additional sources like copilot, etc
-					{name = 'luasnip'},
+					{name = 'nvim_lsp', group_index = 2 },
+					{name = 'luasnip', group_index = 2 },
+					{ name = 'buffer', group_index = 3 },
 				},
 
 				-- mapping guide: https://github.com/hrsh7th/nvim-cmp/wiki/Example-mappings#luasnip
@@ -38,19 +42,21 @@ return {
 					-- ['<C-f>'] = cmp_action.luasnip_jump_forward(),
 					-- ['<C-b>'] = cmp_action.luasnip_jump_backward(),
 
-					-- ['<C-Tab>'] = cmp.mapping(function ()
-					--	if not cmp.visible() then
-					--		cmp.complete() -- trigger opening completion menu
-					--	end
-					-- end),
+					['<C-Tab>'] = cmp.mapping(function (fallback)
+					if not cmp.visible() then
+						cmp.complete() -- trigger opening completion menu
+					else
+						fallback()
+					end
+					end),
 
 					['<Tab>'] = cmp.mapping(function(fallback)
-						if cmp.visible() and has_words_before() then
+						if cmp.visible() then -- and has_words_before() then
 							cmp.select_next_item({behavior = 'insert'}) -- Select and also insert entry
 						elseif luasnip.expand_or_jumpable() then
 							luasnip.expand_or_jump()
-						elseif has_words_before() then
-							cmp.complete()
+						-- elseif has_words_before() then
+						-- 	cmp.complete()
 						else
 							fallback()
 						end
@@ -73,7 +79,7 @@ return {
 					}),
 
 					-- cancel completion
-					['<S-Esc>'] = cmp.mapping.abort(),
+					-- ['<S-Esc>'] = cmp.mapping.abort(),
 				}),
 
 				formatting = {
@@ -121,7 +127,9 @@ return {
 
 			cmp.setup.filetype("tex", {
 				sources = {
+					{ name = "copilot", group_index = 2 },
 					{ name = 'vimtex' },
+					{ name = 'luasnip' },
 					{ name = 'buffer' },
 				},
 			})
@@ -138,7 +146,7 @@ return {
 			-- `:` cmdline setup.
 			cmp.setup.cmdline(':', {
 				mapping = cmp.mapping.preset.cmdline(),
-				completion = { autocomplete = false },
+				-- completion = { autocomplete = false }, -- To prevent completion in cmdline to pop up always. comment it for always autocomplete.
 				sources = cmp.config.sources({
 					{ name = 'path' }
 				}, {
@@ -161,6 +169,12 @@ return {
 		dependencies = {
 			{'L3MON4D3/LuaSnip', build = "make install_jsregexp",},
 		},
+	},
+
+	{
+		"L3MON4D3/LuaSnip",
+		lazy = true,
+		dependencies = { "rafamadriz/friendly-snippets" },
 	},
 
 	{

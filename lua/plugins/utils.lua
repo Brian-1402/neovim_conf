@@ -25,16 +25,17 @@ return {
 
 	{
 		"epwalsh/obsidian.nvim",
-		version = "*",  -- recommended, use latest release instead of latest commit
+		enabled = false,
+		version = "*",	-- recommended, use latest release instead of latest commit
 		lazy = true,
 		-- ft = "markdown",
 		-- Replace the above line with this if you only want to load obsidian.nvim for markdown files in your vault:
 		event = {
-		  -- If you want to use the home shortcut '~' here you need to call 'vim.fn.expand'.
-		  -- E.g. "BufReadPre " .. vim.fn.expand "~" .. "/my-vault/**.md"
-		  "VeryLazy",
-		  "BufReadPre C:/Users/brian/My Files/Study/Work/_Obsidian study notes/**.md",
-		  -- "BufNewFile C:/Users/brian/AppData/Roaming/Portable Chrome/Obsidian/Mind Map/**.md",
+			-- If you want to use the home shortcut '~' here you need to call 'vim.fn.expand'.
+			-- E.g. "BufReadPre " .. vim.fn.expand "~" .. "/my-vault/**.md"
+			"VeryLazy",
+			"BufReadPre C:/Users/brian/My Files/Study/Work/_Obsidian study notes/**.md",
+			-- "BufNewFile C:/Users/brian/AppData/Roaming/Portable Chrome/Obsidian/Mind Map/**.md",
 		},
 		dependencies = {
 			"nvim-lua/plenary.nvim",
@@ -42,12 +43,13 @@ return {
 		opts = {
 			workspaces = {
 				-- {
-				-- 	name = "work",
-				-- 	path = "C:/Users/brian/My Files/Study/Work/_Obsidian study notes",
+				--	name = "work",
+				--	path = "C:/Users/brian/My Files/Study/Work/_Obsidian study notes",
+				--	-- Absolute path of workspace in windows format causes errors when same config is used in wsl
 				-- },
 				-- {
-				-- 	name = "work",
-				-- 	path = "~/vaults/work",
+				--	name = "work",
+				--	path = "~/vaults/work",
 				-- },
 			},
 		},
@@ -173,6 +175,46 @@ return {
 			"nvim-lua/plenary.nvim",
 		},
 		cmd = { "LazyGit", "LazyGitConfig", "LazyGitCurrentFile", "LazyGitFilter", "LazyGitFilterCurrentFile" },
+	},
+
+	{
+		"CopilotC-Nvim/CopilotChat.nvim",
+		opts = {
+			show_help = "yes", -- Show help text for CopilotChatInPlace, default: yes
+			debug = false, -- Enable or disable debug mode, the log file will be in ~/.local/state/nvim/CopilotChat.nvim.log
+			disable_extra_info = 'no', -- Disable extra information (e.g: system prompt) in the response.
+			-- proxy = "socks5://127.0.0.1:3000", -- Proxies requests via https or socks.
+		},
+		build = function()
+			vim.notify("Please update the remote plugins by running ':UpdateRemotePlugins', then restart Neovim.")
+		end,
+		event = "VeryLazy",
+		keys = {
+			{ "<leader>cce", "<cmd>CopilotChatExplain<cr>", desc = "CopilotChat - Explain code" },
+			{ "<leader>cct", "<cmd>CopilotChatTests<cr>", desc = "CopilotChat - Generate tests" },
+			{
+				"<leader>ccv",
+				":CopilotChatVisual",
+				mode = "x",
+				desc = "CopilotChat - Open in vertical split",
+			},
+			{
+				"<leader>ccx",
+				":CopilotChatInPlace<cr>",
+				mode = "x",
+				desc = "CopilotChat - Run in-place code",
+			},
+			{
+				"<leader>ccf",
+				"<cmd>CopilotChatFixDiagnostic<cr>", -- Get a fix for the diagnostic message under the cursor.
+				desc = "CopilotChat - Fix diagnostic",
+			},
+			{
+				"<leader>ccr",
+				"<cmd>CopilotChatReset<cr>", -- Reset chat history and clear buffer.
+				desc = "CopilotChat - Reset chat history and clear buffer",
+			}
+		},
 	},
 
 }
