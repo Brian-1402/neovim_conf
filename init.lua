@@ -10,6 +10,9 @@ vim.opt.rtp:prepend(lazypath)
 -- Load the keymaps
 require("keymaps")
 
+-- Load the clipboard settings
+require("clipboard")
+
 -- Load the plugins
 require("lazy").setup("plugins")
 
