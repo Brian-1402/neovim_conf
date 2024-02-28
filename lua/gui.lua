@@ -1,7 +1,6 @@
 -- Config for GUIs:
 if vim.g.neovide then
 	vim.o.guifont = "Consolas Nerd Font:h11"
-	-- vim.o.guifont = "CaskaydiaMono Nerd Font:h12"
 
 	vim.g.neovide_hide_mouse_when_typing = true
 	-- vim.g.neovide_refresh_rate = 144

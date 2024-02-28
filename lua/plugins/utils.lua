@@ -240,6 +240,12 @@ return {
 
 	-- ActivityWatch plugin for monitoring usage
 	{
-		"ActivityWatch/aw-watcher-vim"
+		"ActivityWatch/aw-watcher-vim",
+		enabled = function ()
+			return vim.fn.has("win32")
+		end,
+		config = function ()
+			vim.g.aw_hostname = "Brian-HP"
+		end,
 	},
 }
