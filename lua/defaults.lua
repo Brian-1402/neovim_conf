@@ -61,8 +61,6 @@ vim.o.expandtab = false
 
 vim.o.virtualedit = "block" -- allows cursor to go anywhere in visual block mode
 
-vim.o.virtualedit = "block"
-
 vim.o.encoding = "utf-8"
 
 -- line wrap settings
@@ -75,6 +73,7 @@ vim.o.breakindent = true
 -- open horizontal splits below the current window
 -- open vertical splits to the right of the current window
 vim.o.splitright = true
+vim.o.splitbelow = true
 
 -- Use system clipboard for all operations by default
 -- vim.o.clipboard = "unnamedplus"
@@ -98,7 +97,11 @@ vim.o.gdefault = true
 -- when inserting a bracket, briefly jump to its match
 vim.o.showmatch = false -- this is annoying
 
-vim.o.shell = "pwsh.exe"
+if vim.fn.has("win32") then
+	vim.o.shell = "pwsh.exe"
+elseif vim.fn.has("unix") then
+	vim.o.shell = "bash"
+end
 
 -- For avoiding quotes and stuff from disappearing in json and md due to vim
 -- conceal being activated by indentLine plugin
@@ -107,4 +110,6 @@ vim.g.vim_json_conceal = 0
 -- vim.g.markdown_syntax_conceal = 0
 
 -- For configuring python
-vim.g.python3_host_prog = "C:/Users/brian/AppData/Local/Programs/Python/Python312/python.exe"
+if vim.fn.has("win32") then
+	vim.g.python3_host_prog = "C:/Users/brian/AppData/Local/Programs/Python/Python312/python.exe"
+end
