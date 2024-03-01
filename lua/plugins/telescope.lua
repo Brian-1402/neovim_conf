@@ -34,10 +34,15 @@ return {
 			desc = "Telescope: help tags",
 			},
 			{ -- lazy style key map
-			"<leader>fp",
-			"<cmd>Telescope projects<cr>",
-			desc = "Telescope: projects",
+			"<leader>fr",
+			"<cmd>Telescope oldfiles<cr>",
+			desc = "Telescope: recent files",
 			},
+			-- { -- lazy style key map
+			-- "<leader>fw",
+			-- "<cmd>Telescope workspaces<cr>",
+			-- desc = "Telescope: workspaces",
+			-- },
 		},
 
 		config = function (_, opts)
@@ -93,6 +98,7 @@ return {
 	{
 		-- Automatically cd to project root. This supports telescope extension
 		"ahmedkhalf/project.nvim",
+		enabled = false,
 		dependencies = { "nvim-telescope/telescope.nvim", },
 		event = "VeryLazy",
 		config = function()
@@ -112,6 +118,7 @@ return {
 
 	{
 		"olimorris/persisted.nvim",
+		enabled = false,
 		dependencies = { "nvim-telescope/telescope.nvim", },
 		event = "VeryLazy",
 		config = function()
@@ -126,6 +133,15 @@ return {
 		event = "VeryLazy",
 		config = function()
 			require("telescope").load_extension("agrolens")
+		end,
+	},
+
+	{
+		"nvim-telescope/telescope-ui-select.nvim",
+		dependencies = { "nvim-telescope/telescope.nvim", },
+		event = "VeryLazy",
+		config = function()
+			require("telescope").load_extension("ui-select")
 		end,
 	},
 }

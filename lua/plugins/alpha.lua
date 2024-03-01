@@ -49,9 +49,10 @@ return {
 			dashboard.section.header.val = vim.split(logo .. "\n" .. greeting, "\n")
 			dashboard.section.buttons.val = {
 				dashboard.button("n", " " .. " New file", ":ene <BAR> <CR>"),
-				dashboard.button("p", " " .. " Find projects", ":Telescope projects <CR>"),
-				-- dashboard.button("f", " " .. " Find file", ":Telescope find_files <CR>"),
-				-- dashboard.button("g", "󰷾 " .. " Find text", ":Telescope live_grep <CR>"),
+				dashboard.button("w", " " .. " Find workspaces", ":SessionManager load_session<CR>"),
+				-- dashboard.button("w", " " .. " Find workspaces", ":Telescope workspaces <CR>"),
+				dashboard.button("f", " " .. " Find file", ":Telescope find_files <CR>"),
+				dashboard.button("g", "󰷾 " .. " Find text", ":Telescope live_grep <CR>"),
 				-- dashboard.button("b", " " .. " File browser", ":Joshuto <CR>"),
 				dashboard.button("r", "󰄉 " .. " Recent files", ":Telescope oldfiles <CR>"),
 				-- dashboard.button("c", " " .. " Config", ":e $MYVIMRC <CR>"),

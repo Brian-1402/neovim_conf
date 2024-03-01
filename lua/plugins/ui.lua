@@ -54,25 +54,6 @@ return {
 		},
 	},
 
-	-- {
-	-- 	'goolord/alpha-nvim',
-	-- 	lazy = false,
-	-- 	config = function ()
-	-- 		require'alpha'.setup(require'alpha.themes.dashboard'.config)
-	-- 	end
-	-- },
-
-	{
-		"folke/twilight.nvim",
-		enabled = false, -- I do not like that it also disables the syntax highlighting in dimmed lines
-		event = "VeryLazy",
-		opts = {
-			dimming = {
-				-- alpha = 0.55,
-			},
-		},
-	},
-
 	{
 		'unblevable/quick-scope', -- Highlights unique letter per word for faster f
 		event = "VeryLazy",

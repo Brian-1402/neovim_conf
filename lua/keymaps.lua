@@ -25,3 +25,6 @@ vim.keymap.set("n", "<leader>w", '<C-w>', { noremap = true, silent = true })
 -- For setting ctrl backspace remap in insert mode for Neovim-qt
 vim.keymap.set('i', '<C-BS>', '<C-w>', { noremap = true, silent = true })
 
+-- For quickly reformatting tabspaces
+vim.keymap.set("n", "<leader>t2", ':set ts=2<CR>:retab!<CR>:set ts=4<CR>', { noremap = true, silent = true })
+vim.keymap.set("n", "<leader>t4", ':retab!<CR>', { noremap = true, silent = true })

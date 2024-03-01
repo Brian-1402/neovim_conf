@@ -26,6 +26,19 @@ return {
 	},
 
 	config = function()
-		require("scrollbar").setup()
+		require("scrollbar").setup({
+			excluded_buftypes = {
+					"terminal",
+					"lazy",
+				},
+			excluded_filetypes = {
+				"cmp_docs",
+				"cmp_menu",
+				"noice",
+				"prompt",
+				"TelescopePrompt",
+				"lazy",
+			},
+		})
 	end,
 }
