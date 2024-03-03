@@ -97,10 +97,10 @@ vim.o.gdefault = true
 -- when inserting a bracket, briefly jump to its match
 vim.o.showmatch = false -- this is annoying
 
-if vim.fn.has("win32") then
-	vim.o.shell = "pwsh.exe"
-elseif vim.fn.has("unix") then
+if vim.fn.has("unix") then
 	vim.o.shell = "bash"
+elseif vim.fn.has("win32") then
+	vim.o.shell = "pwsh.exe"
 end
 
 -- For avoiding quotes and stuff from disappearing in json and md due to vim
