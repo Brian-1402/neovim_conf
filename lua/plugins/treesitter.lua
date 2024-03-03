@@ -191,6 +191,7 @@ return {
 			vim.wo.foldexpr = "nvim_treesitter#foldexpr()"
 			vim.wo.foldenable = false
 
+			require 'nvim-treesitter.install'.prefer_git = false
 			require("nvim-treesitter.configs").setup(opts)
 		end,
 	},
