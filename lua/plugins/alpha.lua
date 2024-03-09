@@ -1,3 +1,4 @@
+-- Config found here: https://github.com/goolord/alpha-nvim/discussions/16#discussioncomment-5923314
 return {
 	{
 		"goolord/alpha-nvim",

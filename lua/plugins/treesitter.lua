@@ -49,7 +49,13 @@ return {
 					if ok and stats and stats.size > max_filesize then
 						return true
 					end
-					if vim.tbl_contains( { "latex" }, lang ) then
+					local all_disabled = {"latex"}
+					local win32_disabled = { "make", }
+					-- Disabling latex because vimtex provides highlighting. 
+					-- Disabling make because the current windows parser seems to give an error constantly
+					if vim.fn.has("win32") and vim.tbl_contains( win32_disabled, lang ) then
+						return true
+					elseif vim.tbl_contains( all_disabled, lang ) then
 						return true
 					end
 				end,
@@ -191,7 +197,7 @@ return {
 			vim.wo.foldexpr = "nvim_treesitter#foldexpr()"
 			vim.wo.foldenable = false
 
-			require 'nvim-treesitter.install'.prefer_git = false
+			require 'nvim-treesitter.install'.prefer_git = false -- Use curl instead. Git is slower and overloads the RAM during multiple installations
 			require("nvim-treesitter.configs").setup(opts)
 		end,
 	},
@@ -273,4 +279,10 @@ return {
 		end
 	},
 
+	-- Provides treesitter into heredocs
+	{
+		'AckslD/nvim-FeMaco.lua',
+		event = "VeryLazy",
+		config = true,
+	},
 }

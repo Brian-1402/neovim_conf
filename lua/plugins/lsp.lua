@@ -1,5 +1,5 @@
-local mlsp_server_names = { "bashls", "biome", "html", "cssls", "clangd",
-	"marksman", "texlab", "lua_ls", "pyright", "vimls", "yamlls", }
+local mlsp_server_names = { "bashls", "biome", "clangd",
+	"marksman", "lua_ls", "pyright", "vimls", }
 local linters = { "selene", }
 local formatters = { "stylua", "black", }
 local others = {}
