@@ -5,6 +5,11 @@ return {
 		config = function() vim.cmd.colorscheme("nightfly") end,
 	}, -- Color theme. oxfist/night-owl.nvim is also a good alternative
 
+	{
+		"catppuccin/nvim", name = "catppuccin", lazy = false,  priority = 1000,
+		-- config = function() vim.cmd.colorscheme("catppuccin") end,
+	},
+
 	-- Status line plugin
 	{
 		'nvim-lualine/lualine.nvim',

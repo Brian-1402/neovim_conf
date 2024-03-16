@@ -2,7 +2,7 @@
 if vim.fn.has("termguicolors") then
 	vim.o.termguicolors = true
 end
-vim.cmd.colorscheme( "nightfly" )
+-- vim.cmd.colorscheme( "nightfly" )
 vim.g.nightflyCursorColor = true --Doesn't seem to make any difference though
 
 -- Display line numbers

@@ -489,4 +489,9 @@ return {
 		config = true,
 	},
 
+	-- Tool for better appearances of diffs. Already supports git diff capabilities as commands.
+	{
+		"sindrets/diffview.nvim",
+		event = "VeryLazy",
+	},
 }
