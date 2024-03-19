@@ -102,4 +102,15 @@ return {
 		end
 	},
 
+	-- Toggle maximise a split window
+	{
+		"szw/vim-maximizer",
+		keys = {
+			{
+				"<leader>sm",
+				"<cmd>MaximizerToggle<CR>",
+				desc = "Maximize/minimize a split",
+			},
+		},
+	},
 }

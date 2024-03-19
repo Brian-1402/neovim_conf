@@ -220,8 +220,8 @@ return {
 	{
 		'Wansmer/treesj',
 		event = "VeryLazy",
-		keys = { '<space>m', '<space>j', '<space>s' },
-		-- leader s for split, j for join, m for toggling
+		keys = { '<space>m'},
+		-- leader m for toggling
 		dependencies = { 'nvim-treesitter/nvim-treesitter' },
 		config = function()
 			require('treesj').setup({--[[ your config ]]})

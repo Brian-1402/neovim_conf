@@ -42,6 +42,11 @@ return {
 					-- ['<C-f>'] = cmp_action.luasnip_jump_forward(),
 					-- ['<C-b>'] = cmp_action.luasnip_jump_backward(),
 
+					-- ["<C-k>"] = cmp.mapping.select_prev_item(), -- previous suggestion
+					-- ["<C-j>"] = cmp.mapping.select_next_item(), -- next suggestion
+
+					["<C-e>"] = cmp.mapping.abort(), -- close completion window
+
 					['<C-Tab>'] = cmp.mapping(function (fallback)
 					if not cmp.visible() then
 						cmp.complete() -- trigger opening completion menu
@@ -53,7 +58,23 @@ return {
 					['<Tab>'] = cmp.mapping(function(fallback)
 						if cmp.visible() then -- and has_words_before() then
 							cmp.select_next_item({behavior = 'insert'}) -- Select and also insert entry
-						elseif luasnip.expand_or_jumpable() then
+						else
+							fallback()
+						end
+					end, { "i", "s" }),
+
+					['<S-Tab>'] = cmp.mapping(function(fallback)
+						if cmp.visible() then -- and has_words_before() then
+							cmp.select_prev_item({behavior = 'insert'})
+						else
+							fallback()
+						end
+					end, { "i", "s" }),
+
+					["<C-j>"]= cmp.mapping(function(fallback)
+						-- if cmp.visible() then -- and has_words_before() then
+						-- 	cmp.select_next_item({behavior = 'insert'}) -- Select and also insert entry
+						if luasnip.expand_or_jumpable() then
 							luasnip.expand_or_jump()
 						-- elseif has_words_before() then
 						-- 	cmp.complete()
@@ -62,10 +83,10 @@ return {
 						end
 					end, { "i", "s" }),
 
-					['<S-Tab>'] = cmp.mapping(function(fallback)
-						if cmp.visible() then
-							cmp.select_prev_item({behavior = 'insert'})
-						elseif luasnip.jumpable(-1) then
+					['<C-k>'] = cmp.mapping(function(fallback)
+						-- if cmp.visible() then
+						-- 	cmp.select_prev_item({behavior = 'insert'})
+						if luasnip.jumpable(-1) then
 							luasnip.jump(-1)
 						else
 							fallback()
@@ -114,7 +135,7 @@ return {
 
 				snippet = {
 					expand = function(args)
-						require('luasnip').lsp_expand(args.body)
+						luasnip.lsp_expand(args.body)
 					end,
 				},
 

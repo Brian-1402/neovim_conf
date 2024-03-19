@@ -5,13 +5,6 @@ return {
 		dependencies = { 'nvim-lua/plenary.nvim' },
 		event = "VeryLazy",
 
-		opts = {
-			-- extensions = {
-			-- 	fzf = { },
-			-- 	agrolens = { },
-			-- },
-		},
-
 		keys = {
 			{ -- lazy style key map
 			"<leader>ff",
@@ -38,6 +31,11 @@ return {
 			"<cmd>Telescope oldfiles<cr>",
 			desc = "Telescope: recent files",
 			},
+			{ -- lazy style key map
+			"<leader>fc",
+			"<cmd>Telescope grep_string<cr>",
+			desc = "Find string under cursor in cwd",
+			},
 			-- { -- lazy style key map
 			-- "<leader>fw",
 			-- "<cmd>Telescope workspaces<cr>",
@@ -45,7 +43,7 @@ return {
 			-- },
 		},
 
-		config = function (_, opts)
+		config = function ()
 			-- local builtin = require('telescope.builtin')
 			-- local extensions = require'telescope'.extensions
 			-- vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
@@ -53,7 +51,28 @@ return {
 			-- vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
 			-- vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
 			-- vim.keymap.set('n', '<leader>fp', extensions.projects.projects, {})
-			require('telescope').setup(opts)
+
+			local telescope = require("telescope")
+			local actions = require("telescope.actions")
+
+			telescope.setup({
+			  defaults = {
+				path_display = { "truncate " },
+				mappings = {
+				  -- For insert mode,
+				  i = {
+					["<C-k>"] = actions.move_selection_previous, -- move to prev result
+					["<C-j>"] = actions.move_selection_next, -- move to next result
+
+					-- Send telescope results to the quickfix list
+					["<C-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
+
+					-- Show mappings for current picker
+					["<C-h>"] = "which_key"
+				  },
+				},
+			  },
+			})
 		end
 	},
 

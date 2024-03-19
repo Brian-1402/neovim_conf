@@ -60,7 +60,7 @@ return {
 		event = "VeryLazy",
 		init = function()
 			vim.o.timeout = true
-			vim.o.timeoutlen = 2000
+			vim.o.timeoutlen = 1000
 		end,
 		opts = {
 			-- your configuration comes here
@@ -485,6 +485,7 @@ return {
 
 	{
 		'akinsho/toggleterm.nvim',
+		event = "VeryLazy",
 		version = "*",
 		config = true,
 	},
