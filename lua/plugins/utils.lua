@@ -446,7 +446,14 @@ return {
 			-- local Path = require('plenary.path')
 			local config = require('session_manager.config')
 			require('session_manager').setup({
-				autoload_mode = config.AutoloadMode.CurrentDir
+				autoload_mode = config.AutoloadMode.CurrentDir,
+				autosave_ignore_dirs = {
+					[[C:\Users\brian\scoop\apps\neovide\current]],
+					[[C:\Users\brian\scoop\apps\nvy\current]],
+					[[C:\WINDOWS\system32]],
+				},
+				-- autosave_ignore_buftypes = {"terminal", "term"},
+				autosave_ignore_filetypes = {"terminal", "term"},
 				  -- autosave_only_in_session = true, -- Always autosaves session. If true, only autosaves after a session is active.
 			})
 
@@ -481,13 +488,6 @@ return {
 				end
 			})
 		end
-	},
-
-	{
-		'akinsho/toggleterm.nvim',
-		event = "VeryLazy",
-		version = "*",
-		config = true,
 	},
 
 	-- Tool for better appearances of diffs. Already supports git diff capabilities as commands.

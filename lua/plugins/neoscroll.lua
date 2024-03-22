@@ -2,6 +2,9 @@
 return {
 	"karb94/neoscroll.nvim",
 	event = "VeryLazy",
+	enabled = function()
+		return not vim.g.neovide
+	end,
 
 	config = function()
 		require('neoscroll').setup({

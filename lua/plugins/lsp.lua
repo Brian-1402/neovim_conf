@@ -1,5 +1,6 @@
 local mlsp_server_names = { "bashls", "biome", "clangd",
-	"marksman", "lua_ls", "pyright", "vimls", "jdtls", }
+	"marksman", "lua_ls", "pyright", "vimls", }
+-- local nvim_jdtls_servers = {"jdtls", "java-test", "java-debug-adapter",}
 local linters = { "selene", }
 local formatters = { "stylua", "black", }
 local others = {}
@@ -154,7 +155,7 @@ return {
 				keymap.set("n", "<leader>rs", ":LspRestart<CR>", opts) -- mapping to restart lsp if necessary
 
 				-- local map = function(m, lhs, rhs)
-				-- 	vim.keymap.set(m, lhs, rhs, opts)
+				--	vim.keymap.set(m, lhs, rhs, opts)
 				-- end
 				--
 				-- -- LSP actions
@@ -225,13 +226,21 @@ return {
 
 			local default_setup = function(server)
 				lspconfig[server].setup(lsp_opts[server])
+				-- lspconfig[server].setup()
+			end
+
+			-- Call setup for each server
+			for _, server in pairs(mlsp_server_names) do
+				default_setup(server)
 			end
 
 			require('mason-lspconfig').setup({
 				ensure_installed = mason_all_pkgs,
-				handlers = {
-					default_setup,
-				},
+				-- Adding as handler making it call lspconfig[server].setup() would work but it gets run for every mason installed package. 
+				-- Some packages we may not need to call setup intentionally (eg jdtls), therefore have commented out the below lines.
+				-- handlers = {
+				--	default_setup,
+				-- },
 			})
 
 			attach_lsp_to_existing_buffers()
@@ -253,5 +262,12 @@ return {
 		build = ":MasonUpdate",
 		config = true,
 	},
+
+	-- Java LSP and other features
+	-- {
+	-- 	"mfussenegger/nvim-jdtls",
+	-- 	filetypes = { "java" },
+	-- 	config = false,
+	-- },
 
 }
