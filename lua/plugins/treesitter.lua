@@ -1,6 +1,7 @@
 return {
 	{
 		'nvim-treesitter/nvim-treesitter',
+		tag = "v0.9.2",
 		build = ':TSUpdate',
 		event = { "VeryLazy" },
 
@@ -49,8 +50,8 @@ return {
 					if ok and stats and stats.size > max_filesize then
 						return true
 					end
-					local all_disabled = {"latex"}
-					local win32_disabled = { "make", }
+					local all_disabled = {"latex", }
+					local win32_disabled = { --[[ "make", ]] }
 					-- Disabling latex because vimtex provides highlighting. 
 					-- Disabling make because the current windows parser seems to give an error constantly
 					if vim.fn.has("win32") and vim.tbl_contains( win32_disabled, lang ) then

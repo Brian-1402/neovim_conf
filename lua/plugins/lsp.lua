@@ -270,4 +270,18 @@ return {
 	-- 	config = false,
 	-- },
 
+	{
+		"AckslD/swenv.nvim",
+		-- event = "Verylazy",
+		lazy = true,
+		cmd = "PickPythonEnv",
+		filetypes = { "python" },
+		depedencies = "plenary.nvim",
+		config = function()
+			require("swenv").setup()
+			vim.api.nvim_create_user_command('PickPythonEnv', function()
+				require('swenv.api').pick_venv()
+			end, { desc = 'Pick python virtual env' })
+		end,
+	},
 }

@@ -56,11 +56,11 @@ return {
 			local actions = require("telescope.actions")
 
 			telescope.setup({
-			  defaults = {
+				defaults = {
 				path_display = { "truncate " },
 				mappings = {
-				  -- For insert mode,
-				  i = {
+					-- For insert mode,
+					i = {
 					["<C-k>"] = actions.move_selection_previous, -- move to prev result
 					["<C-j>"] = actions.move_selection_next, -- move to next result
 
@@ -69,9 +69,9 @@ return {
 
 					-- Show mappings for current picker
 					["<C-h>"] = "which_key"
-				  },
+					},
 				},
-			  },
+				},
 			})
 		end
 	},
@@ -161,6 +161,17 @@ return {
 		event = "VeryLazy",
 		config = function()
 			require("telescope").load_extension("ui-select")
+		end,
+	},
+
+	-- Allows telescope to check out keymappings
+	{ "gregorias/nvim-mapper",
+		dependencies = "nvim-telescope/telescope.nvim",
+		opts = {
+			-- search_path = vim.fn.stdpath('config') .. '/lua',
+		},
+		config = function(_, opts)
+			require('nvim-mapper').setup(opts)
 		end,
 	},
 }
