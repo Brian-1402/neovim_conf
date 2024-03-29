@@ -56,6 +56,11 @@ return {
 			"williamboman/mason.nvim",
 			{ "folke/neodev.nvim", config = true, },
 			"SmiteshP/nvim-navic",
+			{ "smjonas/inc-rename.nvim",
+				config = function()
+					require("inc_rename").setup({ input_buffer_type = "dressing" })
+				end,
+			},
 		},
 
 		config = function()
@@ -122,19 +127,50 @@ return {
 				keymap.set("n", "gD", vim.lsp.buf.declaration, opts) -- go to declaration
 
 				opts.desc = "Show LSP definitions"
-				keymap.set("n", "gd", "<cmd>Telescope lsp_definitions<CR>", opts) -- show lsp definitions
+				keymap.set("n", "gd", function() require("telescope.builtin").lsp_definitions({ reuse_win = true }) end, opts) -- show lsp definitions
 
 				opts.desc = "Show LSP implementations"
-				keymap.set("n", "gi", "<cmd>Telescope lsp_implementations<CR>", opts) -- show lsp implementations
+				keymap.set("n", "gI", function() require("telescope.builtin").lsp_implementations({ reuse_win = true }) end, opts) -- show lsp implementations
 
-				-- opts.desc = "Show LSP type definitions"
-				-- keymap.set("n", "gt", "<cmd>Telescope lsp_type_definitions<CR>", opts) -- show lsp type definitions
+				opts.desc = "Show LSP type definitions"
+				keymap.set("n", "gy", function() require("telescope.builtin").lsp_type_definitions({ reuse_win = true }) end, opts) -- show lsp type definitions
+
+				opts.desc = "Show LSP signature help"
+				keymap.set("n", "gK", vim.lsp.buf.signature_help, opts)
 
 				opts.desc = "See available code actions"
 				keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts) -- see available code actions, in visual mode will apply to selection
 
+				opts.desc = "Run Codelens"
+				keymap.set({ "n", "v" }, "<leader>cc", vim.lsp.codelens.run, opts)
+
+				opts.desc = "Refresh & Display Codelens"
+				keymap.set({ "n", "v" }, "<leader>cC", vim.lsp.codelens.refresh, opts)
+
+				opts.desc = "Source action"
+				keymap.set("n", "<leader>cA",
+					function()
+						vim.lsp.buf.code_action({
+							context = {
+								only = {
+									"source",
+								},
+								diagnostics = {},
+							},
+						})
+					end,
+					opts
+				)
+
 				opts.desc = "Smart rename"
-				keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts) -- smart rename
+				-- keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts) -- smart rename
+				keymap.set("n", "<leader>rn",
+					function()
+						local inc_rename = require("inc_rename")
+						return ":" .. inc_rename.config.cmd_name .. " " .. vim.fn.expand("<cword>")
+					end,
+					opts
+				) -- smart rename
 
 				opts.desc = "Show buffer diagnostics"
 				keymap.set("n", "<leader>D", "<cmd>Telescope diagnostics bufnr=0<CR>", opts) -- show	diagnostics for file
@@ -219,9 +255,9 @@ return {
 
 			-- Add the on_attach function to each server config
 			-- for _, opts in pairs(lsp_opts) do
-			-- 	if type(opts) == "table" then
-			-- 		opts.on_attach = navic_on_attach
-			-- 	end
+			--	if type(opts) == "table" then
+			--		opts.on_attach = navic_on_attach
+			--	end
 			-- end
 
 
