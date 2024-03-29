@@ -218,11 +218,24 @@ return {
 			end
 
 			-- Add the on_attach function to each server config
-			for _, opts in pairs(lsp_opts) do
-				if type(opts) == "table" then
-					opts.on_attach = navic_on_attach
-				end
-			end
+			-- for _, opts in pairs(lsp_opts) do
+			-- 	if type(opts) == "table" then
+			-- 		opts.on_attach = navic_on_attach
+			-- 	end
+			-- end
+
+
+			-- Custom lsp opts
+			lsp_opts["clangd"] = {
+				on_attach = function(client, bufnr)
+					navic.attach(client, bufnr)
+				end,
+				capabilities = cmp_nvim_lsp.default_capabilities(),
+				cmd = {
+					"clangd",
+					"--offset-encoding=utf-8",
+				},
+			}
 
 			local default_setup = function(server)
 				lspconfig[server].setup(lsp_opts[server])
@@ -265,9 +278,9 @@ return {
 
 	-- Java LSP and other features
 	-- {
-	-- 	"mfussenegger/nvim-jdtls",
-	-- 	filetypes = { "java" },
-	-- 	config = false,
+	--	"mfussenegger/nvim-jdtls",
+	--	filetypes = { "java" },
+	--	config = false,
 	-- },
 
 	{

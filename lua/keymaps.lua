@@ -22,6 +22,9 @@ vim.keymap.set("v", "<leader>c", '"+y', { noremap = true, silent = true }) -- Fo
 -- To make jumping between windows easier
 vim.keymap.set("n", "<leader>w", '<C-w>', { noremap = true, silent = true })
 
+-- Remap Ctrl-s to save
+vim.keymap.set("n", "<C-S>", ':w<CR>', { noremap = true, silent = true })
+
 -- For setting ctrl backspace remap in insert mode for Neovim-qt
 vim.keymap.set('i', '<C-BS>', '<C-w>', { noremap = true, silent = true })
 
