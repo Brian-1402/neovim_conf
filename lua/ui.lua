@@ -32,3 +32,8 @@ vim.opt.listchars = {
 	precedes = "«",
 	-- nbsp = "░",
 }
+
+-- gutter space for lsp info on left
+vim.o.signcolumn = "yes"
+-- increased for lsp code actions
+vim.o.updatetime = 100

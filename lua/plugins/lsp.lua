@@ -169,7 +169,7 @@ return {
 						local inc_rename = require("inc_rename")
 						return ":" .. inc_rename.config.cmd_name .. " " .. vim.fn.expand("<cword>")
 					end,
-					opts
+					vim.tbl_deep_extend("keep", opts, { expr = true })
 				) -- smart rename
 
 				opts.desc = "Show buffer diagnostics"

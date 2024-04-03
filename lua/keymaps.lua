@@ -16,8 +16,8 @@ vim.api.nvim_set_keymap('i', '<C-U>', '<C-G>u<C-U>', { noremap = true })
 -- To prevent pasting from being messed up by autoindent, etc
 vim.keymap.set("n", "<leader>v", ':set paste<CR>"+p:set nopaste<CR>', { noremap = true, silent = true })
 vim.keymap.set("v", "<leader>v", ':set paste<CR>"+p:set nopaste<CR>', { noremap = true, silent = true })
-vim.keymap.set("n", "<leader>c", '"+y', { noremap = true, silent = true }) -- For normal mode
-vim.keymap.set("v", "<leader>c", '"+y', { noremap = true, silent = true }) -- For visual mode
+-- vim.keymap.set("n", "<leader>c", '"+y', { noremap = true, silent = true }) -- For normal mode
+-- vim.keymap.set("v", "<leader>c", '"+y', { noremap = true, silent = true }) -- For visual mode
 
 -- To make jumping between windows easier
 vim.keymap.set("n", "<leader>w", '<C-w>', { noremap = true, silent = true })

@@ -173,8 +173,8 @@ return {
 
 	{
 		"kdheepak/lazygit.nvim",
-		enabled = false,
-		-- event = "VeryLazy",
+		-- enabled = false,
+		event = "VeryLazy",
 		-- optional for floating window border decoration
 		dependencies = {
 			"nvim-lua/plenary.nvim",
