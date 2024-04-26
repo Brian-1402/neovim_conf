@@ -1,4 +1,4 @@
-local mlsp_server_names = { "bashls", "biome", "clangd",
+local mlsp_server_names = { "bashls", "biome", "clangd", "autotools_ls",
 	"marksman", "lua_ls", "pyright", "vimls", }
 -- local nvim_jdtls_servers = {"jdtls", "java-test", "java-debug-adapter",}
 local linters = { "selene", }
@@ -269,7 +269,7 @@ return {
 				capabilities = cmp_nvim_lsp.default_capabilities(),
 				cmd = {
 					"clangd",
-					"--offset-encoding=utf-8",
+					"--offset-encoding=utf-16",
 				},
 			}
 

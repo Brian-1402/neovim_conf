@@ -179,7 +179,13 @@ return {
 		dependencies = {
 			"nvim-lua/plenary.nvim",
 		},
+		keys = {
+			{ "<leader>gz", "<cmd>LazyGit<cr>", desc = "LazyGit" },
+		},
 		cmd = { "LazyGit", "LazyGitConfig", "LazyGitCurrentFile", "LazyGitFilter", "LazyGitFilterCurrentFile" },
+		-- config = function ()
+		--		vim.api.nvim_set_keymap("n", "<leader>gz", "<cmd>LazyGit<CR>", { noremap = true, silent = true })
+		-- end
 	},
 
 	{
@@ -408,8 +414,8 @@ return {
 					"silent %bdelete!",
 				},
 				-- open = function()
-				-- 	-- require("sessions").load(nil, { --[[ silent = true ]] })
-				-- 	require('session_manager').save_current_session()
+				--	-- require("sessions").load(nil, { --[[ silent = true ]] })
+				--	require('session_manager').save_current_session()
 				-- end,
 				open = {
 					"SessionManager load_current_dir_session",
@@ -494,5 +500,23 @@ return {
 	{
 		"sindrets/diffview.nvim",
 		event = "VeryLazy",
+	},
+
+	{
+		"kawre/leetcode.nvim",
+		build = ":TSUpdate html",
+		dependencies = {
+			"nvim-telescope/telescope.nvim",
+			"nvim-lua/plenary.nvim", -- required by telescope
+			"MunifTanjim/nui.nvim",
+
+			-- optional
+			"nvim-treesitter/nvim-treesitter",
+			"rcarriga/nvim-notify",
+			"nvim-tree/nvim-web-devicons",
+		},
+		opts = {
+			-- configuration goes here
+		},
 	},
 }
