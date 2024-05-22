@@ -71,8 +71,14 @@ return {
 
 	{
 		'numToStr/Comment.nvim',
-		opts = { },
 		event = "VeryLazy",
+		config = function()
+			local comment = require('Comment');
+			comment.setup();
+			-- Below not working
+			-- -- Remap Ctrl-/ to comment
+			-- vim.keymap.set("n", "<C-/>", "gcc", { noremap = true, silent = true })
+		end,
 	},
 
 	{

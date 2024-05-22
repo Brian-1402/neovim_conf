@@ -20,7 +20,7 @@ vim.keymap.set("v", "<leader>v", ':set paste<CR>"+p:set nopaste<CR>', { noremap 
 -- vim.keymap.set("v", "<leader>c", '"+y', { noremap = true, silent = true }) -- For visual mode
 
 -- To make jumping between windows easier
-vim.keymap.set("n", "<leader>w", '<C-w>', { noremap = true, silent = true })
+-- vim.keymap.set("n", "<leader>w", '<C-w>', { noremap = true, silent = true })
 
 -- Remap Ctrl-s to save
 vim.keymap.set("n", "<C-S>", ':w<CR>', { noremap = true, silent = true })
