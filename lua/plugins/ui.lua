@@ -1,19 +1,25 @@
 return {
 
 	{
-		'bluz71/vim-nightfly-colors', name = 'nightfly', lazy = false, priority = 1000,
+		'bluz71/vim-nightfly-colors',
+		name = 'nightfly',
+		lazy = false,
+		priority = 1000,
 		config = function() vim.cmd.colorscheme("nightfly") end,
 	}, -- Color theme. oxfist/night-owl.nvim is also a good alternative
 
 	{
-		"catppuccin/nvim", name = "catppuccin", lazy = false,  priority = 1000,
+		"catppuccin/nvim",
+		name = "catppuccin",
+		lazy = false,
+		priority = 1000,
 		-- config = function() vim.cmd.colorscheme("catppuccin") end,
 	},
 
 	-- Status line plugin
 	{
 		'nvim-lualine/lualine.nvim',
-		event = {"UIEnter", "VeryLazy"},
+		event = { "UIEnter", "VeryLazy" },
 		dependencies = { 'nvim-tree/nvim-web-devicons', lazy = true, },
 		opts = {
 			options = { theme = 'nightfly' },
@@ -27,7 +33,7 @@ return {
 	{
 		"utilyre/barbecue.nvim",
 		name = "barbecue",
-		enabled = false, -- Giving E36:Not enough room error everytime I scroll. But that error started recently only, 
+		enabled = false, -- Giving E36:Not enough room error everytime I scroll. But that error started recently only,
 		-- probably conflicting with some recent settings changes. I think it's the treesitter top scope previewer bar.
 		event = "UIEnter",
 		version = "*",
@@ -67,12 +73,13 @@ return {
 	{
 		'akinsho/bufferline.nvim',
 		enabled = false,
-		version = "*", dependencies = 'nvim-tree/nvim-web-devicons',
+		version = "*",
+		dependencies = 'nvim-tree/nvim-web-devicons',
 		event = "VeryLazy",
 		opts = {
 			-- diagnostics = "nvim_lsp",
 		},
-		config = function (_, opts)
+		config = function(_, opts)
 			vim.opt.termguicolors = true
 			require("bufferline").setup(opts)
 		end
@@ -94,17 +101,18 @@ return {
 		config = function()
 			local codewindow = require('codewindow')
 			codewindow.setup({
-			-- use_lsp = false, -- Use the builtin LSP to show errors and warnings
-			-- use_treesitter = false, -- Use nvim-treesitter to highlight the code
+				-- use_lsp = false, -- Use the builtin LSP to show errors and warnings
+				-- use_treesitter = false, -- Use nvim-treesitter to highlight the code
 			})
 			codewindow.apply_default_keybinds()
-			vim.api.nvim_set_hl(0, 'CodewindowBorder', {fg = '#012b4d'}) -- Doesn't seem to work
+			vim.api.nvim_set_hl(0, 'CodewindowBorder', { fg = '#012b4d' }) -- Doesn't seem to work
 		end
 	},
 
 	-- Toggle maximise a split window
 	{
 		"szw/vim-maximizer",
+		-- by default, it sets keymap as F3. put "let g:maximizer_set_default_mapping = 1" to disable it.
 		keys = {
 			{
 				"<leader>sm",
@@ -112,5 +120,10 @@ return {
 				desc = "Maximize/minimize a split",
 			},
 		},
+		config = function()
+			vim.g.maximizer_set_default_mapping = 0
+			-- vim.g.maximizer_default_mapping_key = '<leader>sm'
+			-- Above setting not working
+		end,
 	},
 }

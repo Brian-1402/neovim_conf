@@ -1,4 +1,3 @@
-
 --The below functionality has been replaced with farmergreg/vim-lastplace plugin
 vim.cmd([[
 	" Put these in an autocmd group, so that you can revert them with:
@@ -25,7 +24,7 @@ vim.cmd([[
 	augroup vimHints
 		au!
 		autocmd CmdwinEnter *
-		\ echohl Todo | 
+		\ echohl Todo |
 		\ echo 'You discovered the command-line window! You can close it with ":q".' |
 		\ echohl None
 	augroup END

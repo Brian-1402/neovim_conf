@@ -8,4 +8,7 @@ require("defaults")
 require("cmds")
 
 -- Load plugins
-require("no_ui.plugins")
+require("vscode.plugins")
+
+-- Load the vs code specific keymaps
+require("vscode.keymaps")

@@ -2,12 +2,11 @@
 
 return {
 	"lukas-reineke/indent-blankline.nvim",
-	event = { "UIEnter", "VeryLazy",},
+	event = { "UIEnter", "VeryLazy", },
 
 	dependencies = { "HiPhish/rainbow-delimiters.nvim", },
 
 	config = function()
-
 		local highlight = {
 			"RainbowRed",
 			"RainbowYellow",
@@ -33,10 +32,9 @@ return {
 
 		vim.g.rainbow_delimiters = { highlight = highlight }
 		require("ibl").setup {
-			indent = { highlight = highlight,  char = "▏", tab_char = "▏", },
+			indent = { highlight = highlight, char = "▏", tab_char = "▏", },
 		}
 
 		hooks.register(hooks.type.SCOPE_HIGHLIGHT, hooks.builtin.scope_highlight_from_extmark)
-
 	end,
 }

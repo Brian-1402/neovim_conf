@@ -9,12 +9,12 @@ return {
 
 			local logo = [[
 
-  ███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗ 
-  ████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║ 
-  ██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║ 
-  ██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║ 
-  ██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║ 
-  ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝ 
+  ███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗
+  ████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║
+  ██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║
+  ██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║
+  ██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║
+  ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝
 
 			]]
 			local function getGreeting(name)
@@ -92,7 +92,8 @@ return {
 				callback = function()
 					local stats = require("lazy").stats()
 					local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
-					local version = "  󰥱 v" .. vim.version().major .. "." .. vim.version().minor .. "." .. vim.version().patch
+					local version = "  󰥱 v" ..
+					vim.version().major .. "." .. vim.version().minor .. "." .. vim.version().patch
 					local plugins = "⚡Neovim loaded " .. stats.count .. " plugins in " .. ms .. "ms"
 					local footer = version .. "\t" .. plugins .. "\n"
 					dashboard.section.footer.val = footer

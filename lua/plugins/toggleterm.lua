@@ -4,11 +4,11 @@ local M = {
 }
 
 function M.config()
-
 	if vim.fn.has("win32") == 1 then
 		local powershell_options = {
 			shell = vim.fn.executable "pwsh" == 1 and "pwsh" or "powershell",
-			shellcmdflag = "-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;",
+			shellcmdflag =
+			"-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;",
 			shellredir = "-RedirectStandardOutput %s -NoNewWindow -Wait",
 			shellpipe = "2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode",
 			shellquote = "",
@@ -21,8 +21,8 @@ function M.config()
 	end
 	local execs = {
 		{ nil, "<M-1>", "Horizontal Terminal", "horizontal", 0.3 },
-		{ nil, "<M-2>", "Vertical Terminal", "vertical", 0.4 },
-		{ nil, "<M-3>", "Float Terminal", "float", nil },
+		{ nil, "<M-2>", "Vertical Terminal",   "vertical",   0.4 },
+		{ nil, "<M-3>", "Float Terminal",      "float",      nil },
 	}
 
 	local function get_buf_size()
@@ -96,7 +96,7 @@ function M.config()
 		direction = "float",
 		-- direction = "vertical",
 		close_on_exit = true, -- close the terminal window when the process exits
-		shell = nil, -- change the default shell
+		shell = nil,    -- change the default shell
 		float_opts = {
 			border = "rounded",
 			winblend = 0,
@@ -173,11 +173,11 @@ function M.config()
 		end,
 	}
 
-	function _lazygit_toggle()
+	local function _lazygit_toggle()
 		lazygit:toggle()
 	end
 
-	function _bun_outdated()
+	local function _bun_outdated()
 		bun_outdated:toggle()
 	end
 

@@ -9,7 +9,7 @@ local mason_nonlsp_pkgs = vim.tbl_extend("keep", linters, formatters, others)
 local mason_all_pkgs = vim.tbl_extend("keep", mlsp_server_names, mason_nonlsp_pkgs)
 
 -- Custom config opts for each server
-local lsp_opts = { }
+local lsp_opts = {}
 
 -- Add empty opts for each server already not having any
 for _, pkg in ipairs(mlsp_server_names) do
@@ -56,7 +56,8 @@ return {
 			"williamboman/mason.nvim",
 			{ "folke/neodev.nvim", config = true, },
 			"SmiteshP/nvim-navic",
-			{ "smjonas/inc-rename.nvim",
+			{
+				"smjonas/inc-rename.nvim",
 				config = function()
 					require("inc_rename").setup({ input_buffer_type = "dressing" })
 				end,
@@ -102,24 +103,6 @@ return {
 
 
 				-- set keybinds
-				-- -- The below are non-telescope quickfix menu mappings
-				-- opts.desc = "Show LSP references"
-				-- keymap.set("n", "gr", vim.lsp.buf.references, opts) -- show definition, references
-				--
-				-- opts.desc = "Go to declaration"
-				-- keymap.set("n", "gD", vim.lsp.buf.declaration, opts) -- go to declaration
-				--
-				-- opts.desc = "Show LSP definitions"
-				-- keymap.set("n", "gd", vim.lsp.buf.definition, opts) -- show lsp definitions
-				--
-				-- opts.desc = "Show LSP implementations"
-				-- keymap.set("n", "gi", vim.lsp.buf.implementation, opts) -- show lsp implementations
-				--
-				-- opts.desc = "Show LSP type definitions"
-				-- keymap.set("n", "gt", vim.lsp.buf.type_definition, opts) -- show lsp type definitions
-				--
-
-				-- set keybinds
 				opts.desc = "Show LSP references"
 				keymap.set("n", "gr", "<cmd>Telescope lsp_references<CR>", opts) -- show definition, references
 
@@ -127,13 +110,16 @@ return {
 				keymap.set("n", "gD", vim.lsp.buf.declaration, opts) -- go to declaration
 
 				opts.desc = "Show LSP definitions"
-				keymap.set("n", "gd", function() require("telescope.builtin").lsp_definitions({ reuse_win = true }) end, opts) -- show lsp definitions
+				keymap.set("n", "gd", function() require("telescope.builtin").lsp_definitions({ reuse_win = true }) end,
+					opts) -- show lsp definitions
 
 				opts.desc = "Show LSP implementations"
-				keymap.set("n", "gI", function() require("telescope.builtin").lsp_implementations({ reuse_win = true }) end, opts) -- show lsp implementations
+				keymap.set("n", "gI",
+					function() require("telescope.builtin").lsp_implementations({ reuse_win = true }) end, opts) -- show lsp implementations
 
 				opts.desc = "Show LSP type definitions"
-				keymap.set("n", "gy", function() require("telescope.builtin").lsp_type_definitions({ reuse_win = true }) end, opts) -- show lsp type definitions
+				keymap.set("n", "gy",
+					function() require("telescope.builtin").lsp_type_definitions({ reuse_win = true }) end, opts) -- show lsp type definitions
 
 				opts.desc = "Show LSP signature help"
 				keymap.set("n", "gK", vim.lsp.buf.signature_help, opts)
@@ -190,28 +176,49 @@ return {
 				opts.desc = "Restart LSP"
 				keymap.set("n", "<leader>rs", ":LspRestart<CR>", opts) -- mapping to restart lsp if necessary
 
-				-- local map = function(m, lhs, rhs)
-				--	vim.keymap.set(m, lhs, rhs, opts)
-				-- end
-				--
-				-- -- LSP actions
-				-- map('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>')
-				-- map('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>')
-				-- map('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>')
-				-- map('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>')
-				-- map('n', 'go', '<cmd>lua vim.lsp.buf.type_definition()<cr>')
-				-- map('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>')
-				-- map('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<cr>')
-				-- map('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>')
-				-- map({ 'n', 'x' }, '<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>')
-				-- map('n', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>')
-				-- map('x', '<F4>', '<cmd>lua vim.lsp.buf.range_code_action()<cr>')
-				--
-				-- -- Diagnostics
-				-- map('n', 'gl', '<cmd>lua vim.diagnostic.open_float()<cr>')
-				-- map('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<cr>')
-				-- map('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<cr>')
+				opts.desc = "Set location list to diagnostics"
+				keymap.set("n", "<leader>q", vim.diagnostic.setloclist, opts)
 
+				local formatter = function() vim.lsp.buf.format({ async = true }) end
+
+				opts.desc = "Format buffer"
+				keymap.set("n", "<leader>=", formatter, opts)
+
+				opts.desc = "Format selection"
+				keymap.set("v", "=", formatter, opts)
+
+
+				-- The workspace functions aren't really useful.
+				--[[
+
+				opts.desc = "Add workspace folder"
+				keymap.set("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, opts)
+
+				opts.desc = "Remove workspace folder"
+				keymap.set("n", "<leader>wr", vim.lsp.buf.remove_workspace_folder, opts)
+
+				local list_workspace_folders = function()
+					local folders = vim.lsp.buf.list_workspace_folders()
+					require('telescope.pickers').new({}, {
+						prompt_title = 'Workspace Folders',
+						finder = require('telescope.finders').new_table({
+							results = folders,
+							entry_maker = function(entry)
+								return {
+									value = entry,
+									display = entry,
+									ordinal = entry,
+								}
+							end,
+						}),
+						sorter = require('telescope.config').values.generic_sorter({})
+					}):find()
+				end
+
+				opts.desc = "List workspace folders"
+				keymap.set("n", "<leader>wl", list_workspace_folders, opts)
+
+				]]
 			end
 
 			vim.api.nvim_create_autocmd('LspAttach', {
@@ -266,6 +273,7 @@ return {
 				on_attach = function(client, bufnr)
 					navic.attach(client, bufnr)
 				end,
+				inlay_hints = { enabled = true },
 				capabilities = cmp_nvim_lsp.default_capabilities(),
 				cmd = {
 					"clangd",
@@ -285,7 +293,7 @@ return {
 
 			require('mason-lspconfig').setup({
 				ensure_installed = mason_all_pkgs,
-				-- Adding as handler making it call lspconfig[server].setup() would work but it gets run for every mason installed package. 
+				-- Adding as handler making it call lspconfig[server].setup() would work but it gets run for every mason installed package.
 				-- Some packages we may not need to call setup intentionally (eg jdtls), therefore have commented out the below lines.
 				-- handlers = {
 				--	default_setup,

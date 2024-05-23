@@ -7,7 +7,7 @@ end
 return {
 	{
 		'hrsh7th/nvim-cmp',
-		event = { "InsertEnter", "CmdlineEnter"},
+		event = { "InsertEnter", "CmdlineEnter" },
 		dependencies = {
 			'neovim/nvim-lspconfig',
 			'saadparwaiz1/cmp_luasnip',
@@ -28,10 +28,10 @@ return {
 
 			cmp.setup {
 				sources = { -- For regular insert mode global setup. For filetype specific or cmdline etc, see further below
-					{ name = "copilot", group_index = 2 },
-					{name = 'nvim_lsp', group_index = 2 },
-					{name = 'luasnip', group_index = 2 },
-					{ name = 'buffer', group_index = 3 },
+					{ name = "copilot",  group_index = 2 },
+					{ name = 'nvim_lsp', group_index = 2 },
+					{ name = 'luasnip',  group_index = 2 },
+					{ name = 'buffer',   group_index = 3 },
 				},
 
 				-- mapping guide: https://github.com/hrsh7th/nvim-cmp/wiki/Example-mappings#luasnip
@@ -47,17 +47,17 @@ return {
 
 					["<C-e>"] = cmp.mapping.abort(), -- close completion window
 
-					['<C-Tab>'] = cmp.mapping(function (fallback)
-					if not cmp.visible() then
-						cmp.complete() -- trigger opening completion menu
-					else
-						fallback()
-					end
+					['<C-Tab>'] = cmp.mapping(function(fallback)
+						if not cmp.visible() then
+							cmp.complete() -- trigger opening completion menu
+						else
+							fallback()
+						end
 					end),
 
 					['<Tab>'] = cmp.mapping(function(fallback)
-						if cmp.visible() then -- and has_words_before() then
-							cmp.select_next_item({behavior = 'insert'}) -- Select and also insert entry
+						if cmp.visible() then        -- and has_words_before() then
+							cmp.select_next_item({ behavior = 'insert' }) -- Select and also insert entry
 						else
 							fallback()
 						end
@@ -65,19 +65,19 @@ return {
 
 					['<S-Tab>'] = cmp.mapping(function(fallback)
 						if cmp.visible() then -- and has_words_before() then
-							cmp.select_prev_item({behavior = 'insert'})
+							cmp.select_prev_item({ behavior = 'insert' })
 						else
 							fallback()
 						end
 					end, { "i", "s" }),
 
-					["<C-j>"]= cmp.mapping(function(fallback)
+					["<C-j>"] = cmp.mapping(function(fallback)
 						-- if cmp.visible() then -- and has_words_before() then
 						-- 	cmp.select_next_item({behavior = 'insert'}) -- Select and also insert entry
 						if luasnip.expand_or_jumpable() then
 							luasnip.expand_or_jump()
-						-- elseif has_words_before() then
-						-- 	cmp.complete()
+							-- elseif has_words_before() then
+							-- 	cmp.complete()
 						else
 							fallback()
 						end
@@ -105,7 +105,7 @@ return {
 
 				formatting = {
 					expandable_indicator = true,
-					fields = {'abbr', 'kind', 'menu'},
+					fields = { 'abbr', 'kind', 'menu' },
 					format = lspkind.cmp_format({
 						mode = "symbol",
 						max_width = 50,
@@ -179,8 +179,6 @@ return {
 					}
 				})
 			})
-
-
 		end,
 	},
 
@@ -188,7 +186,7 @@ return {
 		'saadparwaiz1/cmp_luasnip',
 		lazy = true,
 		dependencies = {
-			{'L3MON4D3/LuaSnip', build = "make install_jsregexp",},
+			{ 'L3MON4D3/LuaSnip', build = "make install_jsregexp", },
 		},
 	},
 
@@ -201,7 +199,7 @@ return {
 	{
 		"zbirenbaum/copilot-cmp",
 		lazy = true,
-		config = function ()
+		config = function()
 			require("copilot_cmp").setup()
 		end
 	},
@@ -211,10 +209,10 @@ return {
 		cmd = "Copilot",
 		event = "InsertEnter",
 		config = function()
-		require("copilot").setup({
-			suggestion = { enabled = false },
-			panel = { enabled = false },
-		})
+			require("copilot").setup({
+				suggestion = { enabled = false },
+				panel = { enabled = false },
+			})
 		end,
 	},
 

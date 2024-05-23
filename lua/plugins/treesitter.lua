@@ -50,13 +50,13 @@ return {
 					if ok and stats and stats.size > max_filesize then
 						return true
 					end
-					local all_disabled = {"latex", }
+					local all_disabled = { "latex", }
 					local win32_disabled = { --[[ "make", ]] }
-					-- Disabling latex because vimtex provides highlighting. 
+					-- Disabling latex because vimtex provides highlighting.
 					-- Disabling make because the current windows parser seems to give an error constantly
-					if vim.fn.has("win32") and vim.tbl_contains( win32_disabled, lang ) then
+					if vim.fn.has("win32") and vim.tbl_contains(win32_disabled, lang) then
 						return true
-					elseif vim.tbl_contains( all_disabled, lang ) then
+					elseif vim.tbl_contains(all_disabled, lang) then
 						return true
 					end
 				end,
@@ -233,11 +233,11 @@ return {
 		"nvim-treesitter/nvim-treesitter-context",
 		event = "VeryLazy",
 		opts = { mode = "cursor", max_lines = 3 },
-		config = function (_, opts)
+		config = function(_, opts)
 			vim.keymap.set("n", "[C", function()
-					require("treesitter-context").go_to_context(vim.v.count1)
-				end, { silent = true })
-			require'treesitter-context'.setup(opts)
+				require("treesitter-context").go_to_context(vim.v.count1)
+			end, { silent = true })
+			require 'treesitter-context'.setup(opts)
 		end,
 	},
 
@@ -245,11 +245,23 @@ return {
 	{
 		'Wansmer/treesj',
 		event = "VeryLazy",
-		keys = { '<space>m'},
+		keys = { '<space>m' },
 		-- leader m for toggling
 		dependencies = { 'nvim-treesitter/nvim-treesitter' },
 		config = function()
-			require('treesj').setup({--[[ your config ]]})
+			local treesj = require('treesj')
+			treesj.setup({
+				max_join_length = 400,
+				use_default_keymaps = false,
+			})
+			-- Keymap leader m to toggle
+			-- vim.keymap.set( "n", "<space>m", function() treesj.toggle() end)
+			vim.keymap.set(
+				"n",
+				"<space>m",
+				treesj.toggle,
+				{ noremap = true, silent = true, desc = "Toggle split/join list code blocks" }
+			)
 		end,
 	},
 

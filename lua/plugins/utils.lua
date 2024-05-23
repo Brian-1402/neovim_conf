@@ -2,7 +2,7 @@ return {
 
 	{
 		'lervag/vimtex', -- Latex features
-		config = function ()
+		config = function()
 			-- vimtex config
 			vim.g.tex_flavor = 'latex'
 			vim.g.vimtex_quickfix_mode = 0
@@ -26,7 +26,7 @@ return {
 	{
 		"epwalsh/obsidian.nvim",
 		enabled = false,
-		version = "*",	-- recommended, use latest release instead of latest commit
+		version = "*", -- recommended, use latest release instead of latest commit
 		lazy = true,
 		-- ft = "markdown",
 		-- Replace the above line with this if you only want to load obsidian.nvim for markdown files in your vault:
@@ -127,7 +127,7 @@ return {
 		"utilyre/sentiment.nvim",
 
 		-- cond required to avoid error when lazy.nvim popup closes to leave a blank file.
-		cond = function ()
+		cond = function()
 			local buftype = vim.api.nvim_buf_get_option(0, 'buftype')
 			if buftype == 'nofile' then -- In the beginning of file loading, the lazy popup sets this value, even though later on it's value is of the opened file.
 				return false
@@ -192,7 +192,7 @@ return {
 		"CopilotC-Nvim/CopilotChat.nvim",
 		opts = {
 			show_help = "yes", -- Show help text for CopilotChatInPlace, default: yes
-			debug = false, -- Enable or disable debug mode, the log file will be in ~/.local/state/nvim/CopilotChat.nvim.log
+			debug = false,    -- Enable or disable debug mode, the log file will be in ~/.local/state/nvim/CopilotChat.nvim.log
 			disable_extra_info = 'no', -- Disable extra information (e.g: system prompt) in the response.
 			-- proxy = "socks5://127.0.0.1:3000", -- Proxies requests via https or socks.
 		},
@@ -202,7 +202,7 @@ return {
 		event = "VeryLazy",
 		keys = {
 			{ "<leader>cce", "<cmd>CopilotChatExplain<cr>", desc = "CopilotChat - Explain code" },
-			{ "<leader>cct", "<cmd>CopilotChatTests<cr>", desc = "CopilotChat - Generate tests" },
+			{ "<leader>cct", "<cmd>CopilotChatTests<cr>",   desc = "CopilotChat - Generate tests" },
 			{
 				"<leader>ccv",
 				":CopilotChatVisual",
@@ -242,10 +242,10 @@ return {
 			"TmuxNavigatePrevious",
 		},
 		keys = {
-			{ "<c-h>", "<cmd><C-U>TmuxNavigateLeft<cr>" },
-			{ "<c-j>", "<cmd><C-U>TmuxNavigateDown<cr>" },
-			{ "<c-k>", "<cmd><C-U>TmuxNavigateUp<cr>" },
-			{ "<c-l>", "<cmd><C-U>TmuxNavigateRight<cr>" },
+			{ "<c-h>",  "<cmd><C-U>TmuxNavigateLeft<cr>" },
+			{ "<c-j>",  "<cmd><C-U>TmuxNavigateDown<cr>" },
+			{ "<c-k>",  "<cmd><C-U>TmuxNavigateUp<cr>" },
+			{ "<c-l>",  "<cmd><C-U>TmuxNavigateRight<cr>" },
 			{ "<c-\\>", "<cmd><C-U>TmuxNavigatePrevious<cr>" },
 		},
 	},
@@ -253,14 +253,14 @@ return {
 	-- ActivityWatch plugin for monitoring usage
 	{
 		"ActivityWatch/aw-watcher-vim",
-		enabled = function ()
+		enabled = function()
 			if vim.fn.has("unix") then
 				return false
 			else
 				return true
 			end
 		end,
-		config = function ()
+		config = function()
 			vim.g.aw_hostname = "Brian-HP"
 		end,
 	},
@@ -289,13 +289,13 @@ return {
 
 
 			store_hooks = {
-				pre = function ()
+				pre = function()
 					-- -- if you use neo-tree.nvim, add these two lines to the `pre` of `store_hooks`.
 					-- vim.cmd('tabd Neotree close')
 					-- vim.cmd('tabn')
 
 					-- Below are to close nvim-tree and neo-tree otherwise it'll cause errors when storing sessions
-					-- nvim-tree 
+					-- nvim-tree
 					local nvim_tree_present, api = pcall(require, "nvim-tree.api")
 					if nvim_tree_present then api.tree.close() end
 
@@ -364,7 +364,7 @@ return {
 				desc = "Restore last session automatically"
 			})
 
-			-- The following lines register two commands StoreProjectSession and RestoreProjectSession. 
+			-- The following lines register two commands StoreProjectSession and RestoreProjectSession.
 			-- Both of them attempt to store/restore the session if cwd is a project directory
 			vim.api.nvim_create_user_command("StoreProjectSession", function()
 				Session.store(vim.loop.cwd())
@@ -380,7 +380,6 @@ return {
 			vim.api.nvim_create_user_command("AddWorkspace", function()
 				Workspace.add(vim.loop.cwd())
 			end, {})
-
 		end
 	},
 
@@ -430,7 +429,7 @@ return {
 
 			}
 		},
-		config = function (_, opts)
+		config = function(_, opts)
 			require("workspaces").setup(opts)
 			require("telescope").load_extension("workspaces")
 			-- vim.keymap.set("n", "<leader>fw", function() vim.cmd("Telescope workspaces") end)
@@ -448,7 +447,7 @@ return {
 			-- "nvim-telescope/telescope-ui-select.nvim",
 			"nvim-lua/plenary.nvim",
 		},
-		config = function ()
+		config = function()
 			-- local Path = require('plenary.path')
 			local config = require('session_manager.config')
 			require('session_manager').setup({
@@ -459,8 +458,8 @@ return {
 					[[C:\WINDOWS\system32]],
 				},
 				-- autosave_ignore_buftypes = {"terminal", "term"},
-				autosave_ignore_filetypes = {"terminal", "term"},
-				  -- autosave_only_in_session = true, -- Always autosaves session. If true, only autosaves after a session is active.
+				autosave_ignore_filetypes = { "terminal", "term" },
+				-- autosave_only_in_session = true, -- Always autosaves session. If true, only autosaves after a session is active.
 			})
 
 			vim.keymap.set("n", "<leader>fw", function() vim.cmd("SessionManager load_session") end)
@@ -472,7 +471,7 @@ return {
 				group = config_group,
 				callback = function()
 					-- Below are to close nvim-tree and neo-tree otherwise it'll cause errors when storing sessions
-					-- nvim-tree 
+					-- nvim-tree
 					local nvim_tree_present, api = pcall(require, "nvim-tree.api")
 					if nvim_tree_present then api.tree.close() end
 					-- neo-tree
@@ -483,7 +482,7 @@ return {
 			-- Auto save session
 			vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
 				group = config_group,
-				callback = function ()
+				callback = function()
 					for _, buf in ipairs(vim.api.nvim_list_bufs()) do
 						-- Don't save while there's any 'nofile' buffer open.
 						if vim.api.nvim_get_option_value("buftype", { buf = buf }) == 'nofile' then

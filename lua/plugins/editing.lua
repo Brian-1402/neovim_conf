@@ -9,7 +9,7 @@ return {
 
 	-- For auto closing brackets
 	{
-	"windwp/nvim-autopairs",
+		"windwp/nvim-autopairs",
 		event = { "InsertEnter" },
 		dependencies = {
 			"hrsh7th/nvim-cmp",
@@ -20,11 +20,11 @@ return {
 
 			-- configure autopairs
 			autopairs.setup({
-				check_ts = true, -- enable treesitter
+				check_ts = true,         -- enable treesitter
 				ts_config = {
-					lua = { "string" }, -- don't add pairs in lua string treesitter nodes
+					lua = { "string" },  -- don't add pairs in lua string treesitter nodes
 					javascript = { "template_string" }, -- don't add pairs in javscript template_string treesitter nodes
-					java = false, -- don't check treesitter on java
+					java = false,        -- don't check treesitter on java
 				},
 			})
 
@@ -101,7 +101,7 @@ return {
 
 	{
 		'tmhedberg/SimpylFold', -- Folds for python
-		ft = {'python'},
+		ft = { 'python' },
 		config = function()
 			vim.wo.foldenable = false
 			vim.wo.foldmethod = "expr"
