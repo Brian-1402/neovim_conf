@@ -518,4 +518,14 @@ return {
 			-- configuration goes here
 		},
 	},
+	{
+		"EtiamNullam/deferred-clipboard.nvim",
+		event = "VeryLazy",
+		enabled = not vim.g.neovide and vim.fn.has("wsl"),
+		config = function()
+			require("deferred-clipboard").setup({
+				fallback = 'unnamedplus', -- or your preferred setting for clipboard
+			})
+		end,
+	}
 }

@@ -1,5 +1,7 @@
 -- Noticed a performance delay in wsl2 when using the clipboard. This is a fix for that.
 -- Found here: https://github.com/neovim/neovim/issues/21739#issuecomment-1399405391
+-- But this still causes an error when running. 
+-- So workaround is to use https://github.com/EtiamNullam/deferred-clipboard.nvim
 
 
 local M = {}

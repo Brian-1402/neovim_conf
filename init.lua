@@ -7,32 +7,13 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
--- Function to reload configuration and plugins
-function _G.ReloadConfig()
-  -- Unload Lua modules
-  for name,_ in pairs(package.loaded) do
-    if name:match('^plugins') or name:match('^keymaps') or name:match('^cmd') or name:match('^defaults') then
-      package.loaded[name] = nil
-    end
-  end
-
-  -- Reload the main configuration file
-  dofile(vim.env.MYVIMRC)
-
-  -- Reload plugins with lazy.nvim
-  require('lazy').sync()
-
-  print("Configuration and plugins reloaded!")
-end
-
 -- Load the keymaps
 require("keymaps")
 
--- Map the function to a keybinding (for example, <leader>r)
-vim.api.nvim_set_keymap('n', '<leader>r', ':lua ReloadConfig()<CR>', { noremap = true, silent = true })
-
--- Load the clipboard settings
-require("clipboard")
+-- Load the clipboard settings if not in neovide and when in wsl
+-- if not vim.g.neovide and vim.fn.has("wsl") then
+-- 	require("clipboard").setup()
+-- end
 
 -- Load the plugins
 require("lazy").setup("plugins")
