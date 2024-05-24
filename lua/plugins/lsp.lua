@@ -62,13 +62,20 @@ return {
 					require("inc_rename").setup({ input_buffer_type = "dressing" })
 				end,
 			},
+			{ -- For peeking in floating window
+				'rmagatti/goto-preview',
+				config = function()
+					require('goto-preview').setup {}
+				end
+			}
 		},
 
 		config = function()
 			require("neodev").setup()
 			local lspconfig = require('lspconfig')
 			local navic = require('nvim-navic')
-			local cmp_nvim_lsp = require("cmp_nvim_lsp")
+			local cmp_nvim_lsp = require('cmp_nvim_lsp')
+			local preview = require('goto-preview')
 
 			lspconfig.util.on_setup = lspconfig.util.add_hook_after(
 				lspconfig.util.on_setup,
@@ -82,7 +89,7 @@ return {
 				end
 			)
 
-			local keymap = vim.keymap -- for conciseness
+			-- local keymap = vim.keymap -- for conciseness
 			local opts = { noremap = true, silent = true }
 
 			local lsp_on_attach = function(event)
@@ -104,37 +111,44 @@ return {
 
 				-- set keybinds
 				opts.desc = "Show LSP references"
-				keymap.set("n", "gr", "<cmd>Telescope lsp_references<CR>", opts) -- show definition, references
-
-				opts.desc = "Go to declaration"
-				keymap.set("n", "gD", vim.lsp.buf.declaration, opts) -- go to declaration
+				vim.keymap.set("n", "gr", "<cmd>Telescope lsp_references<CR>", opts) -- show definition, references
 
 				opts.desc = "Show LSP definitions"
-				keymap.set("n", "gd", function() require("telescope.builtin").lsp_definitions({ reuse_win = true }) end,
+				vim.keymap.set("n", "gd",
+					function() require("telescope.builtin").lsp_definitions({ reuse_win = true }) end,
 					opts) -- show lsp definitions
 
+				opts.desc = "Go to declaration"
+				vim.keymap.set("n", "gf", vim.lsp.buf.declaration, opts) -- go to declaration
+
+				opts.desc = "Peek LSP definitions"
+				vim.keymap.set("n", "gD", preview.goto_preview_definition, opts) -- show lsp definitions
+
+				opts.desc = "Peek declaration"
+				vim.keymap.set("n", "gF", preview.goto_preview_declaration, opts) -- go to declaration
+
 				opts.desc = "Show LSP implementations"
-				keymap.set("n", "gI",
+				vim.keymap.set("n", "gI",
 					function() require("telescope.builtin").lsp_implementations({ reuse_win = true }) end, opts) -- show lsp implementations
 
 				opts.desc = "Show LSP type definitions"
-				keymap.set("n", "gy",
+				vim.keymap.set("n", "gy",
 					function() require("telescope.builtin").lsp_type_definitions({ reuse_win = true }) end, opts) -- show lsp type definitions
 
 				opts.desc = "Show LSP signature help"
-				keymap.set("n", "gK", vim.lsp.buf.signature_help, opts)
+				vim.keymap.set("n", "gK", vim.lsp.buf.signature_help, opts)
 
 				opts.desc = "See available code actions"
-				keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts) -- see available code actions, in visual mode will apply to selection
+				vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts) -- see available code actions, in visual mode will apply to selection
 
 				opts.desc = "Run Codelens"
-				keymap.set({ "n", "v" }, "<leader>cc", vim.lsp.codelens.run, opts)
+				vim.keymap.set({ "n", "v" }, "<leader>cc", vim.lsp.codelens.run, opts)
 
 				opts.desc = "Refresh & Display Codelens"
-				keymap.set({ "n", "v" }, "<leader>cC", vim.lsp.codelens.refresh, opts)
+				vim.keymap.set({ "n", "v" }, "<leader>cC", vim.lsp.codelens.refresh, opts)
 
 				opts.desc = "Source action"
-				keymap.set("n", "<leader>cA",
+				vim.keymap.set("n", "<leader>cA",
 					function()
 						vim.lsp.buf.code_action({
 							context = {
@@ -150,7 +164,7 @@ return {
 
 				opts.desc = "Smart rename"
 				-- keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts) -- smart rename
-				keymap.set("n", "<leader>rn",
+				vim.keymap.set("n", "<leader>rn",
 					function()
 						local inc_rename = require("inc_rename")
 						return ":" .. inc_rename.config.cmd_name .. " " .. vim.fn.expand("<cword>")
@@ -159,33 +173,33 @@ return {
 				) -- smart rename
 
 				opts.desc = "Show buffer diagnostics"
-				keymap.set("n", "<leader>D", "<cmd>Telescope diagnostics bufnr=0<CR>", opts) -- show	diagnostics for file
+				vim.keymap.set("n", "<leader>D", "<cmd>Telescope diagnostics bufnr=0<CR>", opts) -- show	diagnostics for file
 
 				opts.desc = "Show line diagnostics"
-				keymap.set("n", "<leader>d", vim.diagnostic.open_float, opts) -- show diagnostics for line
+				vim.keymap.set("n", "<leader>d", vim.diagnostic.open_float, opts) -- show diagnostics for line
 
 				opts.desc = "Go to previous diagnostic"
-				keymap.set("n", "[d", vim.diagnostic.goto_prev, opts) -- jump to previous diagnostic in buffer
+				vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts) -- jump to previous diagnostic in buffer
 
 				opts.desc = "Go to next diagnostic"
-				keymap.set("n", "]d", vim.diagnostic.goto_next, opts) -- jump to next diagnostic in buffer
+				vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts) -- jump to next diagnostic in buffer
 
 				opts.desc = "Show documentation for what is under cursor"
-				keymap.set("n", "K", vim.lsp.buf.hover, opts) -- show documentation for what is under cursor
+				vim.keymap.set("n", "K", vim.lsp.buf.hover, opts) -- show documentation for what is under cursor
 
 				opts.desc = "Restart LSP"
-				keymap.set("n", "<leader>rs", ":LspRestart<CR>", opts) -- mapping to restart lsp if necessary
+				vim.keymap.set("n", "<leader>rs", ":LspRestart<CR>", opts) -- mapping to restart lsp if necessary
 
 				opts.desc = "Set location list to diagnostics"
-				keymap.set("n", "<leader>q", vim.diagnostic.setloclist, opts)
+				vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, opts)
 
 				local formatter = function() vim.lsp.buf.format({ async = true }) end
 
 				opts.desc = "Format buffer"
-				keymap.set("n", "<leader>=", formatter, opts)
+				vim.keymap.set("n", "<leader>=", formatter, opts)
 
 				opts.desc = "Format selection"
-				keymap.set("v", "=", formatter, opts)
+				vim.keymap.set("v", "=", formatter, opts)
 
 
 				-- The workspace functions aren't really useful.
