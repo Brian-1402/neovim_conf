@@ -16,20 +16,6 @@ return {
 		-- config = function() vim.cmd.colorscheme("catppuccin") end,
 	},
 
-	-- Status line plugin
-	{
-		'nvim-lualine/lualine.nvim',
-		event = { "UIEnter", "VeryLazy" },
-		dependencies = { 'nvim-tree/nvim-web-devicons', lazy = true, },
-		opts = {
-			options = { theme = 'nightfly' },
-		},
-		config = function(_, opts)
-			vim.opt.showmode = false
-			require('lualine').setup(opts)
-		end
-	},
-
 	{
 		"utilyre/barbecue.nvim",
 		name = "barbecue",
@@ -92,6 +78,14 @@ return {
 		opts = {},
 	},
 
+	{
+		"rcarriga/nvim-notify",
+		event = "VeryLazy",
+		config = function()
+			require("telescope").load_extension("notify")
+		end,
+	},
+
 	-- A minimap plugin
 	{
 		'gorbit99/codewindow.nvim',
@@ -125,5 +119,10 @@ return {
 			-- vim.g.maximizer_default_mapping_key = '<leader>sm'
 			-- Above setting not working
 		end,
+	},
+
+	{ -- Toggle relative numbering only for active window in normal mode, absolute when insert, etc.
+		"sitiom/nvim-numbertoggle",
+		event = "VeryLazy",
 	},
 }

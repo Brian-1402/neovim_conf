@@ -1,6 +1,7 @@
 	-- Scrollbar
 return {
 	"petertriho/nvim-scrollbar",
+	enabled = false,
 	event = { "UIEnter", "VeryLazy",},
 
 	dependencies = {

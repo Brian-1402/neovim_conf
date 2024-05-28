@@ -23,9 +23,9 @@ end
 -- https://www.reddit.com/r/neovim/comments/15s3fxk/comment/jwdgdcp/
 local attach_lsp_to_existing_buffers = vim.schedule_wrap(function()
 	for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
-		local valid = vim.api.nvim_buf_is_valid(bufnr) and vim.api.nvim_buf_get_option(bufnr, 'buflisted')
+		local valid = vim.api.nvim_buf_is_valid(bufnr) and vim.api.nvim_buf_get_option(bufnr, "buflisted")
 		if valid and vim.bo[bufnr].buftype == "" then
-			local augroup_lspconfig = vim.api.nvim_create_augroup('lspconfig', { clear = false })
+			local augroup_lspconfig = vim.api.nvim_create_augroup("lspconfig", { clear = false })
 			vim.api.nvim_exec_autocmds("FileType", { group = augroup_lspconfig, buffer = bufnr })
 		end
 	end
@@ -35,7 +35,7 @@ local function lsp_format(input)
 	local name
 	local async = input.bang
 
-	if input.args ~= '' then
+	if input.args ~= "" then
 		name = input.args
 	end
 
@@ -46,10 +46,10 @@ end
 return {
 	-- lsp config
 	{
-		'neovim/nvim-lspconfig',
-		cmd = { 'LspInfo', 'LspInstall', 'LspStart' },
-		-- event = {'BufReadPre', 'BufNewFile'},
-		event = { 'VeryLazy' },
+		"neovim/nvim-lspconfig",
+		cmd = { "LspInfo", "LspInstall", "LspStart" },
+		-- event = {"BufReadPre", "BufNewFile"},
+		event = "VeryLazy",
 		dependencies = {
 			"hrsh7th/cmp-nvim-lsp",
 			"williamboman/mason-lspconfig.nvim",
@@ -59,32 +59,32 @@ return {
 			{
 				"smjonas/inc-rename.nvim",
 				config = function()
-					require("inc_rename").setup({ input_buffer_type = "dressing" })
+					require("inc_rename").setup({})
 				end,
 			},
 			{ -- For peeking in floating window
-				'rmagatti/goto-preview',
+				"rmagatti/goto-preview",
 				config = function()
-					require('goto-preview').setup {}
+					require("goto-preview").setup {}
 				end
 			}
 		},
 
 		config = function()
 			require("neodev").setup()
-			local lspconfig = require('lspconfig')
-			local navic = require('nvim-navic')
-			local cmp_nvim_lsp = require('cmp_nvim_lsp')
-			local preview = require('goto-preview')
+			local lspconfig = require("lspconfig")
+			local navic = require("nvim-navic")
+			local cmp_nvim_lsp = require("cmp_nvim_lsp")
+			local preview = require("goto-preview")
 
 			lspconfig.util.on_setup = lspconfig.util.add_hook_after(
 				lspconfig.util.on_setup,
 				function(config, user_config)
 					config.capabilities = vim.tbl_deep_extend(
-						'force',
+						"force",
 						config.capabilities,
 						cmp_nvim_lsp.default_capabilities(),
-						vim.tbl_get(user_config, 'capabilities') or {}
+						vim.tbl_get(user_config, "capabilities") or {}
 					)
 				end
 			)
@@ -97,12 +97,12 @@ return {
 
 				vim.api.nvim_buf_create_user_command(
 					bufnr,
-					'LspFormat',
+					"LspFormat",
 					lsp_format,
 					{
 						bang = true,
-						nargs = '?',
-						desc = 'Format buffer with language server'
+						nargs = "?",
+						desc = "Format buffer with language server"
 					}
 				)
 
@@ -202,7 +202,7 @@ return {
 				vim.keymap.set("v", "=", formatter, opts)
 
 
-				-- The workspace functions aren't really useful.
+				-- The workspace functions aren"t really useful.
 				--[[
 
 				opts.desc = "Add workspace folder"
@@ -213,9 +213,9 @@ return {
 
 				local list_workspace_folders = function()
 					local folders = vim.lsp.buf.list_workspace_folders()
-					require('telescope.pickers').new({}, {
-						prompt_title = 'Workspace Folders',
-						finder = require('telescope.finders').new_table({
+					require("telescope.pickers").new({}, {
+						prompt_title = "Workspace Folders",
+						finder = require("telescope.finders").new_table({
 							results = folders,
 							entry_maker = function(entry)
 								return {
@@ -225,7 +225,7 @@ return {
 								}
 							end,
 						}),
-						sorter = require('telescope.config').values.generic_sorter({})
+						sorter = require("telescope.config").values.generic_sorter({})
 					}):find()
 				end
 
@@ -235,38 +235,38 @@ return {
 				]]
 			end
 
-			vim.api.nvim_create_autocmd('LspAttach', {
-				desc = 'LSP actions',
+			vim.api.nvim_create_autocmd("LspAttach", {
+				desc = "LSP actions",
 				callback = lsp_on_attach,
 			})
 
 			vim.diagnostic.config({
-				float = { border = 'rounded' },
+				float = { border = "rounded" },
 			})
 
-			vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(
+			vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
 				vim.lsp.handlers.hover,
-				{ border = 'rounded' }
+				{ border = "rounded" }
 			)
 
-			vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(
+			vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(
 				vim.lsp.handlers.signature_help,
-				{ border = 'rounded' }
+				{ border = "rounded" }
 			)
 
 			local command = vim.api.nvim_create_user_command
 
-			command('LspWorkspaceAdd', function()
+			command("LspWorkspaceAdd", function()
 				vim.lsp.buf.add_workspace_folder()
-			end, { desc = 'Add folder to workspace' })
+			end, { desc = "Add folder to workspace" })
 
-			command('LspWorkspaceList', function()
+			command("LspWorkspaceList", function()
 				vim.notify(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-			end, { desc = 'List workspace folders' })
+			end, { desc = "List workspace folders" })
 
-			command('LspWorkspaceRemove', function()
+			command("LspWorkspaceRemove", function()
 				vim.lsp.buf.remove_workspace_folder()
-			end, { desc = 'Remove folder from workspace' })
+			end, { desc = "Remove folder from workspace" })
 
 			local navic_on_attach = function(client, bufnr)
 				if client.server_capabilities.documentSymbolProvider then
@@ -305,7 +305,7 @@ return {
 				default_setup(server)
 			end
 
-			require('mason-lspconfig').setup({
+			require("mason-lspconfig").setup({
 				ensure_installed = mason_all_pkgs,
 				-- Adding as handler making it call lspconfig[server].setup() would work but it gets run for every mason installed package.
 				-- Some packages we may not need to call setup intentionally (eg jdtls), therefore have commented out the below lines.
@@ -350,9 +350,9 @@ return {
 		depedencies = "plenary.nvim",
 		config = function()
 			require("swenv").setup()
-			vim.api.nvim_create_user_command('PickPythonEnv', function()
-				require('swenv.api').pick_venv()
-			end, { desc = 'Pick python virtual env' })
+			vim.api.nvim_create_user_command("PickPythonEnv", function()
+				require("swenv.api").pick_venv()
+			end, { desc = "Pick python virtual env" })
 		end,
 	},
 }

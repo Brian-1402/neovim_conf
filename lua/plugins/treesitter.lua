@@ -255,13 +255,8 @@ return {
 				use_default_keymaps = false,
 			})
 			-- Keymap leader m to toggle
-			-- vim.keymap.set( "n", "<space>m", function() treesj.toggle() end)
-			vim.keymap.set(
-				"n",
-				"<space>m",
-				treesj.toggle,
-				{ noremap = true, silent = true, desc = "Toggle split/join list code blocks" }
-			)
+			vim.keymap.set("n", "<space>m", treesj.toggle,
+				{ noremap = true, silent = true, desc = "Toggle split/join list code blocks" })
 		end,
 	},
 
@@ -322,4 +317,5 @@ return {
 		event = "VeryLazy",
 		config = true,
 	},
+
 }
