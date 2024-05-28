@@ -38,11 +38,6 @@ return {
 				"<cmd>Telescope grep_string<cr>",
 				desc = "Find string under cursor in cwd",
 			},
-			{
-				"<leader>fm",
-				"<cmd>Telescope macros<cr>",
-				desc = "Telescope: browse macros",
-			},
 			-- {
 			-- "<leader>fw",
 			-- "<cmd>Telescope workspaces<cr>",
@@ -180,7 +175,8 @@ return {
 	-- Allows telescope to check out keymappings
 	{
 		"gregorias/nvim-mapper",
-		dependencies = "nvim-telescope/telescope.nvim",
+		dependencies = { "nvim-telescope/telescope.nvim" },
+		event = "VeryLazy",
 		opts = {
 			-- search_path = vim.fn.stdpath("config") .. "/lua",
 		},
@@ -191,70 +187,11 @@ return {
 
 	{
 		"LukasPietzschmann/telescope-tabs",
-		dependencies = "nvim-telescope/telescope.nvim",
+		dependencies = { "nvim-telescope/telescope.nvim" },
 		event = "VeryLazy",
 		config = function()
 			require("telescope").load_extension "telescope-tabs"
 			require("telescope-tabs").setup {}
-		end,
-	},
-
-	{ -- Macro management
-
-		-- Edit your macros in a more comprehensive way with the `:EditMacros` command
-		-- Clear the list of macros with the `:ClearNeoComposer` command
-		-- For complex macros over large counts, you can toggle a delay between macro playback using the `:ToggleDelay` command
-
-		"ecthelionvi/NeoComposer.nvim",
-		dependencies = {
-			"kkharji/sqlite.lua",
-			"nvim-telescope/telescope.nvim",
-		},
-		event = "VeryLazy",
-		opts = {
-			notify = true,
-			delay_timer = 150,
-			queue_most_recent = false,
-			window = {
-				width = 60,
-				height = 10,
-				border = "rounded",
-				winhl = {
-					Normal = "ComposerNormal",
-				},
-			},
-			colors = {
-				bg = "#011626",
-				fg = "#011626",
-				red = "#ec5f67",
-				blue = "#5fb3b3",
-				green = "#99c794",
-			},
-			keymaps = {
-				play_macro = "Q",
-				yank_macro = "yq", -- Yank the currently selected macro, in human readable format into the default register
-				stop_macro = "cq",
-				toggle_record = "q",
-				cycle_next = "<c-n>",
-				cycle_prev = "<c-p>",
-				toggle_macro_menu = false,
-			},
-		},
-		config = function(_, opts)
-			require("telescope").load_extension("macros")
-			require("NeoComposer").setup(opts)
-		end,
-	},
-
-	{ --For cheat.sh access
-		"nvim-telescope/telescope-cheat.nvim",
-		event = "VeryLazy",
-		dependencies = {
-			"kkharji/sqlite.lua",
-			"nvim-telescope/telescope.nvim"
-		},
-		config = function()
-			require("telescope").load_extension("cheat")
 		end,
 	},
 
@@ -266,7 +203,21 @@ return {
 			"nvim-telescope/telescope.nvim"
 		},
 		config = function()
-			require("telescope").load_extension "frecency"
+			require("telescope").load_extension("frecency")
 		end,
 	},
+
+	{              --For cheat.sh access
+		"nvim-telescope/telescope-cheat.nvim",
+		enabled = false, -- Seems to give error about unable to open database
+		event = "VeryLazy",
+		dependencies = {
+			"kkharji/sqlite.lua",
+			"nvim-telescope/telescope.nvim"
+		},
+		config = function()
+			require("telescope").load_extension("cheat")
+		end,
+	},
+
 }

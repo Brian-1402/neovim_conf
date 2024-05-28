@@ -67,7 +67,7 @@ return {
 			"AndreM222/copilot-lualine", -- For copilot status
 			"arkav/lualine-lsp-progress", -- For lsp progress
 			"meuter/lualine-so-fancy.nvim", -- Fancier icons, lot more support
-			"ecthelionvi/NeoComposer.nvim", -- For macros status
+			-- "ecthelionvi/NeoComposer.nvim", -- For macros status
 		},
 		config = function()
 			vim.opt.showmode = false
@@ -78,6 +78,11 @@ return {
 					ignore_focus = {
 						"DressingInput", "DressingSelect", "lspinfo", "ccc-ui", "TelescopePrompt",
 						"checkhealth", "noice", "lazy", "mason", "qf",
+					},
+					refresh = {
+						statusline = 250,
+						tabline = 250,
+						winbar = 250,
 					},
 				},
 				tabline = {
@@ -98,28 +103,25 @@ return {
 						{ -- using lualine's tab display, cause it looks better than vim's
 							"tabs",
 							mode = 1,
-							cond = function() return vim.fn.tabpagenr("$") > 1 end,
+							-- cond = function() return vim.fn.tabpagenr("$") > 1 end,
 						},
 					},
 					lualine_b = {
-						navicBreadcrumbs,
+						{ -- recording status
+							function() return ("雷Recording to [%s]…"):format(vim.fn.reg_recording()) end,
+							cond = function() return vim.fn.reg_recording() ~= "" end,
+							-- color = function() return { fg = u.getHighlightValue("Error", "fg") } end,
+						},
 					},
-					lualine_c = {
-						-- HACK spacer so the tabline is never empty (in which case vim adds its ugly tabline)
-						{ function() return " " end, padding = { left = 0, right = 0 } },
-					},
+					-- lualine_c = {
+					-- 	-- HACK spacer so the tabline is never empty (in which case vim adds its ugly tabline)
+					-- 	{ function() return " " end, padding = { left = 0, right = 0 } },
+					-- },
 					lualine_x = {
 						lspProgress,
-						"fancy_lsp_servers"
+						"fancy_lsp_servers",
 					},
-					lualine_y = {
-						-- { -- recording status
-						-- 	function() return ("雷Recording to [%s]…"):format(vim.fn.reg_recording()) end,
-						-- 	cond = function() return vim.fn.reg_recording() ~= "" end,
-						-- 	-- color = function() return { fg = u.getHighlightValue("Error", "fg") } end,
-						-- },
-						{ require("NeoComposer.ui").status_recording },
-					},
+					lualine_y = {},
 				},
 				sections = {
 					lualine_a = { { "fancy_mode", width = 8, fmt = trunc(0, 0, 30, true) } },

@@ -191,7 +191,7 @@ return {
 				vim.keymap.set("n", "<leader>rs", ":LspRestart<CR>", opts) -- mapping to restart lsp if necessary
 
 				opts.desc = "Set location list to diagnostics"
-				vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, opts)
+				vim.keymap.set("n", "<leader>rd", vim.diagnostic.setloclist, opts)
 
 				local formatter = function() vim.lsp.buf.format({ async = true }) end
 

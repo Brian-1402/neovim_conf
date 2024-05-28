@@ -13,6 +13,7 @@ return {
 		--	 If not available, we use `mini` as the fallback
 		"rcarriga/nvim-notify",
 		"hrsh7th/nvim-cmp",
+		"nvim-telescope/telescope.nvim",
 	},
 	config = function()
 		require("noice").setup({
@@ -60,6 +61,18 @@ return {
 				{ filter = { event = "msg_show", find = "search hit BOTTOM" }, skip = true },
 				{ filter = { event = "msg_show", find = "search hit TOP" },    skip = true },
 				{ filter = { find = "Config Change Detected. Reloading..." },  skip = true },
+				{
+					view = "popup",
+					filter = {
+						any = {
+							{ cmdline = "^:reg" },
+							{ cmdline = "^:dis" },
+							{ cmdline = "^:ls" },
+							{ cmdline = "^:marks" },
+							{ cmdline = "^:hi" },
+						}
+					},
+				},
 			},
 
 			-- Bring back classic command line
@@ -75,5 +88,6 @@ return {
 				},
 			},
 		})
+		require("telescope").load_extension("noice")
 	end
 }

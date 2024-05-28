@@ -425,7 +425,7 @@ return {
 				},
 				-- Workspace remove not exactly deleting the session properly via SessionManager
 				remove = {
-					"SessionManager delete_session",
+					"SessionManager delete_current_dir_session",
 				},
 
 			}
@@ -528,6 +528,79 @@ return {
 			require("deferred-clipboard").setup({
 				fallback = 'unnamedplus', -- or your preferred setting for clipboard
 			})
+		end,
+	},
+
+	{ -- Macro management
+
+		-- Edit your macros in a more comprehensive way with the `:EditMacros` command
+		-- Clear the list of macros with the `:ClearNeoComposer` command
+		-- For complex macros over large counts, you can toggle a delay between macro playback using the `:ToggleDelay` command
+
+		"ecthelionvi/NeoComposer.nvim",
+		enabled = false,
+		dependencies = {
+			"kkharji/sqlite.lua",
+			"nvim-telescope/telescope.nvim",
+		},
+		event = "VeryLazy",
+		opts = {
+			notify = true,
+			delay_timer = 150,
+			queue_most_recent = false,
+			window = {
+				width = 60,
+				height = 10,
+				border = "rounded",
+				winhl = {
+					Normal = "ComposerNormal",
+				},
+			},
+			colors = {
+				bg = "#011626",
+				fg = "#011626",
+				red = "#ec5f67",
+				blue = "#5fb3b3",
+				green = "#99c794",
+			},
+			keymaps = {
+				play_macro = "Q",
+				yank_macro = "yq", -- Yank the currently selected macro, in human readable format into the default register
+				stop_macro = "cq",
+				toggle_record = "q",
+				cycle_next = "<c-n>",
+				cycle_prev = "<c-p>",
+				toggle_macro_menu = false,
+			},
+		},
+		config = function(_, opts)
+			require("telescope").load_extension("macros")
+			require("NeoComposer").setup(opts)
+		end,
+	},
+
+	{ -- Another macro management plugin
+		"kr40/nvim-macros",
+		event = "VeryLazy",
+		cmd = { "MacroSave", "MacroYank", "MacroSelect", "MacroDelete" },
+		-- keys = {
+		-- 	{ "n", "<leader>q",  "<cmd>MacroSave<cr>", desc = "Save macro" },
+		-- 	{ "n", "<leader>fq", ":MacroSelect",       desc = "Select macro" },
+		-- },
+		config = function()
+			local username = os.getenv("USER")
+			local path = vim.fn.stdpath("data")
+			if vim.fn.has("wsl") == 1 and username then
+				path = "/mnt/c/Users/" .. username .. "/AppData/Local/nvim-data"
+			end
+			path = path  .. "/macros.json"
+			require("nvim-macros").setup({
+				json_file_path = vim.fs.normalize(path), -- Location where the macros will be stored
+				default_macro_register = "q", -- Use as default register for :MacroYank and :MacroSave and :MacroSelect Raw functions
+				json_formatter = "none",     -- can be "none" | "jq" | "yq" used to pretty print the json file (jq or yq must be installed!)
+			})
+			vim.keymap.set("n", "<leader>q", ":MacroSave<CR>", { silent = true, desc = "Save macro" })
+			vim.keymap.set("n", "<leader>fq", ":MacroSelect<CR>", { silent = true, desc = "Select macros" })
 		end,
 	},
 }
