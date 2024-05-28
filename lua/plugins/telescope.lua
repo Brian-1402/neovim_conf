@@ -29,7 +29,8 @@ return {
 			},
 			{
 				"<leader>fr",
-				"<cmd>Telescope oldfiles<cr>",
+				'<cmd>Telescope frecency workspace=LSP path_display={"tail"}<cr>',
+				-- "<cmd>Telescope oldfiles<cr>",
 				desc = "Telescope: recent files",
 			},
 			{
@@ -242,6 +243,30 @@ return {
 		config = function(_, opts)
 			require("telescope").load_extension("macros")
 			require("NeoComposer").setup(opts)
+		end,
+	},
+
+	{ --For cheat.sh access
+		"nvim-telescope/telescope-cheat.nvim",
+		event = "VeryLazy",
+		dependencies = {
+			"kkharji/sqlite.lua",
+			"nvim-telescope/telescope.nvim"
+		},
+		config = function()
+			require("telescope").load_extension("cheat")
+		end,
+	},
+
+	{ -- For frecency sorting of previously opened files
+		"nvim-telescope/telescope-frecency.nvim",
+		event = "VeryLazy",
+		dependencies = {
+			"kkharji/sqlite.lua",
+			"nvim-telescope/telescope.nvim"
+		},
+		config = function()
+			require("telescope").load_extension "frecency"
 		end,
 	},
 }

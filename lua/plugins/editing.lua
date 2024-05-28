@@ -142,4 +142,13 @@ return {
 		"tommcdo/vim-lion",
 		event = "VeryLazy",
 	},
+
+	{ -- For persistent storage support for other plugins
+		"kkharji/sqlite.lua",
+		config = function()
+			if vim.fn.has("win32") == 1 then
+				vim.g.sqlite_clib_path = "C:/Program Files/sqlite/sqlite3.dll"
+			end
+		end
+	},
 }

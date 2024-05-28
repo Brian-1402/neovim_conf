@@ -113,3 +113,6 @@ vim.g.vim_json_conceal = 0
 if vim.fn.has("win32") then
 	vim.g.python3_host_prog = "C:/Users/brian/AppData/Local/Programs/Python/Python312/python.exe"
 end
+
+-- Previews command output in the live buffer
+vim.o.inccommand = "nosplit"
