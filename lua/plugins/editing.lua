@@ -131,6 +131,15 @@ return {
 				}
 			})
 		end,
+	},
 
-	}
+	{ -- Support exhanges using cx, cxx, X(after visual selection)
+		"tommcdo/vim-exchange",
+		event = "VeryLazy",
+	},
+
+	{ -- Align text using gl and gL
+		"tommcdo/vim-lion",
+		event = "VeryLazy",
+	},
 }
