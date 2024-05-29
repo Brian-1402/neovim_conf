@@ -69,19 +69,6 @@ return {
 		}
 	},
 
-	-- Window to show all errors and warnings
-	{
-		"folke/trouble.nvim",
-		dependencies = { "nvim-lua/plenary.nvim" },
-		event = "VeryLazy",
-		cmd = "TroubleToggle",
-		config = function()
-			require("trouble").setup {
-				vim.keymap.set("n", "<leader>xx", function() require("trouble").toggle() end)
-			}
-		end
-	},
-
 	-- Markdown preview directly in terminal
 	{
 		"ellisonleao/glow.nvim",
@@ -593,7 +580,7 @@ return {
 			if vim.fn.has("wsl") == 1 and username then
 				path = "/mnt/c/Users/" .. username .. "/AppData/Local/nvim-data"
 			end
-			path = path  .. "/macros.json"
+			path = path .. "/macros.json"
 			require("nvim-macros").setup({
 				json_file_path = vim.fs.normalize(path), -- Location where the macros will be stored
 				default_macro_register = "q", -- Use as default register for :MacroYank and :MacroSave and :MacroSelect Raw functions

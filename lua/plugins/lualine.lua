@@ -51,10 +51,11 @@ vim.api.nvim_create_autocmd("LspProgress", {
 	end,
 })
 
+local navic = require("nvim-navic")
 -- wrapper to not require navic directly
 local function navicBreadcrumbs()
-	if vim.bo.filetype == "css" or not require("nvim-navic").is_available() then return "" end
-	return require("nvim-navic").get_location()
+	if vim.bo.filetype == "css" or not navic.is_available() then return "" end
+	return navic.get_location()
 end
 
 return {
@@ -107,6 +108,8 @@ return {
 						},
 					},
 					lualine_b = {
+						-- navicBreadcrumbs,
+						{ "navic", color_correction = nil, navic_opts = nil },
 						{ -- recording status
 							function() return ("雷Recording to [%s]…"):format(vim.fn.reg_recording()) end,
 							cond = function() return vim.fn.reg_recording() ~= "" end,
@@ -123,6 +126,7 @@ return {
 					},
 					lualine_y = {},
 				},
+
 				sections = {
 					lualine_a = { { "fancy_mode", width = 8, fmt = trunc(0, 0, 30, true) } },
 					lualine_b = {
@@ -131,19 +135,19 @@ return {
 							function() return "󱥒" end,
 							cond = function() return vim.env.VIRTUAL_ENV and vim.bo.ft == "python" end,
 							padding = { left = 1, right = 0 },
-							fmt = trunc(0, 0, 100, true),
+							fmt = trunc(0, 0, 90, true),
 						},
-						{ "fancy_diff",   fmt = trunc(0, 0, 85, true) },
+						{ "fancy_diff",   fmt = trunc(0, 0, 75, true) },
 						"filename",
 					},
 					lualine_c = {},
 					lualine_x = {
 						-- { noice.api.statusline.mode.get, cond = noice.api.statusline.mode.has, color = { fg = "#ff9e64" } }, -- For macro recording
 						-- "fancy_macro",
-						{ "fancy_searchcount", fmt = trunc(0, 0, 95, true) },
-						{ "fancy_diagnostics", fmt = trunc(0, 0, 70, true) },
+						{ "fancy_searchcount", fmt = trunc(0, 0, 85, true) },
+						-- { "fancy_diagnostics", fmt = trunc(0, 0, 70, true) },
 						-- "copilot",
-						{ "fileformat",        fmt = trunc(0, 0, 80, true) },
+						{ "fileformat",        fmt = trunc(0, 0, 70, true) },
 						{ "filetype",          fmt = trunc(0, 0, 50, true) },
 					},
 					lualine_y = {

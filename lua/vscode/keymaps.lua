@@ -92,14 +92,14 @@ vim.keymap.set("n", "<leader>rn", function()
 end, opts)
 
 -- Show buffer diagnostics
-opts.desc = "Show buffer diagnostics"
-vim.keymap.set("n", "<leader>D", function()
+opts.desc = "Show all buffers diagnostics"
+vim.keymap.set("n", "<leader>dD", function()
 	vscode.action('workbench.actions.view.problems')
 end, opts)
 
 -- Show line diagnostics
 opts.desc = "Show line diagnostics"
-vim.keymap.set("n", "<leader>d", function()
+vim.keymap.set("n", "<leader>dd", function()
 	vscode.action('editor.action.showHover')
 end, opts)
 

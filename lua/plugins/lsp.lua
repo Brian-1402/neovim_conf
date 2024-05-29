@@ -54,7 +54,8 @@ return {
 			"hrsh7th/cmp-nvim-lsp",
 			"williamboman/mason-lspconfig.nvim",
 			"williamboman/mason.nvim",
-			{ "folke/neodev.nvim", config = true, },
+			{ "folke/trouble.nvim", config = true, dependencies = "nvim-lua/plenary.nvim", },
+			{ "folke/neodev.nvim",  config = true, },
 			"SmiteshP/nvim-navic",
 			{
 				"smjonas/inc-rename.nvim",
@@ -151,12 +152,7 @@ return {
 				vim.keymap.set("n", "<leader>cA",
 					function()
 						vim.lsp.buf.code_action({
-							context = {
-								only = {
-									"source",
-								},
-								diagnostics = {},
-							},
+							context = {only = {"source"}, diagnostics = {}},
 						})
 					end,
 					opts
@@ -173,10 +169,17 @@ return {
 				) -- smart rename
 
 				opts.desc = "Show buffer diagnostics"
-				vim.keymap.set("n", "<leader>D", "<cmd>Telescope diagnostics bufnr=0<CR>", opts) -- show	diagnostics for file
+				vim.keymap.set("n", "<leader>db", "<cmd>Telescope diagnostics bufnr=0<CR>", opts) -- show	diagnostics for file
+
+				opts.desc = "Show all buffers diagnostics"
+				vim.keymap.set("n", "<leader>dD", "<cmd>Telescope diagnostics<CR>", opts) -- show	diagnostics for file
+				-- vim.keymap.set("n", "<leader>dD", function() require("trouble").toggle("workspace_diagnostics") end)
 
 				opts.desc = "Show line diagnostics"
-				vim.keymap.set("n", "<leader>d", vim.diagnostic.open_float, opts) -- show diagnostics for line
+				vim.keymap.set("n", "<leader>dd", vim.diagnostic.open_float, opts) -- show diagnostics for line
+
+				opts.desc = "Set location list to diagnostics"
+				vim.keymap.set("n", "<leader>dl", vim.diagnostic.setloclist, opts)
 
 				opts.desc = "Go to previous diagnostic"
 				vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts) -- jump to previous diagnostic in buffer
@@ -189,9 +192,6 @@ return {
 
 				opts.desc = "Restart LSP"
 				vim.keymap.set("n", "<leader>rs", ":LspRestart<CR>", opts) -- mapping to restart lsp if necessary
-
-				opts.desc = "Set location list to diagnostics"
-				vim.keymap.set("n", "<leader>rd", vim.diagnostic.setloclist, opts)
 
 				local formatter = function() vim.lsp.buf.format({ async = true }) end
 
@@ -275,18 +275,15 @@ return {
 			end
 
 			-- Add the on_attach function to each server config
-			-- for _, opts in pairs(lsp_opts) do
-			--	if type(opts) == "table" then
-			--		opts.on_attach = navic_on_attach
-			--	end
-			-- end
-
+			for _, opts2 in pairs(lsp_opts) do
+				if type(opts2) == "table" then
+					opts2.on_attach = navic_on_attach
+				end
+			end
 
 			-- Custom lsp opts
 			lsp_opts["clangd"] = {
-				on_attach = function(client, bufnr)
-					navic.attach(client, bufnr)
-				end,
+				on_attach = navic_on_attach,
 				inlay_hints = { enabled = true },
 				capabilities = cmp_nvim_lsp.default_capabilities(),
 				cmd = {
@@ -355,4 +352,5 @@ return {
 			end, { desc = "Pick python virtual env" })
 		end,
 	},
+
 }
