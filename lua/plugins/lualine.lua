@@ -22,19 +22,38 @@ local function get_formatted_cwd(options)
 	local substitute_home = options.substitute_home == nil and true or options.substitute_home
 
 	local result = vim.fn.getcwd()
+	local user = os.getenv("USER") or os.getenv("USERNAME")
+
 	if substitute_home then
-		local home = os.getenv("HOME") or os.getenv("USERPROFILE")
-		if home then
-			-- Normalize path separators for cross-platform compatibility
-			home = vim.fn.fnamemodify(home, ":p")
-			result = vim.fn.fnamemodify(result, ":p")
-			if vim.startswith(result, home) then
-				result = "~" .. result:sub(home:len())
+		if vim.fn.has("unix") == 1 then
+			-- Linux case (including WSL)
+			local linux_home = os.getenv("HOME")
+			local windows_home = "/mnt/c/Users/" .. user
+
+			if linux_home then
+				linux_home = vim.fn.fnamemodify(linux_home, ":p")
+				result = vim.fn.fnamemodify(result, ":p")
+				if vim.startswith(result, linux_home) then
+					result = "~" .. result:sub(linux_home:len())
+				elseif vim.startswith(result, windows_home) then
+					result = "~win" .. result:sub(windows_home:len() + 1)
+				end
+			end
+		elseif vim.fn.has("win32") == 1 or vim.fn.has("win64") == 1 then
+			-- Windows case
+			local home = os.getenv("USERPROFILE")
+			if home then
+				home = vim.fn.fnamemodify(home, ":p")
+				result = vim.fn.fnamemodify(result, ":p")
+				if vim.startswith(result, home) then
+					result = "~" .. result:sub(home:len())
+				end
 			end
 		end
 	end
 	return icon .. " " .. result:gsub("[/\\]+$", "")
 end
+
 
 -- Got from https://www.reddit.com/r/neovim/comments/o4bguk/comment/h2kcjxa
 local function lsp_progress()
