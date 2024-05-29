@@ -16,6 +16,25 @@ local function trunc(trunc_width, trunc_len, hide_width, no_ellipsis)
 end
 
 
+local function get_formatted_cwd(options)
+	options = options or {}
+	local icon = options.icon or ""
+	local substitute_home = options.substitute_home == nil and true or options.substitute_home
+
+	local result = vim.fn.getcwd()
+	if substitute_home then
+		local home = os.getenv("HOME") or os.getenv("USERPROFILE")
+		if home then
+			-- Normalize path separators for cross-platform compatibility
+			home = vim.fn.fnamemodify(home, ":p")
+			result = vim.fn.fnamemodify(result, ":p")
+			if vim.startswith(result, home) then
+				result = "~" .. result:sub(home:len())
+			end
+		end
+	end
+	return icon .. " " .. result:gsub("[/\\]+$", "")
+end
 
 -- Got from https://www.reddit.com/r/neovim/comments/o4bguk/comment/h2kcjxa
 local function lsp_progress()
@@ -99,12 +118,13 @@ return {
 						-- 	padding = { left = 0, right = 1 },
 						-- },
 
-						"fancy_cwd",
+						-- { "fancy_cwd", substitute_home = true },
+						get_formatted_cwd,
 
 						{ -- using lualine's tab display, cause it looks better than vim's
 							"tabs",
 							mode = 1,
-							-- cond = function() return vim.fn.tabpagenr("$") > 1 end,
+							cond = function() return vim.fn.tabpagenr("$") > 1 end,
 						},
 					},
 					lualine_b = {
