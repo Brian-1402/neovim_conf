@@ -141,9 +141,13 @@ return {
 	},
 
 	{
-		'airblade/vim-rooter', -- Changes vim directory to project directory
-		enabled = false,
-		event = "VeryLazy",
+		'notjedi/nvim-rooter.lua',
+		config = function()
+			require("nvim-rooter").setup({
+				manual = false,
+			})
+			vim.keymap.set("n", "<leader>cr", ":Rooter<CR>", { silent = true, noremap = true, desc = "Change to project root" })
+		end
 	},
 
 	-- Neovim interface in browser text boxes
