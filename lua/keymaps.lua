@@ -48,6 +48,9 @@ opts.desc = "Close the current tab"
 vim.keymap.set("n", "<C-T>c", ":tabclose<CR>", opts)
 vim.keymap.set("n", "<M-w>", ":tabclose<CR>", opts)
 
+opts.desc = "Close all tabs"
+vim.keymap.set("n", "<M-S-w>", ":qa<CR>", opts)
+
 opts.desc = "Go to the next tab"
 vim.keymap.set("n", "<C-T>l", ":tabnext<CR>", opts)
 vim.keymap.set("n", "<M-q>", ":tabnext<CR>", opts)
@@ -61,6 +64,7 @@ vim.keymap.set("n", "<C-T>H", ":-tabmove<CR>", opts)
 
 opts.desc = "Move the current tab to the right"
 vim.keymap.set("n", "<C-T>L", ":+tabmove<CR>", opts)
+
 
 -- Define a Lua function to move the current window to the previous tab
 function MoveWindowToPreviousTab()
@@ -129,4 +133,4 @@ end
 vim.api.nvim_create_user_command('CdFileDir', change_to_file_directory, {})
 
 opts.desc = "cd to current file's directory"
-vim.keymap.set('n', '<leader>cdf', change_to_file_directory, opts)
+vim.keymap.set('n', '<leader>cd', change_to_file_directory, opts)

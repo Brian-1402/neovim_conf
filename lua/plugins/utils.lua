@@ -142,11 +142,13 @@ return {
 
 	{
 		'notjedi/nvim-rooter.lua',
+		lazy = false,
 		config = function()
 			require("nvim-rooter").setup({
-				manual = false,
+				manual = true,
 			})
-			vim.keymap.set("n", "<leader>cr", ":Rooter<CR>", { silent = true, noremap = true, desc = "Change to project root" })
+			vim.keymap.set("n", "<leader>cr", ":Rooter<CR>",
+				{ silent = true, noremap = true, desc = "Change to project root" })
 		end
 	},
 
@@ -593,5 +595,17 @@ return {
 			vim.keymap.set("n", "<leader>q", ":MacroSave<CR>", { silent = true, desc = "Save macro" })
 			vim.keymap.set("n", "<leader>fq", ":MacroSelect<CR>", { silent = true, desc = "Select macros" })
 		end,
+	},
+
+	{ -- Introduces CondaActivate, CondaDeactivate commands for conda envs
+		"kmontocam/nvim-conda",
+		event = "VeryLazy",
+		dependencies = { "nvim-lua/plenary.nvim" },
+	},
+
+	{
+		"mrcjkb/rustaceanvim",
+		version = '^4', -- Recommended
+		lazy = false, -- This plugin is already lazy
 	},
 }

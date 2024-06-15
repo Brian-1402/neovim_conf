@@ -42,15 +42,15 @@ vim.cmd([[
 	endif
 ]])
 
--- Put these in an autocmd group, so that we can delete them easily.
-vim.cmd([[
-	augroup vimrcEx
-		au!
 
-		" For all text files set 'textwidth' to 78 characters.
-		autocmd FileType text setlocal textwidth=78
-	augroup END
-]])
+-- Set the textwidth to 140 for txt and md files
+vim.api.nvim_create_autocmd("FileType", {
+	group = vim.api.nvim_create_augroup("vimrcEx", { clear = true }),
+	pattern = { "text", "markdown" },
+	callback = function()
+		vim.o.textwidth = 140
+	end,
+})
 
 -- To turn on line wrap for text files only
 vim.api.nvim_create_autocmd("FileType", {
@@ -74,12 +74,19 @@ vim.api.nvim_create_autocmd("FileType", {
 
 
 -- highlights yanked text
-vim.cmd([[
-	augroup highlight_yank
-		autocmd!
-		autocmd TextYankPost * silent! lua require'vim.highlight'.on_yank()
-	augroup END
-]])
+-- vim.cmd([[
+-- 	augroup highlight_yank
+-- 		autocmd!
+-- 		autocmd TextYankPost * silent! lua require'vim.highlight'.on_yank()
+-- 	augroup END
+-- ]])
+-- Converting the above to lua: 
+vim.api.nvim_create_autocmd("TextYankPost", {
+	group = vim.api.nvim_create_augroup("highlight_yank", { clear = true }),
+	callback = function()
+		require('vim.highlight').on_yank()
+	end
+})
 
 
 
@@ -157,3 +164,14 @@ end, { desc = 'Close buffers not in a tab or window' })
 
 -- vim.keymap.set('n', '<Leader>b', ':BCloseUntouched<CR>', { silent = true, desc = 'Close unused buffers' })
 vim.keymap.set('n', '<Leader>b', ':BCloseNonVisible<CR>', { silent = true, desc = 'Close buffers not in a tab or window' })
+
+
+-- Automatically create parent directories when writing a file
+vim.api.nvim_create_autocmd({ "BufWritePre" }, {
+  pattern = "*",
+  group = vim.api.nvim_create_augroup("auto_create_dir", { clear = true }),
+  callback = function(ctx)
+    local dir = vim.fn.fnamemodify(ctx.file, ":p:h")
+    vim.fn.mkdir(dir, "p")
+  end
+})

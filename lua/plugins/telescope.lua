@@ -61,6 +61,7 @@ return {
 
 			local telescope = require("telescope")
 			local actions = require("telescope.actions")
+			local builtin = require("telescope.builtin")
 
 			telescope.setup({
 				defaults = {
@@ -80,6 +81,20 @@ return {
 					},
 				},
 			})
+
+			-- local function find_files_include_hidden()
+			-- 	builtin.find_files({
+			-- 		find_command = { 'rg', '--files', '--hidden', '--ignore-file', '.gitignore' }
+			-- 	})
+			-- end
+			local function find_files_include_hidden()
+				builtin.find_files({
+					find_command = { 'fd', '--type', 'f', '--hidden', '--no-ignore' }
+				})
+			end
+
+			vim.keymap.set('n', '<leader>fh', find_files_include_hidden,
+				{ noremap = true, silent = true, desc = "Telescope: find hidden files" })
 		end
 	},
 
@@ -197,6 +212,7 @@ return {
 
 	{ -- For frecency sorting of previously opened files
 		"nvim-telescope/telescope-frecency.nvim",
+		enabled = false,
 		event = "VeryLazy",
 		dependencies = {
 			"kkharji/sqlite.lua",
