@@ -32,6 +32,7 @@ return {
 					{ name = 'luasnip',  group_index = 2 },
 					{ name = 'nvim_lsp', group_index = 3 },
 					{ name = 'buffer',   group_index = 4 },
+					{ name = "lazydev",  group_index = 0 }, -- Just for lua
 				},
 
 				-- mapping guide: https://github.com/hrsh7th/nvim-cmp/wiki/Example-mappings#luasnip
