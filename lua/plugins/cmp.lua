@@ -28,11 +28,11 @@ return {
 
 			cmp.setup {
 				sources = { -- For regular insert mode global setup. For filetype specific or cmdline etc, see further below
-					{ name = "copilot",  group_index = 2 },
-					{ name = 'luasnip',  group_index = 2 },
-					{ name = 'nvim_lsp', group_index = 3 },
-					{ name = 'buffer',   group_index = 4 },
 					{ name = "lazydev",  group_index = 0 }, -- Just for lua
+					{ name = 'luasnip',  group_index = 1 },
+					{ name = 'nvim_lsp', group_index = 2 },
+					{ name = "copilot",  group_index = 3 },
+					{ name = 'buffer',   group_index = 4 },
 				},
 
 				-- mapping guide: https://github.com/hrsh7th/nvim-cmp/wiki/Example-mappings#luasnip

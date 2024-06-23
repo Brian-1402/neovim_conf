@@ -1,12 +1,15 @@
 local mlsp_server_names =
-	{ "bashls", "biome", "clangd", "autotools_ls", "marksman", "lua_ls", "pyright", "vimls", "jsonls" }
+{ "bashls", "biome", "clangd", "autotools_ls", "marksman", "lua_ls", "pyright", "vimls", "jsonls" }
 -- local nvim_jdtls_servers = {"jdtls", "java-test", "java-debug-adapter",}
 --
 local others = { "rust_analyzer" }
 
 local null_ls_servers = {
-	-- "codespell",
+	"codespell",
 	"proselint",
+
+	"shellcheck",
+	"beautysh",
 
 	"pylint",
 	"isort",
@@ -15,19 +18,15 @@ local null_ls_servers = {
 	"selene",
 	"stylua",
 
-	"clang_format",
-	-- "cppcheck",
+	"clang-format",
+	"cppcheck", -- Not avalable in mason
 
 	"prettier",
-
-	-- "textidote",
-
-	"rustfmt",
 }
 
 local mason_nonlsp_pkgs = vim.tbl_extend("keep", others, null_ls_servers)
 local mason_all_pkgs = vim.tbl_extend("keep", mlsp_server_names, mason_nonlsp_pkgs)
-local mason_ensure_installed = mason_all_pkgs
+local mason_ensure_installed = mlsp_server_names
 
 -- Custom config opts for each server
 local lsp_opts = {}
@@ -72,7 +71,7 @@ return {
 			"hrsh7th/cmp-nvim-lsp",
 			"williamboman/mason-lspconfig.nvim",
 			"williamboman/mason.nvim",
-			{ "folke/trouble.nvim", config = true, dependencies = "nvim-lua/plenary.nvim" },
+			{ "folke/trouble.nvim",   config = true, dependencies = "nvim-lua/plenary.nvim" },
 
 			{
 				"SmiteshP/nvim-navbuddy",
@@ -82,7 +81,12 @@ return {
 				},
 				config = function()
 					require("nvim-navbuddy").setup({ lsp = { auto_attach = true } })
-					vim.keymap.set("n", "<leader>n",require("nvim-navbuddy").open, { noremap = true, silent = true, desc = "Open NavBuddy"})
+					vim.keymap.set(
+						"n",
+						"<leader>n",
+						require("nvim-navbuddy").open,
+						{ noremap = true, silent = true, desc = "Open NavBuddy" }
+					)
 				end,
 			},
 
@@ -91,6 +95,7 @@ return {
 				dependencies = {
 					"nvim-lua/plenary.nvim",
 					"nvimtools/none-ls-extras.nvim",
+					"gbprod/none-ls-shellcheck.nvim",
 				},
 				opt = false,
 			},
@@ -127,7 +132,6 @@ return {
 			local navbuddy = require("nvim-navbuddy")
 			local cmp_nvim_lsp = require("cmp_nvim_lsp")
 			local preview = require("goto-preview")
-			local null_ls = require("null-ls")
 
 			lspconfig.util.on_setup = lspconfig.util.add_hook_after(
 				lspconfig.util.on_setup,
@@ -192,7 +196,9 @@ return {
 				vim.keymap.set("n", "gK", vim.lsp.buf.signature_help, opts)
 
 				opts.desc = "See available code actions"
-				vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts) -- see available code actions, in visual mode will apply to selection
+				vim.keymap.set({ "n" }, "<leader>ca", vim.lsp.buf.code_action, opts)      -- see available code actions, in visual mode will apply to selection
+				vim.keymap.set({ "v" }, "<leader>ca", ":'<,'>Telescope lsp_range_code_actions", opts) -- see available code actions, in visual mode will apply to selection
+				-- vim.keymap.set({ "v" }, "<leader>ca", vim.lsp.buf.range_code_action, opts) -- see available code actions, in visual mode will apply to selection
 
 				opts.desc = "Run Codelens"
 				vim.keymap.set({ "n", "v" }, "<leader>cc", vim.lsp.codelens.run, opts)
@@ -420,34 +426,6 @@ return {
 				default_setup(server)
 			end
 
-			null_ls.setup({
-				sources = {
-					-- General
-					null_ls.builtins.completion.spell, -- spell check
-					null_ls.builtins.code_actions.proselint, -- An English prose linter, default md and tex.
-
-					-- Python
-					-- null_ls.builtins.diagnostics.pylint.with({
-					-- 	diagnostics_postprocess = function(diagnostic)
-					-- 		diagnostic.code = diagnostic.message_id
-					-- 	end,
-					-- }), -- python diagnostics
-					null_ls.builtins.formatting.isort, -- orders imports
-					null_ls.builtins.formatting.black, -- python formatter
-
-					-- Lua
-					-- null_ls.builtins.diagnostics.selene, -- lua diagnostics
-					null_ls.builtins.formatting.stylua, -- lua formatter
-
-					-- C/C++
-					null_ls.builtins.formatting.clang_format, -- C/C++ formatter
-					null_ls.builtins.diagnostics.cppcheck, -- More refined C/C++ diagnostics
-
-					-- WebDev
-					null_ls.builtins.formatting.prettier, -- js, ts, css, html formatter
-					-- null_ls.builtins.formatting.biome,
-				},
-			})
 
 			require("mason-lspconfig").setup({
 				ensure_installed = mason_ensure_installed,
@@ -478,6 +456,55 @@ return {
 		config = true,
 	},
 
+	{
+		"jay-babu/mason-null-ls.nvim",
+		event = { "BufReadPre", "BufNewFile" },
+		dependencies = {
+			"williamboman/mason.nvim",
+			"nvimtools/none-ls.nvim",
+		},
+		config = function()
+			local null_ls = require("null-ls")
+			require("mason-null-ls").setup({
+				ensure_installed = mason_nonlsp_pkgs,
+				automatic_installation = true,
+			})
+
+			null_ls.setup({
+				sources = {
+					-- General
+					-- null_ls.builtins.completion.spell, -- spell check
+					null_ls.builtins.code_actions.proselint, -- An English prose linter, default md and tex.
+					null_ls.builtins.code_actions.refactoring, -- Code refactoring, for lua, python, go, js, ts
+
+					-- bash
+					null_ls.builtins.formatting.shellharden,
+					null_ls.builtins.formatting.shfmt,
+
+					-- Python
+					-- null_ls.builtins.diagnostics.pylint.with({
+					-- 	diagnostics_postprocess = function(diagnostic)
+					-- 		diagnostic.code = diagnostic.message_id
+					-- 	end,
+					-- }), -- python diagnostics
+					null_ls.builtins.formatting.isort, -- orders imports
+					null_ls.builtins.formatting.black, -- python formatter
+
+					-- Lua
+					-- null_ls.builtins.diagnostics.selene, -- lua diagnostics
+					null_ls.builtins.formatting.stylua, -- lua formatter
+
+					-- C/C++
+					null_ls.builtins.formatting.clang_format, -- C/C++ formatter
+					null_ls.builtins.diagnostics.cppcheck, -- More refined C/C++ diagnostics
+
+					-- WebDev
+					null_ls.builtins.formatting.prettierd, -- js, ts, css, html formatter
+					-- null_ls.builtins.formatting.biome,
+				},
+			})
+		end,
+	},
 	-- Java LSP and other features
 	-- {
 	--	"mfussenegger/nvim-jdtls",
@@ -509,5 +536,15 @@ return {
 			auto_refresh = true,
 		},
 		event = "VeryLazy", -- Optional: needed only if you want to type `:VenvSelect` without a keymapping
+	},
+	{
+		"ThePrimeagen/refactoring.nvim",
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+			"nvim-treesitter/nvim-treesitter",
+		},
+		config = function()
+			require("refactoring").setup()
+		end,
 	},
 }

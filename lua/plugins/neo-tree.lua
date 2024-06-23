@@ -44,8 +44,20 @@ return {
 			end,
 			desc = "Explorer NeoTree (cwd)",
 		},
-		{ "<leader>e", "<leader>fe", desc = "Explorer NeoTree (root dir)", remap = true },
-		{ "<leader>E", "<leader>fE", desc = "Explorer NeoTree (cwd)",      remap = true },
+		{
+			"<leader>e",
+			desc = "Pop up NeoTree (root dir)",
+			function()
+				require("neo-tree.command").execute({ position = 'float', reveal = true, toggle = true })
+			end,
+			remap = true,
+		},
+		{
+			"<leader>E",
+			"<leader>fE",
+			desc = "Explorer NeoTree (cwd)",
+			remap = true,
+		},
 		{
 			"<leader>ge",
 			function()

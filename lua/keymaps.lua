@@ -26,6 +26,9 @@ vim.keymap.set("n", "<leader>v", ':set paste<CR>"+p:set nopaste<CR>', opts)
 opts.desc = "Save file"
 vim.keymap.set("n", "<C-S>", ":w<CR>", opts)
 
+opts.desc = "Copy selected text"
+vim.keymap.set("v", "<C-C>", '"+y', opts)
+
 -- For setting ctrl backspace remap in insert mode for Neovim-qt
 opts.desc = "Delete word backwards in insert mode"
 vim.keymap.set("i", "<C-BS>", "<C-w>", opts)
