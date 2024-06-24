@@ -1,26 +1,28 @@
 return {
 
 	{
-		'lervag/vimtex', -- Latex features
+		"lervag/vimtex", -- Latex features
 		config = function()
 			-- vimtex config
-			vim.g.tex_flavor = 'latex'
+			vim.g.tex_flavor = "latex"
 			vim.g.vimtex_quickfix_mode = 0
 			vim.o.conceallevel = 0
-			vim.g.tex_conceal = 'admgs'
+			vim.g.tex_conceal = "admgs"
 			-- -- Setting vimtex default pdf viewer as sumatrapdf
 			-- vim.g.vimtex_view_general_viewer = 'SumatraPDF'
 			-- vim.g.vimtex_view_general_options = '-reuse-instance -forward-search @tex @line @pdf'
 			-- -- vimtex config for okular
 			-- vim.g.vimtex_view_general_viewer = 'zathura'
-		end
+		end,
 	},
 
 	{
 		"iamcco/markdown-preview.nvim",
 		cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
 		ft = { "markdown" },
-		build = function() vim.fn["mkdp#util#install"]() end,
+		build = function()
+			vim.fn["mkdp#util#install"]()
+		end,
 	},
 
 	{
@@ -66,7 +68,7 @@ return {
 			-- your configuration comes here
 			-- or leave it empty to use the default settings
 			-- refer to the configuration section below
-		}
+		},
 	},
 
 	-- Markdown preview directly in terminal
@@ -78,33 +80,33 @@ return {
 
 	-- Automatically creates directories needed
 	{
-		'jghauser/mkdir.nvim',
+		"jghauser/mkdir.nvim",
 		event = "VeryLazy",
 	},
 
 	{
-		'dstein64/vim-startuptime', -- Plugin to measure startup times
+		"dstein64/vim-startuptime", -- Plugin to measure startup times
 		cmd = "StartupTime",
 	},
 
 	{
-		'tpope/vim-fugitive', -- Git support
+		"tpope/vim-fugitive", -- Git support
 		cmd = "Git",
 	},
 
 	{
-		'tpope/vim-obsession', -- Autosave sessions
+		"tpope/vim-obsession", -- Autosave sessions
 		cmd = "Obsess",
 	},
 
 	{
-		'tpope/vim-rhubarb', -- GitHub support
+		"tpope/vim-rhubarb", -- GitHub support
 		cmd = "GBrowse",
 	},
 
 	-- Coding usage tracking
 	{
-		'wakatime/vim-wakatime',
+		"wakatime/vim-wakatime",
 		enabled = false,
 		event = "VeryLazy",
 	},
@@ -115,8 +117,8 @@ return {
 
 		-- cond required to avoid error when lazy.nvim popup closes to leave a blank file.
 		cond = function()
-			local buftype = vim.api.nvim_buf_get_option(0, 'buftype')
-			if buftype == 'nofile' then -- In the beginning of file loading, the lazy popup sets this value, even though later on it's value is of the opened file.
+			local buftype = vim.api.nvim_buf_get_option(0, "buftype")
+			if buftype == "nofile" then -- In the beginning of file loading, the lazy popup sets this value, even though later on it's value is of the opened file.
 				return false
 			else
 				return true
@@ -141,27 +143,31 @@ return {
 	},
 
 	{
-		'notjedi/nvim-rooter.lua',
+		"notjedi/nvim-rooter.lua",
 		lazy = false,
 		config = function()
 			require("nvim-rooter").setup({
 				manual = true,
 			})
-			vim.keymap.set("n", "<leader>cr", ":Rooter<CR>",
-				{ silent = true, noremap = true, desc = "Change to project root" })
-		end
+			vim.keymap.set(
+				"n",
+				"<leader>cr",
+				":Rooter<CR>",
+				{ silent = true, noremap = true, desc = "Change to project root" }
+			)
+		end,
 	},
 
 	-- Neovim interface in browser text boxes
 	{
-		'glacambre/firenvim',
+		"glacambre/firenvim",
 		enabled = false,
 		-- Lazy load firenvim
 		-- Explanation: https://github.com/folke/lazy.nvim/discussions/463#discussioncomment-4819297
 		lazy = not vim.g.started_by_firenvim,
 		build = function()
 			vim.fn["firenvim#install"](0)
-		end
+		end,
 	},
 
 	{
@@ -186,8 +192,8 @@ return {
 		enabled = false,
 		opts = {
 			show_help = "yes", -- Show help text for CopilotChatInPlace, default: yes
-			debug = false,    -- Enable or disable debug mode, the log file will be in ~/.local/state/nvim/CopilotChat.nvim.log
-			disable_extra_info = 'no', -- Disable extra information (e.g: system prompt) in the response.
+			debug = false, -- Enable or disable debug mode, the log file will be in ~/.local/state/nvim/CopilotChat.nvim.log
+			disable_extra_info = "no", -- Disable extra information (e.g: system prompt) in the response.
 			-- proxy = "socks5://127.0.0.1:3000", -- Proxies requests via https or socks.
 		},
 		build = function()
@@ -196,7 +202,7 @@ return {
 		event = "VeryLazy",
 		keys = {
 			{ "<leader>cce", "<cmd>CopilotChatExplain<cr>", desc = "CopilotChat - Explain code" },
-			{ "<leader>cct", "<cmd>CopilotChatTests<cr>",   desc = "CopilotChat - Generate tests" },
+			{ "<leader>cct", "<cmd>CopilotChatTests<cr>", desc = "CopilotChat - Generate tests" },
 			{
 				"<leader>ccv",
 				":CopilotChatVisual",
@@ -218,7 +224,7 @@ return {
 				"<leader>ccr",
 				"<cmd>CopilotChatReset<cr>", -- Reset chat history and clear buffer.
 				desc = "CopilotChat - Reset chat history and clear buffer",
-			}
+			},
 		},
 	},
 
@@ -236,10 +242,10 @@ return {
 			"TmuxNavigatePrevious",
 		},
 		keys = {
-			{ "<c-h>",  "<cmd><C-U>TmuxNavigateLeft<cr>" },
-			{ "<c-j>",  "<cmd><C-U>TmuxNavigateDown<cr>" },
-			{ "<c-k>",  "<cmd><C-U>TmuxNavigateUp<cr>" },
-			{ "<c-l>",  "<cmd><C-U>TmuxNavigateRight<cr>" },
+			{ "<c-h>", "<cmd><C-U>TmuxNavigateLeft<cr>" },
+			{ "<c-j>", "<cmd><C-U>TmuxNavigateDown<cr>" },
+			{ "<c-k>", "<cmd><C-U>TmuxNavigateUp<cr>" },
+			{ "<c-l>", "<cmd><C-U>TmuxNavigateRight<cr>" },
 			{ "<c-\\>", "<cmd><C-U>TmuxNavigatePrevious<cr>" },
 		},
 	},
@@ -281,7 +287,6 @@ return {
 			-- -- 2) If in some project's root, attempt to restore that project's session
 			-- -- 3) If not, restore last stored session
 
-
 			store_hooks = {
 				pre = function()
 					-- -- if you use neo-tree.nvim, add these two lines to the `pre` of `store_hooks`.
@@ -291,13 +296,16 @@ return {
 					-- Below are to close nvim-tree and neo-tree otherwise it'll cause errors when storing sessions
 					-- nvim-tree
 					local nvim_tree_present, api = pcall(require, "nvim-tree.api")
-					if nvim_tree_present then api.tree.close() end
+					if nvim_tree_present then
+						api.tree.close()
+					end
 
 					-- neo-tree
-					if pcall(require, "neo-tree") then vim.cmd [[Neotree action=close]] end
+					if pcall(require, "neo-tree") then
+						vim.cmd([[Neotree action=close]])
+					end
 				end,
 			},
-
 		},
 		config = function(_, opts)
 			require("projections").setup(opts)
@@ -318,25 +326,30 @@ return {
 			-- Save localoptions to session file
 			vim.opt.sessionoptions:append("localoptions")
 
-
 			-- Bind <leader>fp to Telescope projections
-			require('telescope').load_extension('projections')
-			vim.keymap.set("n", "<leader>fp", function() vim.cmd("Telescope projections") end)
+			require("telescope").load_extension("projections")
+			vim.keymap.set("n", "<leader>fp", function()
+				vim.cmd("Telescope projections")
+			end)
 
 			-- -- for fzf-lua-projections.nvim
 			-- vim.keymap.set('n', '<Leader>cp', function () require('fzf-lua-projections').projects() end, NOREF_NOERR_TRUNC)
 
 			-- Autostore session on VimExit
 			local Session = require("projections.session")
-			vim.api.nvim_create_autocmd({ 'VimLeavePre' }, {
-				callback = function() Session.store(vim.loop.cwd()) end,
+			vim.api.nvim_create_autocmd({ "VimLeavePre" }, {
+				callback = function()
+					Session.store(vim.loop.cwd())
+				end,
 			})
 
 			-- Switch to project if vim was started in a project dir
 			local switcher = require("projections.switcher")
 			vim.api.nvim_create_autocmd({ "VimEnter" }, {
 				callback = function()
-					if vim.fn.argc() == 0 then switcher.switch(vim.loop.cwd()) end
+					if vim.fn.argc() == 0 then
+						switcher.switch(vim.loop.cwd())
+					end
 				end,
 			})
 
@@ -346,7 +359,9 @@ return {
 			-- If no sessions, do nothing
 			vim.api.nvim_create_autocmd({ "VimEnter" }, {
 				callback = function()
-					if vim.fn.argc() ~= 0 then return end
+					if vim.fn.argc() ~= 0 then
+						return
+					end
 					local session_info = Session.info(vim.loop.cwd())
 					if session_info == nil then
 						-- Session.restore_latest()
@@ -355,7 +370,7 @@ return {
 						Session.restore(vim.loop.cwd())
 					end
 				end,
-				desc = "Restore last session automatically"
+				desc = "Restore last session automatically",
 			})
 
 			-- The following lines register two commands StoreProjectSession and RestoreProjectSession.
@@ -374,7 +389,7 @@ return {
 			vim.api.nvim_create_user_command("AddWorkspace", function()
 				Workspace.add(vim.loop.cwd())
 			end, {})
-		end
+		end,
 	},
 
 	{
@@ -386,7 +401,7 @@ return {
 			-- session_filepath = ".nvim/session",
 			session_filepath = vim.fn.stdpath("data") .. "/sessions",
 			absolute = true,
-		}
+		},
 	},
 
 	{
@@ -420,8 +435,7 @@ return {
 				remove = {
 					"SessionManager delete_current_dir_session",
 				},
-
-			}
+			},
 		},
 		config = function(_, opts)
 			require("workspaces").setup(opts)
@@ -443,8 +457,8 @@ return {
 		},
 		config = function()
 			-- local Path = require('plenary.path')
-			local config = require('session_manager.config')
-			require('session_manager').setup({
+			local config = require("session_manager.config")
+			require("session_manager").setup({
 				autoload_mode = config.AutoloadMode.CurrentDir,
 				autosave_ignore_dirs = {
 					[[C:\Users\brian\scoop\apps\neovide\current]],
@@ -456,37 +470,43 @@ return {
 				-- autosave_only_in_session = true, -- Always autosaves session. If true, only autosaves after a session is active.
 			})
 
-			vim.keymap.set("n", "<leader>fw", function() vim.cmd("SessionManager load_session") end)
+			vim.keymap.set("n", "<leader>fw", function()
+				vim.cmd("SessionManager load_session")
+			end)
 
-			local config_group = vim.api.nvim_create_augroup('MyConfigGroup', {}) -- A global group for all your config autocommands
+			local config_group = vim.api.nvim_create_augroup("MyConfigGroup", {}) -- A global group for all your config autocommands
 			-- Close nvim-tree and neo-tree before saving session
-			vim.api.nvim_create_autocmd({ 'User' }, {
+			vim.api.nvim_create_autocmd({ "User" }, {
 				pattern = "SessionSavePre",
 				group = config_group,
 				callback = function()
 					-- Below are to close nvim-tree and neo-tree otherwise it'll cause errors when storing sessions
 					-- nvim-tree
 					local nvim_tree_present, api = pcall(require, "nvim-tree.api")
-					if nvim_tree_present then api.tree.close() end
+					if nvim_tree_present then
+						api.tree.close()
+					end
 					-- neo-tree
-					if pcall(require, "neo-tree") then vim.cmd [[Neotree action=close]] end
+					if pcall(require, "neo-tree") then
+						vim.cmd([[Neotree action=close]])
+					end
 				end,
 			})
 
 			-- Auto save session
-			vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
+			vim.api.nvim_create_autocmd({ "BufWritePre" }, {
 				group = config_group,
 				callback = function()
 					for _, buf in ipairs(vim.api.nvim_list_bufs()) do
 						-- Don't save while there's any 'nofile' buffer open.
-						if vim.api.nvim_get_option_value("buftype", { buf = buf }) == 'nofile' then
+						if vim.api.nvim_get_option_value("buftype", { buf = buf }) == "nofile" then
 							return
 						end
 					end
-					require('session_manager').save_current_session()
-				end
+					require("session_manager").save_current_session()
+				end,
 			})
-		end
+		end,
 	},
 
 	-- Tool for better appearances of diffs. Already supports git diff capabilities as commands.
@@ -510,7 +530,25 @@ return {
 		},
 		opts = {
 			-- configuration goes here
+			injector = { ---@type table<lc.lang, lc.inject>
+				["python3"] = {
+					before = true,
+				},
+				["cpp"] = {
+					before = { "#include <bits/stdc++.h>", "using namespace std;" },
+					-- after = "int main() {}",
+				},
+				["java"] = {
+					before = "import java.util.*;",
+				},
+			},
 		},
+		config = function(_, opts)
+			require("leetcode").setup(opts)
+			vim.keymap.set("n", "<leader>ll", "<cmd>Leet<cr>", { silent = true, noremap = true, desc = "Open Leetcode" })
+			vim.keymap.set("n", "<leader>lt", "<cmd>Leet test<cr>", { silent = true, noremap = true, desc = "Leet test" })
+			vim.keymap.set("n", "<leader>ls", "<cmd>Leet submit<cr>", { silent = true, noremap = true, desc = "Leet submit" })
+		end,
 	},
 
 	{
@@ -519,7 +557,7 @@ return {
 		enabled = not vim.g.neovide and vim.fn.has("wsl"),
 		config = function()
 			require("deferred-clipboard").setup({
-				fallback = 'unnamedplus', -- or your preferred setting for clipboard
+				fallback = "unnamedplus", -- or your preferred setting for clipboard
 			})
 		end,
 	},
@@ -590,7 +628,7 @@ return {
 			require("nvim-macros").setup({
 				json_file_path = vim.fs.normalize(path), -- Location where the macros will be stored
 				default_macro_register = "q", -- Use as default register for :MacroYank and :MacroSave and :MacroSelect Raw functions
-				json_formatter = "none",     -- can be "none" | "jq" | "yq" used to pretty print the json file (jq or yq must be installed!)
+				json_formatter = "none", -- can be "none" | "jq" | "yq" used to pretty print the json file (jq or yq must be installed!)
 			})
 			vim.keymap.set("n", "<leader>q", ":MacroSave<CR>", { silent = true, desc = "Save macro" })
 			vim.keymap.set("n", "<leader>fq", ":MacroSelect<CR>", { silent = true, desc = "Select macros" })
@@ -605,13 +643,13 @@ return {
 
 	{
 		"mrcjkb/rustaceanvim",
-		version = '^4', -- Recommended
+		version = "^4", -- Recommended
 		lazy = false, -- This plugin is already lazy
 	},
 
 	{
 		"folke/todo-comments.nvim",
 		dependencies = { "nvim-lua/plenary.nvim" },
-		opts = {}
+		opts = {},
 	},
 }

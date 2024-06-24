@@ -20,11 +20,11 @@ return {
 
 			-- configure autopairs
 			autopairs.setup({
-				check_ts = true,         -- enable treesitter
+				check_ts = true, -- enable treesitter
 				ts_config = {
-					lua = { "string" },  -- don't add pairs in lua string treesitter nodes
+					lua = { "string" }, -- don't add pairs in lua string treesitter nodes
 					javascript = { "template_string" }, -- don't add pairs in javscript template_string treesitter nodes
-					java = false,        -- don't check treesitter on java
+					java = false, -- don't check treesitter on java
 				},
 			})
 
@@ -39,7 +39,6 @@ return {
 		end,
 	},
 
-
 	-- For peeking lines when mentioning them in command line
 	{
 		"nacro90/numb.nvim",
@@ -48,7 +47,7 @@ return {
 	},
 
 	{
-		'takac/vim-hardtime', -- Puts time delay for hjkl keys
+		"takac/vim-hardtime", -- Puts time delay for hjkl keys
 		enabled = false,
 		event = "VeryLazy",
 		config = function()
@@ -58,26 +57,27 @@ return {
 
 	-- The default vim % feature, added here for lazy loading
 	{
-		'chrisbra/matchit',
+		"chrisbra/matchit",
 		enabled = false, -- Replaced by vim-matchup
 		event = "VeryLazy",
 	},
 
 	{
-		'tpope/vim-unimpaired',
+		"tpope/vim-unimpaired",
 		enabled = false,
 		event = "VeryLazy",
 	},
 
 	{
-		'numToStr/Comment.nvim',
+		"numToStr/Comment.nvim",
 		event = "VeryLazy",
 		config = function()
-			local comment = require('Comment');
-			comment.setup();
-			-- Below not working
-			-- -- Remap Ctrl-/ to comment
-			-- vim.keymap.set("n", "<C-/>", "gcc", { noremap = true, silent = true })
+			require("Comment").setup({ ignore = "^$", })
+			local ft = require("Comment.ft")
+			ft.set("ahk", ";")
+			-- Remap Ctrl-/ to comment
+			vim.keymap.set("n", "<C-/>", "gcc", { remap = true, silent = true, desc = "Line comment" })
+			vim.keymap.set("v", "<C-/>", "gc", { remap = true, silent = true, desc = "Comment selected lines" })
 		end,
 	},
 
@@ -89,19 +89,19 @@ return {
 	},
 
 	{
-		'tpope/vim-abolish', -- Search shortcuts
+		"tpope/vim-abolish", -- Search shortcuts
 		enabled = false,
 		event = "VeryLazy",
 	},
 
 	{
-		'Konfekt/FastFold', -- For making vim folds faster
+		"Konfekt/FastFold", -- For making vim folds faster
 		event = "VeryLazy",
 	},
 
 	{
-		'tmhedberg/SimpylFold', -- Folds for python
-		ft = { 'python' },
+		"tmhedberg/SimpylFold", -- Folds for python
+		ft = { "python" },
 		config = function()
 			vim.wo.foldenable = false
 			vim.wo.foldmethod = "expr"
@@ -113,22 +113,22 @@ return {
 		"nat-418/boole.nvim",
 		event = "VeryLazy",
 		config = function()
-			require('boole').setup({
+			require("boole").setup({
 				mappings = {
-					increment = '<C-a>',
-					decrement = '<C-x>'
+					increment = "<C-a>",
+					decrement = "<C-x>",
 				},
 				-- User defined loops
 				additions = {
-					{ 'Foo', 'Bar' },
-					{ 'tic', 'tac', 'toe' }
+					{ "Foo", "Bar" },
+					{ "tic", "tac", "toe" },
 				},
 				allow_caps_additions = {
-					{ 'enable', 'disable' }
+					{ "enable", "disable" },
 					-- enable → disable
 					-- Enable → Disable
 					-- ENABLE → DISABLE
-				}
+				},
 			})
 		end,
 	},
@@ -149,6 +149,6 @@ return {
 			if vim.fn.has("win32") == 1 then
 				vim.g.sqlite_clib_path = "C:/Program Files/sqlite/sqlite3.dll"
 			end
-		end
+		end,
 	},
 }
