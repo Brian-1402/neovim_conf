@@ -69,6 +69,9 @@ opts.desc = "Move the current tab to the right"
 vim.keymap.set("n", "<C-T>L", ":+tabmove<CR>", opts)
 
 
+opts.desc = "Refresh current buffer"
+vim.keymap.set("n", "<M-r>", ":e<CR>", opts)
+
 -- Define a Lua function to move the current window to the previous tab
 function MoveWindowToPreviousTab()
     local current_tab = vim.fn.tabpagenr()

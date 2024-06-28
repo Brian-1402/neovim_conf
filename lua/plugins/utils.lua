@@ -517,6 +517,7 @@ return {
 
 	{
 		"kawre/leetcode.nvim",
+		cmd = { "Leet", "Leet test", "Leet submit", "Leet list"},
 		build = ":TSUpdate html",
 		dependencies = {
 			"nvim-telescope/telescope.nvim",
@@ -545,9 +546,24 @@ return {
 		},
 		config = function(_, opts)
 			require("leetcode").setup(opts)
-			vim.keymap.set("n", "<leader>ll", "<cmd>Leet<cr>", { silent = true, noremap = true, desc = "Open Leetcode" })
-			vim.keymap.set("n", "<leader>lt", "<cmd>Leet test<cr>", { silent = true, noremap = true, desc = "Leet test" })
-			vim.keymap.set("n", "<leader>ls", "<cmd>Leet submit<cr>", { silent = true, noremap = true, desc = "Leet submit" })
+			vim.keymap.set(
+				"n",
+				"<leader>ll",
+				"<cmd>Leet<cr>",
+				{ silent = true, noremap = true, desc = "Open Leetcode" }
+			)
+			vim.keymap.set(
+				"n",
+				"<leader>lt",
+				"<cmd>Leet test<cr>",
+				{ silent = true, noremap = true, desc = "Leet test" }
+			)
+			vim.keymap.set(
+				"n",
+				"<leader>ls",
+				"<cmd>Leet submit<cr>",
+				{ silent = true, noremap = true, desc = "Leet submit" }
+			)
 		end,
 	},
 
@@ -557,7 +573,7 @@ return {
 		enabled = not vim.g.neovide and vim.fn.has("linux"),
 		config = function()
 			require("deferred-clipboard").setup({
-				fallback = '', -- or your preferred setting for clipboard
+				fallback = "", -- or your preferred setting for clipboard
 			})
 		end,
 	},
@@ -639,6 +655,19 @@ return {
 		"kmontocam/nvim-conda",
 		event = "VeryLazy",
 		dependencies = { "nvim-lua/plenary.nvim" },
+		config = function()
+			-- run CondaActivate DL
+
+			-- Create an autocommand group for managing conda environment activation
+			vim.api.nvim_create_augroup("CondaEnv", { clear = true })
+
+			-- Define the autocommand to activate the conda environment for Python files
+			vim.api.nvim_create_autocmd({ "BufRead", "BufEnter" }, {
+				group = "CondaEnv",
+				pattern = "*.py",
+				command = "CondaActivate DL",
+			})
+		end,
 	},
 
 	{

@@ -17,7 +17,7 @@ end
 local pluginSpecFiles = {
 	'plugins.editing',
 	'plugins.treesitter',
-	'vscode.plugin_extras',
+	'vscode_config.plugin_extras',
 }
 
 -- Function to load and modify a plugin spec file

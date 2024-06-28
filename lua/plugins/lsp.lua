@@ -197,7 +197,7 @@ return {
 
 				opts.desc = "See available code actions"
 				vim.keymap.set({ "n" }, "<leader>ca", vim.lsp.buf.code_action, opts)      -- see available code actions, in visual mode will apply to selection
-				vim.keymap.set({ "v" }, "<leader>ca", ":'<,'>Telescope lsp_range_code_actions", opts) -- see available code actions, in visual mode will apply to selection
+				vim.keymap.set({ "v" }, "<leader>ca", ":'<,'>Telescope lsp_range_code_actions<CR>", opts) -- see available code actions, in visual mode will apply to selection
 				-- vim.keymap.set({ "v" }, "<leader>ca", vim.lsp.buf.range_code_action, opts) -- see available code actions, in visual mode will apply to selection
 
 				opts.desc = "Run Codelens"

@@ -116,3 +116,4 @@ end
 
 -- Previews command output in the live buffer
 vim.o.inccommand = "nosplit"
+
