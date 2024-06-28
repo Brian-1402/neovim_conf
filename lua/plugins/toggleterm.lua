@@ -6,7 +6,7 @@ local M = {
 function M.config()
 	if vim.fn.has("win32") == 1 then
 		local powershell_options = {
-			shell = vim.fn.executable "pwsh" == 1 and "pwsh" or "powershell",
+			shell = vim.fn.executable "pwsh" == 1 and "pwsh -nologo" or "powershell",
 			shellcmdflag =
 			"-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;",
 			shellredir = "-RedirectStandardOutput %s -NoNewWindow -Wait",
@@ -182,7 +182,8 @@ function M.config()
 	end
 
 	-- vim.api.nvim_set_keymap("n", "<leader>gz", "<cmd>lua _lazygit_toggle()<CR>", { noremap = true, silent = true })
-	vim.api.nvim_set_keymap("n", "<leader>co", "<cmd>lua _bun_outdated()<CR>", { noremap = true, silent = true })
+	-- vim.api.nvim_set_keymap("n", "<leader>co", "<cmd>lua _bun_outdated()<CR>", { noremap = true, silent = true })
+	vim.keymap.set("t", "<C-]>", [[<C-\><C-n>]], {silent = true, noremap = true})
 end
 
 return M
