@@ -101,6 +101,7 @@ return {
 
 	{
 		"tmhedberg/SimpylFold", -- Folds for python
+		enabled = false,
 		ft = { "python" },
 		config = function()
 			vim.wo.foldenable = false
@@ -145,8 +146,9 @@ return {
 
 	{ -- For persistent storage support for other plugins
 		"kkharji/sqlite.lua",
+		event = "VeryLazy",
 		config = function()
-			if vim.fn.has("win32") == 1 then
+			if not vim.fn.has("linux") then
 				vim.g.sqlite_clib_path = "C:/Program Files/sqlite/sqlite3.dll"
 			end
 		end,

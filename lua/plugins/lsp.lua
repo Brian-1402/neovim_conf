@@ -1,5 +1,5 @@
 local mlsp_server_names =
-{ "bashls", "biome", "clangd", "autotools_ls", "marksman", "lua_ls", "pyright", "vimls", "jsonls" }
+{ "bashls", "biome", "clangd", "marksman", "lua_ls", "pyright", "vimls", "jsonls" }
 -- local nvim_jdtls_servers = {"jdtls", "java-test", "java-debug-adapter",}
 --
 local others = { "rust_analyzer" }
@@ -461,7 +461,7 @@ return {
 		event = { "BufReadPre", "BufNewFile" },
 		dependencies = {
 			"williamboman/mason.nvim",
-			"nvimtools/none-ls.nvim",
+			{ "nvimtools/none-ls.nvim", lazy = false },
 		},
 		config = function()
 			local null_ls = require("null-ls")
@@ -528,6 +528,7 @@ return {
 	-- },
 	{
 		"linux-cultist/venv-selector.nvim",
+		enabled = false,
 		branch = "regexp",
 		dependencies = { "neovim/nvim-lspconfig", "nvim-telescope/telescope.nvim", "mfussenegger/nvim-dap-python" },
 		opts = {
@@ -539,6 +540,8 @@ return {
 	},
 	{
 		"ThePrimeagen/refactoring.nvim",
+		enabled = false,
+		event = "VeryLazy",
 		dependencies = {
 			"nvim-lua/plenary.nvim",
 			"nvim-treesitter/nvim-treesitter",

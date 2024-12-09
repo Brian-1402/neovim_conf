@@ -11,6 +11,7 @@ return {
 	{
 		"catppuccin/nvim",
 		name = "catppuccin",
+		enabled = false,
 		lazy = false,
 		priority = 1000,
 		-- config = function() vim.cmd.colorscheme("catppuccin") end,
@@ -128,6 +129,7 @@ return {
 
 	{ -- Displays file name and more in a small hover window
 		'b0o/incline.nvim',
+		enabled = false,
 		event = 'VeryLazy',
 		dependencies = {
 			"SmiteshP/nvim-navic",

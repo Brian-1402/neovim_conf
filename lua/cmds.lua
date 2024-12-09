@@ -175,3 +175,11 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
     vim.fn.mkdir(dir, "p")
   end
 })
+
+
+vim.api.nvim_create_autocmd("OptionSet", {
+  pattern = "tabstop",
+  callback = function()
+    vim.o.shiftwidth = vim.o.tabstop
+  end,
+})
