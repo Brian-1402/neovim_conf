@@ -1,0 +1,3 @@
+https://medium.com/usevim/improving-vims-startup-time-beb3f83cbfe8
+
+run "vim --startuptime vim.log"

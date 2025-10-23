@@ -1,111 +1,161 @@
+
+-- Use system clipboard for all operations by default
+-- vim.o.clipboard = "unnamedplus"
+--
+local win32yank_path = "/mnt/c/Users/brian/scoop/shims/win32yank.exe"
+if vim.fn.has('linux') then
+	vim.g.clipboard = {
+		name = "win32yank-wsl",
+		copy = {
+			["+"] = win32yank_path .. " -i --crlf",
+			["*"] = win32yank_path .. " -i --crlf",
+		},
+		paste = {
+			["+"] = win32yank_path .. " -o --lf",
+			["*"] = win32yank_path .. " -o --lf",
+		},
+		cache_enabled = 0,
+	}
+end
+
+-- Below doesn't deal with line endings properly
+-- if vim.fn.has('linux') then
+-- 	vim.g.clipboard = {
+-- 		name = "WslClipboard",
+-- 		copy = {
+-- 			["+"] = "clip.exe",
+-- 			["*"] = "clip.exe",
+-- 		},
+-- 		paste = {
+-- 			["+"] = "powershell.exe -NoLogo -NoProfile -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace('`r', ''))",
+-- 			["*"] = "powershell.exe -NoLogo -NoProfile -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace('`r', ''))",
+-- 		},
+-- 		cache_enabled = 0,
+-- 	}
+-- end
+
+
+
+
+
+
+
+
+
+
+
+-- Below are old code which isn't working anymore in latest neovim
+--
 -- Noticed a performance delay in wsl2 when using the clipboard. This is a fix for that.
 -- Found here: https://github.com/neovim/neovim/issues/21739#issuecomment-1399405391
 -- But this still causes an error when running. 
 -- So workaround is to use https://github.com/EtiamNullam/deferred-clipboard.nvim
 
 
-local M = {}
+-- local M = {}
 
-local augroup = vim.api.nvim_create_augroup("deferClip", {})
+-- local augroup = vim.api.nvim_create_augroup("deferClip", {})
 
-local entries = {
-  first = 1,
-  last = 1,
-}
-local active_entry = {}
+-- local win32yank_path = "/mnt/c/Users/brian/scoop/shims/win32yank.exe"
 
-local function add_entry(entry)
-  entries[entries.last] = entry
-  entries.last = entries.last + 1
-end
+-- local entries = {
+--   first = 1,
+--   last = 1,
+-- }
+-- local active_entry = {}
 
-local function pop_entry()
-  if entries.first < entries.last then
-    local entry = entries[entries.first]
-    entries[entries.first] = nil
-    entries.first = entries.first + 1
-    return entry
-  end
-end
+-- local function add_entry(entry)
+--   entries[entries.last] = entry
+--   entries.last = entries.last + 1
+-- end
 
-local function sync_from()
-  vim.fn.jobstart({ "win32yank.exe", "-o", "--lf" }, {
-    stdout_buffered = true,
-    on_stdout = function(_, data)
-      active_entry = { lines = data, regtype = "v" }
-    end,
-  })
-end
+-- local function pop_entry()
+--   if entries.first < entries.last then
+--     local entry = entries[entries.first]
+--     entries[entries.first] = nil
+--     entries.first = entries.first + 1
+--     return entry
+--   end
+-- end
 
-local sync_to
-do
-  local cur_sync_job
-  local function sync_next(entry)
-    local chan = vim.fn.jobstart({ "win32yank.exe", "-i" }, {
-      on_exit = function(_)
-        local next_entry = pop_entry()
-        if next_entry then
-          sync_next(next_entry)
-        else
-          cur_sync_job = nil
-        end
-      end,
-    })
-    cur_sync_job = chan
-    vim.fn.chansend(chan, entry.lines)
-    vim.fn.chanclose(chan, "stdin")
-  end
+-- local function sync_from()
+--   vim.fn.jobstart({ win32yank_path, "-o", "--lf" }, {
+--     stdout_buffered = true,
+--     on_stdout = function(_, data)
+--       active_entry = { lines = data, regtype = "v" }
+--     end,
+--   })
+-- end
 
-  sync_to = function()
-    if cur_sync_job then
-      return
-    else
-      local entry = pop_entry()
-      if entry then
-        sync_next(entry)
-      end
-    end
-  end
-end
+-- local sync_to
+-- do
+--   local cur_sync_job
+--   local function sync_next(entry)
+--     local chan = vim.fn.jobstart({ win32yank_path, "-i" }, {
+--       on_exit = function(_)
+--         local next_entry = pop_entry()
+--         if next_entry then
+--           sync_next(next_entry)
+--         else
+--           cur_sync_job = nil
+--         end
+--       end,
+--     })
+--     cur_sync_job = chan
+--     vim.fn.chansend(chan, entry.lines)
+--     vim.fn.chanclose(chan, "stdin")
+--   end
 
-function M.copy(lines, regtype)
-  add_entry({ lines = lines, regtype = regtype })
-  active_entry = { lines = lines, regtype = regtype }
-  sync_to()
-end
+--   sync_to = function()
+--     if cur_sync_job then
+--       return
+--     else
+--       local entry = pop_entry()
+--       if entry then
+--         sync_next(entry)
+--       end
+--     end
+--   end
+-- end
 
-function M.get_active()
-  return { active_entry.lines, active_entry.regtype }
-end
+-- function M.copy(lines, regtype)
+--   add_entry({ lines = lines, regtype = regtype })
+--   active_entry = { lines = lines, regtype = regtype }
+--   sync_to()
+-- end
 
-function M.setup()
-  vim.api.nvim_exec(
-    [[
-    function s:copy(lines, regtype)
-      call luaeval('require("core.vim.deferclip").copy(_A[1], _A[2])', [a:lines, a:regtype])
-    endfunction
-    function s:get_active()
-      call luaeval('require("core.vim.deferclip").get_active()')
-    endfunction
+-- function M.get_active()
+--   return { active_entry.lines, active_entry.regtype }
+-- end
 
-    let g:clipboard = {
-          \   'name': 'deferClip',
-          \   'copy': {
-          \      '+': {lines, regtype -> s:copy(lines, regtype)},
-          \      '*': {lines, regtype -> s:copy(lines, regtype)},
-          \    },
-          \   'paste': {
-          \      '+': {-> s:get_active()},
-          \      '*': {-> s:get_active()},
-          \   },
-          \ }
-  ]],
-    false
-  )
-  vim.api.nvim_create_autocmd({ "FocusGained", "VimEnter" }, {
-    group = augroup,
-    callback = sync_from,
-  })
-end
+-- function M.setup()
+--   vim.api.nvim_exec(
+--     [[
+--     function s:copy(lines, regtype)
+--       call luaeval('require("core.vim.deferclip").copy(_A[1], _A[2])', [a:lines, a:regtype])
+--     endfunction
+--     function s:get_active()
+--       call luaeval('require("core.vim.deferclip").get_active()')
+--     endfunction
 
-return M
+--     let g:clipboard = {
+--           \   'name': 'deferClip',
+--           \   'copy': {
+--           \      '+': {lines, regtype -> s:copy(lines, regtype)},
+--           \      '*': {lines, regtype -> s:copy(lines, regtype)},
+--           \    },
+--           \   'paste': {
+--           \      '+': {-> s:get_active()},
+--           \      '*': {-> s:get_active()},
+--           \   },
+--           \ }
+--   ]],
+--     false
+--   )
+--   vim.api.nvim_create_autocmd({ "FocusGained", "VimEnter" }, {
+--     group = augroup,
+--     callback = sync_from,
+--   })
+-- end
+
+-- return M

@@ -61,6 +61,7 @@ return {
 				{ filter = { event = "msg_show", find = "search hit BOTTOM" }, skip = true },
 				{ filter = { event = "msg_show", find = "search hit TOP" },    skip = true },
 				{ filter = { find = "Config Change Detected. Reloading..." },  skip = true },
+				{ filter = { find = "Client stylua quit with exit code 2 and signal 0." },  skip = true },
 				{
 					view = "popup",
 					filter = {

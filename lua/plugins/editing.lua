@@ -76,8 +76,9 @@ return {
 			local ft = require("Comment.ft")
 			ft.set("ahk", ";")
 			-- Remap Ctrl-/ to comment
-			vim.keymap.set("n", "<C-/>", "gcc", { remap = true, silent = true, desc = "Line comment" })
-			vim.keymap.set("v", "<C-/>", "gc", { remap = true, silent = true, desc = "Comment selected lines" })
+			vim.keymap.set("n", "<C-_>", "gcc", { remap = true, silent = true, desc = "Line comment" })
+			vim.keymap.set("v", "<C-_>", "gc", { remap = true, silent = true, desc = "Comment selected lines" })
+			-- vim recognizes <C-/> as <C-_>
 		end,
 	},
 

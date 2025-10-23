@@ -1,8 +1,9 @@
-local mlsp_server_names =
-{ "bashls", "biome", "clangd", "marksman", "lua_ls", "pyright", "vimls", "jsonls" }
+local mlsp_server_names = { "bashls", "biome", "clangd", "marksman", "lua_ls", "pyright", "vimls", "jsonls" }
 -- local nvim_jdtls_servers = {"jdtls", "java-test", "java-debug-adapter",}
 --
-local others = { "rust_analyzer" }
+local others = {
+	"rust_analyzer",
+}
 
 local null_ls_servers = {
 	"codespell",
@@ -71,7 +72,7 @@ return {
 			"hrsh7th/cmp-nvim-lsp",
 			"williamboman/mason-lspconfig.nvim",
 			"williamboman/mason.nvim",
-			{ "folke/trouble.nvim",   config = true, dependencies = "nvim-lua/plenary.nvim" },
+			{ "folke/trouble.nvim", config = true, dependencies = "nvim-lua/plenary.nvim" },
 
 			{
 				"SmiteshP/nvim-navbuddy",
@@ -127,28 +128,38 @@ return {
 		},
 
 		config = function()
-			local lspconfig = require("lspconfig")
 			local navic = require("nvim-navic")
 			local navbuddy = require("nvim-navbuddy")
 			local cmp_nvim_lsp = require("cmp_nvim_lsp")
 			local preview = require("goto-preview")
 
-			lspconfig.util.on_setup = lspconfig.util.add_hook_after(
-				lspconfig.util.on_setup,
-				function(config, user_config)
-					config.capabilities = vim.tbl_deep_extend(
-						"force",
-						config.capabilities,
-						cmp_nvim_lsp.default_capabilities(),
-						vim.tbl_get(user_config, "capabilities") or {}
-					)
-				end
-			)
+			-- Used for cmp-nvim-lsp, to automatically load nvim-cmp features for LSP servers
+			-- Specifically, includes the cmp capabilities along with the lsp server default capabilities
+			-- But in most cases this isn't required, github examples just make cmp capabilities override the lsp server capabilities
+			-- Deprecated original hook-style version:
+			-- ```lua
+			-- local lspconfig = require("lspconfig")
+			-- lspconfig.util.on_setup = lspconfig.util.add_hook_after(
+			-- 	lspconfig.util.on_setup,
+			-- 	function(config, user_config)
+			-- 		config.capabilities = vim.tbl_deep_extend(
+			-- 			"force",
+			-- 			config.capabilities,
+			-- 			cmp_nvim_lsp.default_capabilities(),
+			-- 			vim.tbl_get(user_config, "capabilities") or {}
+			-- 		)
+			-- 	end
+			-- )
+			-- ```
+			local function cmp_lsp_setup(config)
+				config.capabilities =
+					vim.tbl_deep_extend("force", config.capabilities or {}, cmp_nvim_lsp.default_capabilities())
+			end
 
 			-- local keymap = vim.keymap -- for conciseness
 			local opts = { noremap = true, silent = true }
 
-			local lsp_on_attach = function(event)
+			local function lsp_on_attach(event)
 				local bufnr = event.buf
 
 				-- vim.api.nvim_buf_create_user_command(
@@ -196,7 +207,7 @@ return {
 				vim.keymap.set("n", "gK", vim.lsp.buf.signature_help, opts)
 
 				opts.desc = "See available code actions"
-				vim.keymap.set({ "n" }, "<leader>ca", vim.lsp.buf.code_action, opts)      -- see available code actions, in visual mode will apply to selection
+				vim.keymap.set({ "n" }, "<leader>ca", vim.lsp.buf.code_action, opts) -- see available code actions, in visual mode will apply to selection
 				vim.keymap.set({ "v" }, "<leader>ca", ":'<,'>Telescope lsp_range_code_actions<CR>", opts) -- see available code actions, in visual mode will apply to selection
 				-- vim.keymap.set({ "v" }, "<leader>ca", vim.lsp.buf.range_code_action, opts) -- see available code actions, in visual mode will apply to selection
 
@@ -283,6 +294,25 @@ return {
 				callback = lsp_on_attach,
 			})
 
+			vim.api.nvim_create_user_command("LspRestart", function()
+				local null_ls = require("null-ls")
+				local had_null_ls = false
+
+				for _, client in pairs(vim.lsp.get_clients()) do
+					if client.name == "null-ls" then
+						had_null_ls = true
+					else
+						vim.lsp.stop_client(client.id)
+					end
+				end
+
+				vim.cmd("edit") -- reopen buffer to trigger LspAttach
+
+				if had_null_ls then
+					null_ls.reload()
+				end
+			end, { desc = "Restart all LSPs and reload null-ls" })
+
 			vim.diagnostic.config({
 				float = { border = "rounded" },
 			})
@@ -312,7 +342,7 @@ return {
 			-- 	end
 			-- end
 
-			local null_ls_formatting = function(bufnr)
+			local function null_ls_formatting(bufnr)
 				vim.lsp.buf.format({
 					filter = function(client)
 						-- apply whatever logic you want (in this example, we'll only use null-ls)
@@ -376,6 +406,7 @@ return {
 			-- Final on_attach function
 			local function common_on_attach(client, bufnr)
 				if client.server_capabilities.documentFormattingProvider then
+					-- 	if client.server_capabilities.documentSymbolProvider then
 					navic.attach(client, bufnr)
 				end
 				navbuddy.attach(client, bufnr)
@@ -391,34 +422,61 @@ return {
 			end
 
 			-- Custom lsp opts
+
 			lsp_opts["clangd"] = {
 				on_attach = common_on_attach,
 				inlay_hints = { enabled = true },
-				capabilities = cmp_nvim_lsp.default_capabilities(),
 				cmd = {
 					"clangd",
 					"--offset-encoding=utf-16",
 				},
 			}
 
+			lsp_opts["clangd"] = {
+				cmd = {
+					"clangd",
+					"--query-driver=/usr/bin/g++",
+					"--compile-commands-dir=/home/brian/code/CP",
+					"--header-insertion=never",
+					"--background-index"
+				}
+			--   filetypes = { 'c', 'cpp', 'objc', 'objcpp' },
+			--   -- root_dir = vim.lsp.util.root_pattern('compile_commands.json', '.git'),
+			}
+
 			-- disabled since it is handled by rustaceanvim
-			-- lsp_opts["rust_analyzer"] = {
-			-- 	on_attach = on_attach,
-			-- 	settings = {
-			-- 		['rust-analyzer'] = {
-			-- 			check = {
-			-- 				command = "clippy",
-			-- 			},
-			-- 			diagnostics = {
-			-- 				enable = true,
-			-- 			}
-			-- 		}
-			-- 	}
-			-- }
+			lsp_opts["rust_analyzer"] = {
+				on_attach = common_on_attach,
+				settings = {
+					['rust-analyzer'] = {
+						check = {
+							command = "clippy",
+						},
+						diagnostics = {
+							enable = true,
+						}
+					}
+				}
+			}
+
+			-- silencing the stylua startup error
+			vim.notify_original = vim.notify
+			vim.notify = function(msg, level, opts)
+				if msg:match("stylua") and msg:match("exit code") then
+					return
+				end
+				vim.schedule(function()
+					vim.notify_original(msg, level, opts)
+				end)
+			end
 
 			local default_setup = function(server)
-				lspconfig[server].setup(lsp_opts[server])
-				-- lspconfig[server].setup()
+				-- lsp_opts[server].capabilities = cmp_nvim_lsp.default_capabilities()
+				-- Not sure if this may override any capabilities not covered by cmp_nvim_lsp
+				cmp_lsp_setup(lsp_opts[server])
+
+				vim.lsp.config[server] = lsp_opts[server]
+				vim.lsp.enable(server)
 			end
 
 			-- Call setup for each server
@@ -426,14 +484,13 @@ return {
 				default_setup(server)
 			end
 
-
 			require("mason-lspconfig").setup({
 				ensure_installed = mason_ensure_installed,
 				-- Adding as handler making it call lspconfig[server].setup() would work but it gets run for every mason installed package.
 				-- Some packages we may not need to call setup intentionally (eg jdtls), therefore have commented out the below lines.
-				-- handlers = {
-				--	default_setup,
-				-- },
+				handlers = {
+					default_setup,
+				},
 			})
 
 			attach_lsp_to_existing_buffers()
@@ -445,6 +502,7 @@ return {
 		lazy = true,
 		dependencies = "mason.nvim",
 		-- config = function() end,
+		opts = {},
 	},
 
 	{
@@ -487,12 +545,17 @@ return {
 					-- 		diagnostic.code = diagnostic.message_id
 					-- 	end,
 					-- }), -- python diagnostics
+					--
 					null_ls.builtins.formatting.isort, -- orders imports
 					null_ls.builtins.formatting.black, -- python formatter
 
 					-- Lua
 					-- null_ls.builtins.diagnostics.selene, -- lua diagnostics
-					null_ls.builtins.formatting.stylua, -- lua formatter
+					-- lua formatter
+					null_ls.builtins.formatting.stylua.with({
+						command = "stylua",
+						args = { "--stdin-filepath", "$FILENAME", "-" },
+					}),
 
 					-- C/C++
 					null_ls.builtins.formatting.clang_format, -- C/C++ formatter

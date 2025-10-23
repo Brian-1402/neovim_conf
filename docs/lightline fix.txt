@@ -1,0 +1,4 @@
+In vimrc, add:
+set laststatus=2
+
+https://github.com/itchyny/lightline.vim/issues/393#issuecomment-535094709

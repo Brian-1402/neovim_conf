@@ -1,7 +1,7 @@
 	-- Scrollbar
 return {
 	"petertriho/nvim-scrollbar",
-	enabled = false,
+	enabled = true,
 	event = { "UIEnter", "VeryLazy",},
 
 	dependencies = {
@@ -9,9 +9,9 @@ return {
 		{
 			"kevinhwang91/nvim-hlslens",
 			config = function()
-				require('hlslens').setup() -- is not required
+				-- require('hlslens').setup() -- is not required
 				require("scrollbar.handlers.search").setup({
-					override_lens = function() end,
+					-- override_lens = function() end,
 				})
 			end,
 		},
@@ -26,20 +26,18 @@ return {
 		},
 	},
 
-	config = function()
-		require("scrollbar").setup({
-			excluded_buftypes = {
-					"terminal",
-					"lazy",
-				},
-			excluded_filetypes = {
-				"cmp_docs",
-				"cmp_menu",
-				"noice",
-				"prompt",
-				"TelescopePrompt",
-				"lazy",
-			},
-		})
-	end,
+	opts = {
+		excluded_buftypes = {
+			"terminal",
+			"lazy",
+		},
+		excluded_filetypes = {
+			"cmp_docs",
+			"cmp_menu",
+			"noice",
+			"prompt",
+			"TelescopePrompt",
+			"lazy",
+		},
+	}
 }

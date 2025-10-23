@@ -10,10 +10,8 @@ vim.opt.rtp:prepend(lazypath)
 -- Load the keymaps
 require("keymaps")
 
--- Load the clipboard settings if not in neovide and when in wsl
--- if not vim.g.neovide and vim.fn.has("wsl") then
--- 	require("clipboard").setup()
--- end
+-- Load clipboard settings
+require("clipboard")
 
 -- Load the plugins
 require("lazy").setup("plugins")

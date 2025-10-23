@@ -84,6 +84,10 @@ return {
 		event = "VeryLazy",
 		config = function()
 			require("telescope").load_extension("notify")
+			require("notify").setup({
+			  background_colour = "#000000",
+			  merge_duplicates = true,
+			})
 		end,
 	},
 

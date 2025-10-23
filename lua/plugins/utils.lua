@@ -69,6 +69,15 @@ return {
 			-- or leave it empty to use the default settings
 			-- refer to the configuration section below
 		},
+		keys = {
+			{
+				"<leader>?",
+				function()
+					require("which-key").show({ global = false })
+				end,
+				desc = "Buffer Local Keymaps (which-key)",
+			},
+		},
 	},
 
 	-- Markdown preview directly in terminal
@@ -367,7 +376,13 @@ return {
 						-- Session.restore_latest()
 						return
 					else
-						Session.restore(vim.loop.cwd())
+						-- optionally filter out unsafe filetypes
+						local ok, err = pcall(function()
+							Session.restore(vim.loop.cwd())
+						end)
+						if not ok then
+							vim.notify("Failed to restore session: " .. err, vim.log.levels.WARN)
+						end
 					end
 				end,
 				desc = "Restore last session automatically",
@@ -517,7 +532,7 @@ return {
 
 	{
 		"kawre/leetcode.nvim",
-		cmd = { "Leet", "Leet test", "Leet submit", "Leet list"},
+		cmd = { "Leet", "Leet test", "Leet submit", "Leet list" },
 		build = ":TSUpdate html",
 		dependencies = {
 			"nvim-telescope/telescope.nvim",
@@ -569,8 +584,11 @@ return {
 
 	{
 		"EtiamNullam/deferred-clipboard.nvim",
-		event = "VeryLazy",
-		enabled = not vim.g.neovide and vim.fn.has("linux"),
+		-- event = "VeryLazy",
+		-- event = "UIEnter",
+		lazy = false,
+		enabled = false,
+		-- enabled = not vim.g.neovide and vim.fn.has("linux"),
 		config = function()
 			require("deferred-clipboard").setup({
 				fallback = "", -- or your preferred setting for clipboard
@@ -672,7 +690,8 @@ return {
 
 	{
 		"mrcjkb/rustaceanvim",
-		version = "^4", -- Recommended
+		enabled = false,
+		version = "^6", -- Recommended
 		lazy = false, -- This plugin is already lazy
 	},
 

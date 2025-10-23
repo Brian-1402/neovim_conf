@@ -75,9 +75,6 @@ vim.o.breakindent = true
 vim.o.splitright = true
 vim.o.splitbelow = true
 
--- Use system clipboard for all operations by default
--- vim.o.clipboard = "unnamedplus"
-
 -- Ignore case when searching
 vim.o.ignorecase = true
 -- Do not ignore case if search pattern contains uppercase characters
