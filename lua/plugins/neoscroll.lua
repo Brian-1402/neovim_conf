@@ -58,18 +58,18 @@ return {
 
 			-- Default easing (quadratic)
 			["zt"] = function()
-				neoscroll.zt({ duration = 100 })
+				neoscroll.zt({ half_win_duration = 100 })
 			end,
 			["zz"] = function()
-				neoscroll.zz({ duration = 100 })
+				neoscroll.zz({ half_win_duration = 100 })
 			end,
 			["zb"] = function()
-				neoscroll.zb({ duration = 100 })
+				neoscroll.zb({ half_win_duration = 100 })
 			end,
 
 			-- Optional constant speed examples (disabled in old version)
-			-- ["<C-y>"] = function() neoscroll.scroll(-0.10, { move_cursor=false, duration=100, easing=nil }) end,
-			-- ["<C-e>"] = function() neoscroll.scroll(0.10, { move_cursor=false, duration=100, easing=nil }) end,
+			-- ["<C-y>"] = function() neoscroll.scroll(-0.1, { move_cursor=false; duration = 100 }) end;
+			-- ["<C-e>"] = function() neoscroll.scroll(0.1, { move_cursor=false; duration = 100 }) end;
 		}
 
 		local modes = { "n", "v", "x" }

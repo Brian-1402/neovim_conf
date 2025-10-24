@@ -113,7 +113,7 @@ return {
 			-- local noice = require("noice")
 			require("lualine").setup({
 				options = {
-					theme = "nightfly",
+					theme = "auto",
 					ignore_focus = {
 						"DressingInput", "DressingSelect", "lspinfo", "ccc-ui", "TelescopePrompt",
 						"checkhealth", "noice", "lazy", "mason", "qf",

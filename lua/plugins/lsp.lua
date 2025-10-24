@@ -1,8 +1,13 @@
-local mlsp_server_names = { "bashls", "biome", "clangd", "marksman", "lua_ls", "pyright", "vimls", "jsonls" }
--- local nvim_jdtls_servers = {"jdtls", "java-test", "java-debug-adapter",}
---
-local others = {
+local mlsp_server_names = {
+	"bashls",
+	"biome",
+	"clangd",
+	"marksman",
+	"lua_ls",
+	"pyright",
 	"rust_analyzer",
+	"vimls",
+	"jsonls",
 }
 
 local null_ls_servers = {
@@ -25,106 +30,60 @@ local null_ls_servers = {
 	"prettier",
 }
 
-local mason_nonlsp_pkgs = vim.tbl_extend("keep", others, null_ls_servers)
-local mason_all_pkgs = vim.tbl_extend("keep", mlsp_server_names, mason_nonlsp_pkgs)
-local mason_ensure_installed = mlsp_server_names
-
 -- Custom config opts for each server
-local lsp_opts = {}
+local mlsp_servers_opts = {
+	clangd = {
+		cmd = {
+			"clangd",
+			"--background-index",
+			"--clang-tidy",
+			"--completion-style=detailed",
+			"--header-insertion=never",
+			"--query-driver=/usr/bin/g++",
+			"--offset-encoding=utf-16",
+		},
+		filetypes = { 'c', 'cpp', 'objc', 'objcpp' },
+	}
+}
 
 -- Add empty opts for each server already not having any
 for _, pkg in ipairs(mlsp_server_names) do
-	if not lsp_opts[pkg] then
-		lsp_opts[pkg] = {}
+	if not mlsp_servers_opts[pkg] then
+		mlsp_servers_opts[pkg] = {}
 	end
 end
 
 -- LSP requires to be loaded before buffer to get attached, but this prevents it to be lazy loaded.
 -- As a workaround, this function allows LSP to be lazy loaded, and when it loads, it attaches to already loaded buffers.
--- https://www.reddit.com/r/neovim/comments/15s3fxk/comment/jwdgdcp/
-local attach_lsp_to_existing_buffers = vim.schedule_wrap(function()
-	for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
-		local valid = vim.api.nvim_buf_is_valid(bufnr) and vim.api.nvim_buf_get_option(bufnr, "buflisted")
-		if valid and vim.bo[bufnr].buftype == "" then
-			local augroup_lspconfig = vim.api.nvim_create_augroup("lspconfig", { clear = false })
-			vim.api.nvim_exec_autocmds("FileType", { group = augroup_lspconfig, buffer = bufnr })
-		end
-	end
-end)
-
-local function async_lsp_format(input)
-	local name
-	local async = input.bang
-	if input.args ~= "" then
-		name = input.args
-	end
-	vim.lsp.buf.format({ async = async, name = name })
-end
+-- [source](https://www.reddit.com/r/neovim/comments/15s3fxk/comment/jwdgdcp/)
+-- local attach_lsp_to_existing_buffers = vim.schedule_wrap(function()
+-- 	for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
+-- 		local valid = vim.api.nvim_buf_is_valid(bufnr) and vim.api.nvim_get_option_value("buflisted", {buf = bufnr})
+-- 		if valid and vim.bo[bufnr].buftype == "" then
+-- 			local augroup_lspconfig = vim.api.nvim_create_augroup("lspconfig", { clear = false })
+-- 			vim.api.nvim_exec_autocmds("FileType", { group = augroup_lspconfig, buffer = bufnr })
+-- 		end
+-- 	end
+-- end)
 
 return {
 	-- lsp config
 	{
 		"neovim/nvim-lspconfig",
+		lazy = false,
 		cmd = { "LspInfo", "LspInstall", "LspStart" },
 		-- event = {"BufReadPre", "BufNewFile"},
-		event = "VeryLazy",
+		-- event = "VeryLazy",
+		-- ft = { "c", "cpp", "lua", "python", "bash", "sh", "json", "markdown", "vim", "rust" },
 		dependencies = {
 			"hrsh7th/cmp-nvim-lsp",
 			"williamboman/mason-lspconfig.nvim",
 			"williamboman/mason.nvim",
 			{ "folke/trouble.nvim", config = true, dependencies = "nvim-lua/plenary.nvim" },
-
-			{
-				"SmiteshP/nvim-navbuddy",
-				dependencies = {
-					"SmiteshP/nvim-navic",
-					"MunifTanjim/nui.nvim",
-				},
-				config = function()
-					require("nvim-navbuddy").setup({ lsp = { auto_attach = true } })
-					vim.keymap.set(
-						"n",
-						"<leader>n",
-						require("nvim-navbuddy").open,
-						{ noremap = true, silent = true, desc = "Open NavBuddy" }
-					)
-				end,
-			},
-
-			{
-				"nvimtools/none-ls.nvim",
-				dependencies = {
-					"nvim-lua/plenary.nvim",
-					"nvimtools/none-ls-extras.nvim",
-					"gbprod/none-ls-shellcheck.nvim",
-				},
-				opt = false,
-			},
-			{
-				"smjonas/inc-rename.nvim",
-				config = function()
-					require("inc_rename").setup({})
-				end,
-			},
-			{ -- For peeking in floating window
-				"rmagatti/goto-preview",
-				config = function()
-					require("goto-preview").setup({})
-				end,
-			},
-			{
-				"folke/lazydev.nvim",
-				ft = "lua", -- only load on lua files
-				opts = {
-					library = {
-						-- See the configuration section for more details
-						-- Load luvit types when the `vim.uv` word is found
-						"lazy.nvim",
-						{ path = "luvit-meta/library", words = { "vim%.uv" } },
-					},
-				},
-			},
-			{ "Bilal2453/luvit-meta", lazy = true }, -- optional `vim.uv` typing
+			"SmiteshP/nvim-navbuddy",
+			"SmiteshP/nvim-navic",
+			"nvimtools/none-ls.nvim",
+			"rmagatti/goto-preview",
 		},
 
 		config = function()
@@ -132,47 +91,18 @@ return {
 			local navbuddy = require("nvim-navbuddy")
 			local cmp_nvim_lsp = require("cmp_nvim_lsp")
 			local preview = require("goto-preview")
-
-			-- Used for cmp-nvim-lsp, to automatically load nvim-cmp features for LSP servers
-			-- Specifically, includes the cmp capabilities along with the lsp server default capabilities
-			-- But in most cases this isn't required, github examples just make cmp capabilities override the lsp server capabilities
-			-- Deprecated original hook-style version:
-			-- ```lua
-			-- local lspconfig = require("lspconfig")
-			-- lspconfig.util.on_setup = lspconfig.util.add_hook_after(
-			-- 	lspconfig.util.on_setup,
-			-- 	function(config, user_config)
-			-- 		config.capabilities = vim.tbl_deep_extend(
-			-- 			"force",
-			-- 			config.capabilities,
-			-- 			cmp_nvim_lsp.default_capabilities(),
-			-- 			vim.tbl_get(user_config, "capabilities") or {}
-			-- 		)
-			-- 	end
-			-- )
-			-- ```
-			local function cmp_lsp_setup(config)
-				config.capabilities =
-					vim.tbl_deep_extend("force", config.capabilities or {}, cmp_nvim_lsp.default_capabilities())
-			end
-
+			
 			-- local keymap = vim.keymap -- for conciseness
 			local opts = { noremap = true, silent = true }
 
 			local function lsp_on_attach(event)
+				local client = vim.lsp.get_client_by_id(event.data.client_id)
+				if client and client.server_capabilities.documentSymbolProvider then
+					navic.attach(client, event.buf)
+					navbuddy.attach(client, event.buf)
+				end
+
 				local bufnr = event.buf
-
-				-- vim.api.nvim_buf_create_user_command(
-				-- 	bufnr,
-				-- 	"LspFormat",
-				-- 	lsp_format,
-				-- 	{
-				-- 		bang = true,
-				-- 		nargs = "?",
-				-- 		desc = "Format buffer with language server"
-				-- 	}
-				-- )
-
 				opts.buffer = bufnr
 
 				-- set keybinds
@@ -210,7 +140,6 @@ return {
 				vim.keymap.set({ "n" }, "<leader>ca", vim.lsp.buf.code_action, opts) -- see available code actions, in visual mode will apply to selection
 				vim.keymap.set({ "v" }, "<leader>ca", ":'<,'>Telescope lsp_range_code_actions<CR>", opts) -- see available code actions, in visual mode will apply to selection
 				-- vim.keymap.set({ "v" }, "<leader>ca", vim.lsp.buf.range_code_action, opts) -- see available code actions, in visual mode will apply to selection
-
 				opts.desc = "Run Codelens"
 				vim.keymap.set({ "n", "v" }, "<leader>cc", vim.lsp.codelens.run, opts)
 
@@ -246,6 +175,7 @@ return {
 
 				opts.desc = "Go to previous diagnostic"
 				vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts) -- jump to previous diagnostic in buffer
+				-- vim.keymap.set("n", "[d", vim.diagnostic.jump({count = 1, float = true}), opts) -- jump to previous diagnostic in buffer
 
 				opts.desc = "Go to next diagnostic"
 				vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts) -- jump to next diagnostic in buffer
@@ -256,37 +186,18 @@ return {
 				opts.desc = "Restart LSP"
 				vim.keymap.set("n", "<leader>rs", ":LspRestart<CR>", opts) -- mapping to restart lsp if necessary
 
-				-- The workspace functions aren"t really useful.
-				--[[
 
-				opts.desc = "Add workspace folder"
-				keymap.set("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, opts)
+				opts.desc = "Format current buffer (async)"
+				vim.keymap.set("n", "<leader>=", function()
+					vim.lsp.buf.format({
+						async = false,
+						filter = function(client)
+							print("Formatting with:", client.name)
+							return true
+						end,
+					})
+				end, opts)
 
-				opts.desc = "Remove workspace folder"
-				keymap.set("n", "<leader>wr", vim.lsp.buf.remove_workspace_folder, opts)
-
-				local list_workspace_folders = function()
-					local folders = vim.lsp.buf.list_workspace_folders()
-					require("telescope.pickers").new({}, {
-						prompt_title = "Workspace Folders",
-						finder = require("telescope.finders").new_table({
-							results = folders,
-							entry_maker = function(entry)
-								return {
-									value = entry,
-									display = entry,
-									ordinal = entry,
-								}
-							end,
-						}),
-						sorter = require("telescope.config").values.generic_sorter({})
-					}):find()
-				end
-
-				opts.desc = "List workspace folders"
-				keymap.set("n", "<leader>wl", list_workspace_folders, opts)
-
-				]]
 			end
 
 			vim.api.nvim_create_autocmd("LspAttach", {
@@ -294,215 +205,118 @@ return {
 				callback = lsp_on_attach,
 			})
 
-			vim.api.nvim_create_user_command("LspRestart", function()
-				local null_ls = require("null-ls")
-				local had_null_ls = false
+			-- vim.api.nvim_create_user_command("LspRestart", function()
+			-- 	local null_ls = require("null-ls")
+			-- 	local had_null_ls = false
 
-				for _, client in pairs(vim.lsp.get_clients()) do
-					if client.name == "null-ls" then
-						had_null_ls = true
-					else
-						vim.lsp.stop_client(client.id)
-					end
-				end
+			-- 	for _, client in pairs(vim.lsp.get_clients()) do
+			-- 		if client.name == "null-ls" then
+			-- 			had_null_ls = true
+			-- 		else
+			-- 			vim.lsp.stop_client(client.id)
+			-- 		end
+			-- 	end
 
-				vim.cmd("edit") -- reopen buffer to trigger LspAttach
+			-- 	vim.cmd("edit") -- reopen buffer to trigger LspAttach
 
-				if had_null_ls then
-					null_ls.reload()
-				end
-			end, { desc = "Restart all LSPs and reload null-ls" })
+			-- 	-- if had_null_ls then
+			-- 	--	null_ls.reload() -- ERROR no such field exists?
+			-- 	-- end
+			-- end, { desc = "Restart all LSPs and reload null-ls" })
 
 			vim.diagnostic.config({
 				float = { border = "rounded" },
 			})
+			vim.lsp.buf.hover({ border = "rounded" })
+			vim.lsp.buf.signature_help({ border = "rounded" })
 
-			vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" })
 
-			vim.lsp.handlers["textDocument/signatureHelp"] =
-				vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" })
+			-- Configure LSP servers.
 
-			-- local command = vim.api.nvim_create_user_command
-			--
-			-- command("LspWorkspaceAdd", function()
-			-- 	vim.lsp.buf.add_workspace_folder()
-			-- end, { desc = "Add folder to workspace" })
-			--
-			-- command("LspWorkspaceList", function()
-			-- 	vim.notify(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-			-- end, { desc = "List workspace folders" })
-			--
-			-- command("LspWorkspaceRemove", function()
-			-- 	vim.lsp.buf.remove_workspace_folder()
-			-- end, { desc = "Remove folder from workspace" })
+			local capabilities = cmp_nvim_lsp.default_capabilities()
 
-			-- local navic_on_attach = function(client, bufnr)
-			-- 	if client.server_capabilities.documentSymbolProvider then
-			-- 		navic.attach(client, bufnr)
-			-- 	end
-			-- end
+			local servers_to_enable = {}
+			for server_name, server_opts in pairs(mlsp_servers_opts) do
+				server_opts.capabilities = vim.tbl_deep_extend("force", capabilities, server_opts.capabilities or {})
 
-			local function null_ls_formatting(bufnr)
-				vim.lsp.buf.format({
-					filter = function(client)
-						-- apply whatever logic you want (in this example, we'll only use null-ls)
-						return client.name == "null-ls"
-					end,
-					bufnr = bufnr,
-				})
+				vim.lsp.config(server_name, server_opts)
+				table.insert(servers_to_enable, server_name)
 			end
 
-			local function is_null_ls_formatting_enabled(bufnr)
-				local file_type = vim.api.nvim_buf_get_option(bufnr, "filetype")
-				local generators = require("null-ls.generators").get_available(
-					file_type,
-					require("null-ls.methods").internal.FORMATTING
-				)
-				return #generators > 0
-			end
+			vim.lsp.enable(servers_to_enable)
 
-			local function fix_formatexpr(client, bufnr)
-				if client.name == "null-ls" and is_null_ls_formatting_enabled(bufnr) or client.name ~= "null-ls" then
-					vim.bo[bufnr].formatexpr = "v:lua.vim.lsp.formatexpr()"
-					-- vim.keymap.set("n", "<leader>gq", "<cmd>lua vim.lsp.buf.format({ async = true })<CR>", keymap_opts)
-					vim.keymap.set("n", "gq", "<cmd>lua vim.lsp.buf.format({ async = true })<CR>", keymap_opts)
-				else
-					vim.bo[bufnr].formatexpr = nil
-				end
-			end
-
-			local function formatting_on_attach(client, bufnr)
-				-- fallback to default lsp formatting
-				local formatter = function()
-					vim.lsp.buf.format({ async = true })
-				end
-
-				-- if client.name == "null-ls" and is_null_ls_formatting_enabled(bufnr) then
-				if is_null_ls_formatting_enabled(bufnr) then
-					formatter = null_ls_formatting
-				end
-
-				local keymap_opts = { noremap = true, silent = true }
-				keymap_opts.desc = "Format buffer"
-				vim.keymap.set("n", "<leader>=", formatter, keymap_opts)
-				keymap_opts.desc = "Format selection"
-				vim.keymap.set("v", "=", formatter, keymap_opts)
-			end
-
-			local function format_on_save_callback(client, bufnr)
-				if client.supports_method("textDocument/formatting") then
-					local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
-					vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
-					vim.api.nvim_create_autocmd("BufWritePre", {
-						group = augroup,
-						buffer = bufnr,
-						callback = function()
-							null_ls_formatting(bufnr)
-						end,
-					})
-				end
-			end
-
-			-- Final on_attach function
-			local function common_on_attach(client, bufnr)
-				if client.server_capabilities.documentFormattingProvider then
-					-- 	if client.server_capabilities.documentSymbolProvider then
-					navic.attach(client, bufnr)
-				end
-				navbuddy.attach(client, bufnr)
-				formatting_on_attach(client, bufnr)
-				fix_formatexpr(client, bufnr)
-			end
-
-			-- Add the on_attach function to each server config
-			for _, opts2 in pairs(lsp_opts) do
-				if type(opts2) == "table" then
-					opts2.on_attach = common_on_attach
-				end
-			end
-
-			-- Custom lsp opts
-
-			lsp_opts["clangd"] = {
-				on_attach = common_on_attach,
-				inlay_hints = { enabled = true },
-				cmd = {
-					"clangd",
-					"--offset-encoding=utf-16",
-				},
-			}
-
-			lsp_opts["clangd"] = {
-				cmd = {
-					"clangd",
-					"--query-driver=/usr/bin/g++",
-					"--compile-commands-dir=/home/brian/code/CP",
-					"--header-insertion=never",
-					"--background-index"
-				}
-			--   filetypes = { 'c', 'cpp', 'objc', 'objcpp' },
-			--   -- root_dir = vim.lsp.util.root_pattern('compile_commands.json', '.git'),
-			}
-
-			-- disabled since it is handled by rustaceanvim
-			lsp_opts["rust_analyzer"] = {
-				on_attach = common_on_attach,
-				settings = {
-					['rust-analyzer'] = {
-						check = {
-							command = "clippy",
-						},
-						diagnostics = {
-							enable = true,
-						}
-					}
-				}
-			}
-
-			-- silencing the stylua startup error
-			vim.notify_original = vim.notify
-			vim.notify = function(msg, level, opts)
-				if msg:match("stylua") and msg:match("exit code") then
-					return
-				end
-				vim.schedule(function()
-					vim.notify_original(msg, level, opts)
-				end)
-			end
-
-			local default_setup = function(server)
-				-- lsp_opts[server].capabilities = cmp_nvim_lsp.default_capabilities()
-				-- Not sure if this may override any capabilities not covered by cmp_nvim_lsp
-				cmp_lsp_setup(lsp_opts[server])
-
-				vim.lsp.config[server] = lsp_opts[server]
-				vim.lsp.enable(server)
-			end
-
-			-- Call setup for each server
-			for _, server in pairs(mlsp_server_names) do
-				default_setup(server)
-			end
-
+			require("mason").setup()
 			require("mason-lspconfig").setup({
-				ensure_installed = mason_ensure_installed,
-				-- Adding as handler making it call lspconfig[server].setup() would work but it gets run for every mason installed package.
-				-- Some packages we may not need to call setup intentionally (eg jdtls), therefore have commented out the below lines.
-				handlers = {
-					default_setup,
-				},
+				ensure_installed = servers_to_enable,
 			})
 
-			attach_lsp_to_existing_buffers()
+			-- attach_lsp_to_existing_buffers()
 		end,
 	},
+
+	{
+		"SmiteshP/nvim-navbuddy",
+		dependencies = {
+			"SmiteshP/nvim-navic",
+			"MunifTanjim/nui.nvim",
+		},
+		config = function()
+			require("nvim-navbuddy").setup({ lsp = { auto_attach = true } })
+			vim.keymap.set(
+				"n",
+				"<leader>n",
+				require("nvim-navbuddy").open,
+				{ noremap = true, silent = true, desc = "Open NavBuddy" }
+			)
+		end,
+	},
+
+	{
+		"nvimtools/none-ls.nvim",
+		lazy = false,
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+			"nvimtools/none-ls-extras.nvim",
+			"gbprod/none-ls-shellcheck.nvim",
+		},
+		opt = false,
+	},
+
+	{
+		"smjonas/inc-rename.nvim",
+		dependencies = "neovim/nvim-lspconfig",
+		config = function()
+			require("inc_rename").setup({})
+		end,
+	},
+
+	{ -- For peeking in floating window
+		"rmagatti/goto-preview",
+		config = function()
+			require("goto-preview").setup({})
+		end,
+	},
+
+	{
+		"folke/lazydev.nvim",
+		ft = "lua", -- only load on lua files
+		opts = {
+			library = {
+				-- See the configuration section for more details
+				-- Load luvit types when the `vim.uv` word is found
+				"lazy.nvim",
+				{ path = "luvit-meta/library", words = { "vim%.uv" } },
+			},
+		},
+	},
+
+	{ "Bilal2453/luvit-meta", lazy = true }, -- optional `vim.uv` typing
 
 	{
 		"williamboman/mason-lspconfig.nvim",
 		lazy = true,
 		dependencies = "mason.nvim",
-		-- config = function() end,
-		opts = {},
+		config = false,
 	},
 
 	{
@@ -511,20 +325,20 @@ return {
 		cmd = "Mason",
 		keys = { { "<leader>cm", "<cmd>Mason<cr>", desc = "Mason" } },
 		build = ":MasonUpdate",
-		config = true,
 	},
 
 	{
 		"jay-babu/mason-null-ls.nvim",
-		event = { "BufReadPre", "BufNewFile" },
+		lazy = false,
+		-- event = { "BufReadPre", "BufNewFile" },
 		dependencies = {
 			"williamboman/mason.nvim",
-			{ "nvimtools/none-ls.nvim", lazy = false },
+			"nvimtools/none-ls.nvim",
 		},
 		config = function()
 			local null_ls = require("null-ls")
 			require("mason-null-ls").setup({
-				ensure_installed = mason_nonlsp_pkgs,
+				ensure_installed = null_ls_servers,
 				automatic_installation = true,
 			})
 
@@ -541,9 +355,9 @@ return {
 
 					-- Python
 					-- null_ls.builtins.diagnostics.pylint.with({
-					-- 	diagnostics_postprocess = function(diagnostic)
-					-- 		diagnostic.code = diagnostic.message_id
-					-- 	end,
+					--	diagnostics_postprocess = function(diagnostic)
+					--		diagnostic.code = diagnostic.message_id
+					--	end,
 					-- }), -- python diagnostics
 					--
 					null_ls.builtins.formatting.isort, -- orders imports
@@ -552,10 +366,12 @@ return {
 					-- Lua
 					-- null_ls.builtins.diagnostics.selene, -- lua diagnostics
 					-- lua formatter
-					null_ls.builtins.formatting.stylua.with({
-						command = "stylua",
-						args = { "--stdin-filepath", "$FILENAME", "-" },
-					}),
+					null_ls.builtins.formatting.stylua,
+					-- Use below if getting stylua errors like "unknown flag --lsp"
+					-- null_ls.builtins.formatting.stylua.with({
+					-- 	command = "stylua",
+					-- 	args = { "--stdin-filepath", "$FILENAME", "-" },
+					-- }),
 
 					-- C/C++
 					null_ls.builtins.formatting.clang_format, -- C/C++ formatter
@@ -566,51 +382,59 @@ return {
 					-- null_ls.builtins.formatting.biome,
 				},
 			})
-		end,
-	},
-	-- Java LSP and other features
-	-- {
-	--	"mfussenegger/nvim-jdtls",
-	--	filetypes = { "java" },
-	--	config = false,
-	-- },
 
-	-- {
-	-- 	"AckslD/swenv.nvim",
-	-- 	-- event = "Verylazy",
-	-- 	lazy = true,
-	-- 	cmd = "PickPythonEnv",
-	-- 	filetypes = { "python" },
-	-- 	depedencies = "plenary.nvim",
-	-- 	config = function()
-	-- 		require("swenv").setup()
-	-- 		vim.api.nvim_create_user_command("PickPythonEnv", function()
-	-- 			require("swenv.api").pick_venv()
-	-- 		end, { desc = "Pick python virtual env" })
-	-- 	end,
-	-- },
-	{
-		"linux-cultist/venv-selector.nvim",
-		enabled = false,
-		branch = "regexp",
-		dependencies = { "neovim/nvim-lspconfig", "nvim-telescope/telescope.nvim", "mfussenegger/nvim-dap-python" },
-		opts = {
-			-- Your options go here
-			-- name = { "venv", "env", ".venv", ".env" },
-			auto_refresh = true,
-		},
-		event = "VeryLazy", -- Optional: needed only if you want to type `:VenvSelect` without a keymapping
-	},
-	{
-		"ThePrimeagen/refactoring.nvim",
-		enabled = false,
-		event = "VeryLazy",
-		dependencies = {
-			"nvim-lua/plenary.nvim",
-			"nvim-treesitter/nvim-treesitter",
-		},
-		config = function()
-			require("refactoring").setup()
+
+			-- Keybindings for LSP/Null-ls inspection and formatting tracing
+			local opts = { noremap = true, silent = true }
+
+			opts.desc = "List active LSP clients"
+			vim.keymap.set("n", "<leader>la", function()
+				print("active lsp clients:")
+				for _, client in pairs(vim.lsp.get_clients({ bufnr = 0 })) do
+					print(client.name)
+				end
+			end, opts)
+
+			-- 2. Show which clients provide formatting
+			opts.desc = "Show LSP clients that provide formatting"
+			vim.keymap.set("n", "<leader>lf", function()
+				for _, client in pairs(vim.lsp.get_clients({ bufnr = 0 })) do
+					if client.server_capabilities.documentFormattingProvider then
+						print(client.name .. " provides formatting")
+					end
+				end
+			end, opts)
+
+			-- 3. Trigger format + trace which client runs
+
+			-- 4. Open Null-ls info window (if available)
+			vim.keymap.set("n", "<leader>ln", "<cmd>NullLsInfo<CR>", opts)
 		end,
 	},
+
+--	{
+--		"linux-cultist/venv-selector.nvim",
+--		enabled = false,
+--		branch = "regexp",
+--		dependencies = { "neovim/nvim-lspconfig", "nvim-telescope/telescope.nvim", "mfussenegger/nvim-dap-python" },
+--		opts = {
+--			-- Your options go here
+--			-- name = { "venv", "env", ".venv", ".env" },
+--			auto_refresh = true,
+--		},
+--		event = "VeryLazy", -- Optional: needed only if you want to type `:VenvSelect` without a keymapping
+--	},
+
+--	{
+--		"ThePrimeagen/refactoring.nvim",
+--		enabled = false,
+--		event = "VeryLazy",
+--		dependencies = {
+--			"nvim-lua/plenary.nvim",
+--			"nvim-treesitter/nvim-treesitter",
+--		},
+--		config = function()
+--			require("refactoring").setup()
+--		end,
+--	},
 }

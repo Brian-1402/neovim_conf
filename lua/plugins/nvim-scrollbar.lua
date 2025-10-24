@@ -5,25 +5,8 @@ return {
 	event = { "UIEnter", "VeryLazy",},
 
 	dependencies = {
-		-- hlslens for scrollbar
-		{
-			"kevinhwang91/nvim-hlslens",
-			config = function()
-				-- require('hlslens').setup() -- is not required
-				require("scrollbar.handlers.search").setup({
-					-- override_lens = function() end,
-				})
-			end,
-		},
-
-		-- Gitsigns for displaying in scrollbar
-		{
-			"lewis6991/gitsigns.nvim",
-			config = function()
-				require('gitsigns').setup()
-				require("scrollbar.handlers.gitsigns").setup()
-			end
-		},
+		"kevinhwang91/nvim-hlslens", -- hlslens for scrollbar
+		"lewis6991/gitsigns.nvim", -- Gitsigns for displaying in scrollbar
 	},
 
 	opts = {
@@ -39,5 +22,18 @@ return {
 			"TelescopePrompt",
 			"lazy",
 		},
-	}
+	},
+	config = function(_, opts)
+		require("scrollbar").setup(opts)
+
+		-- For hlslens
+		-- require('hlslens').setup() -- is not required
+		require("scrollbar.handlers.search").setup({
+			-- override_lens = function() end,
+		})
+
+		-- For gitsigns
+		require('gitsigns').setup()
+		require("scrollbar.handlers.gitsigns").setup()
+	end,
 }

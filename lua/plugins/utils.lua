@@ -80,11 +80,30 @@ return {
 		},
 	},
 
-	-- Markdown preview directly in terminal
 	{
-		"ellisonleao/glow.nvim",
-		config = true,
-		cmd = "Glow",
+		'MeanderingProgrammer/render-markdown.nvim',
+		dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, -- if you prefer nvim-web-devicons
+		---@module 'render-markdown'
+		---@type render.md.UserConfig
+		opts = {
+			code = {
+				-- Width of the code block background.
+				-- | block | width of the code block  |
+				-- | full  | full width of the window |
+				width = 'block',
+				right_pad = 4,
+
+				-- Whether to conceal nodes at the top and bottom of code blocks.
+				-- conceal_delimiters = false,
+
+				-- Determines how the top / bottom of code block are rendered.
+				-- | none  | do not render a border                               |
+				-- | thick | use the same highlight as the code body              |
+				-- | thin  | when lines are empty overlay the above & below icons |
+				-- | hide  | conceal lines unless language name or icon is added  |
+				border = 'thin',
+			},
+		},
 	},
 
 	-- Automatically creates directories needed

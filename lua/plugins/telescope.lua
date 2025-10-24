@@ -2,7 +2,8 @@ return {
 
 	{
 		"nvim-telescope/telescope.nvim",
-		branch = "0.1.x",
+		-- branch = "0.1.x",
+		branch = "master",
 		dependencies = { "nvim-lua/plenary.nvim" },
 		event = "VeryLazy",
 
@@ -205,7 +206,7 @@ return {
 		dependencies = { "nvim-telescope/telescope.nvim" },
 		event = "VeryLazy",
 		config = function()
-			require("telescope").load_extension "telescope-tabs"
+			require("telescope").load_extension("telescope-tabs")
 			require("telescope-tabs").setup {}
 		end,
 	},
@@ -222,18 +223,4 @@ return {
 			require("telescope").load_extension("frecency")
 		end,
 	},
-
-	{              --For cheat.sh access
-		"nvim-telescope/telescope-cheat.nvim",
-		enabled = false, -- Seems to give error about unable to open database
-		event = "VeryLazy",
-		dependencies = {
-			"kkharji/sqlite.lua",
-			"nvim-telescope/telescope.nvim"
-		},
-		config = function()
-			require("telescope").load_extension("cheat")
-		end,
-	},
-
 }

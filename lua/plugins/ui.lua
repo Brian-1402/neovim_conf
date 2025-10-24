@@ -1,22 +1,4 @@
 return {
-
-	{
-		'bluz71/vim-nightfly-colors',
-		name = 'nightfly',
-		lazy = false,
-		priority = 1000,
-		config = function() vim.cmd.colorscheme("nightfly") end,
-	}, -- Color theme. oxfist/night-owl.nvim is also a good alternative
-
-	{
-		"catppuccin/nvim",
-		name = "catppuccin",
-		enabled = false,
-		lazy = false,
-		priority = 1000,
-		-- config = function() vim.cmd.colorscheme("catppuccin") end,
-	},
-
 	{
 		"utilyre/barbecue.nvim",
 		name = "barbecue",
