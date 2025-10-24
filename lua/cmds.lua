@@ -42,7 +42,6 @@ vim.cmd([[
 	endif
 ]])
 
-
 -- Set the textwidth to 140 for txt and md files
 vim.api.nvim_create_autocmd("FileType", {
 	group = vim.api.nvim_create_augroup("vimrcEx", { clear = true }),
@@ -72,7 +71,6 @@ vim.api.nvim_create_autocmd("FileType", {
 	end,
 })
 
-
 -- highlights yanked text
 -- vim.cmd([[
 -- 	augroup highlight_yank
@@ -80,25 +78,24 @@ vim.api.nvim_create_autocmd("FileType", {
 -- 		autocmd TextYankPost * silent! lua require'vim.highlight'.on_yank()
 -- 	augroup END
 -- ]])
--- Converting the above to lua: 
+-- Converting the above to lua:
 vim.api.nvim_create_autocmd("TextYankPost", {
 	group = vim.api.nvim_create_augroup("highlight_yank", { clear = true }),
 	callback = function()
 		vim.highlight.on_yank()
-	end
+	end,
 })
-
 
 -- For handling closing off unused buffers
 
 local id = vim.api.nvim_create_augroup("startup", {
-	clear = false
+	clear = false,
 })
 
 local persistbuffer = function(bufnr)
 	bufnr = bufnr or vim.api.nvim_get_current_buf()
-	vim.fn.setbufvar(bufnr, 'buf_touched', 1)
-	vim.fn.setbufvar(bufnr, 'buf_opened', 1)
+	vim.fn.setbufvar(bufnr, "buf_touched", 1)
+	vim.fn.setbufvar(bufnr, "buf_opened", 1)
 end
 
 vim.api.nvim_create_autocmd({ "BufRead" }, {
@@ -110,9 +107,9 @@ vim.api.nvim_create_autocmd({ "BufRead" }, {
 			once = true,
 			callback = function()
 				persistbuffer()
-			end
+			end,
 		})
-	end
+	end,
 })
 
 -- vim.keymap.set('n', '<Leader>b',
@@ -127,18 +124,17 @@ vim.api.nvim_create_autocmd({ "BufRead" }, {
 -- 		end
 -- 	end, { silent = true, desc = 'Close unused buffers' })
 
-
-vim.api.nvim_create_user_command('BCloseUntouched', function()
+vim.api.nvim_create_user_command("BCloseUntouched", function()
 	local curbufnr = vim.api.nvim_get_current_buf()
 	local buflist = vim.api.nvim_list_bufs()
 	for _, bufnr in ipairs(buflist) do
-		if vim.bo[bufnr].buflisted and bufnr ~= curbufnr and (vim.fn.getbufvar(bufnr, 'buf_touched') ~= 1) then
-			vim.cmd('bd ' .. tostring(bufnr))
+		if vim.bo[bufnr].buflisted and bufnr ~= curbufnr and (vim.fn.getbufvar(bufnr, "buf_touched") ~= 1) then
+			vim.cmd("bd " .. tostring(bufnr))
 		end
 	end
-end, { desc = 'Close unused buffers' })
+end, { desc = "Close unused buffers" })
 
-vim.api.nvim_create_user_command('BCloseNonVisible', function()
+vim.api.nvim_create_user_command("BCloseNonVisible", function()
 	local tabpage_list = vim.api.nvim_list_tabpages()
 	local winbufs = {}
 
@@ -149,28 +145,32 @@ vim.api.nvim_create_user_command('BCloseNonVisible', function()
 			local bufnr = vim.api.nvim_win_get_buf(win)
 			winbufs[bufnr] = true
 		end
-		end
+	end
 
 	-- Close buffers that are not in the window list
 	local buflist = vim.api.nvim_list_bufs()
 	for _, bufnr in ipairs(buflist) do
 		if vim.bo[bufnr].buflisted and not winbufs[bufnr] then
 			-- Attempt to close the buffer, let Neovim handle unsaved changes warning
-			vim.cmd('confirm bd ' .. tostring(bufnr))
+			vim.cmd("confirm bd " .. tostring(bufnr))
 		end
 	end
-end, { desc = 'Close buffers not in a tab or window' })
+end, { desc = "Close buffers not in a tab or window" })
 
 -- vim.keymap.set('n', '<Leader>b', ':BCloseUntouched<CR>', { silent = true, desc = 'Close unused buffers' })
-vim.keymap.set('n', '<Leader>b', ':BCloseNonVisible<CR>', { silent = true, desc = 'Close buffers not in a tab or window' })
-
+vim.keymap.set(
+	"n",
+	"<Leader>b",
+	":BCloseNonVisible<CR>",
+	{ silent = true, desc = "Close buffers not in a tab or window" }
+)
 
 -- Automatically create parent directories when writing a file
 vim.api.nvim_create_autocmd({ "BufWritePre" }, {
-  pattern = "*",
-  group = vim.api.nvim_create_augroup("auto_create_dir", { clear = true }),
-  callback = function(ctx)
-    local dir = vim.fn.fnamemodify(ctx.file, ":p:h")
-    vim.fn.mkdir(dir, "p")
-  end
+	pattern = "*",
+	group = vim.api.nvim_create_augroup("auto_create_dir", { clear = true }),
+	callback = function(ctx)
+		local dir = vim.fn.fnamemodify(ctx.file, ":p:h")
+		vim.fn.mkdir(dir, "p")
+	end,
 })

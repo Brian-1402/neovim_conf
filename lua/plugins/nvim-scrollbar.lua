@@ -1,8 +1,8 @@
-	-- Scrollbar
+-- Scrollbar
 return {
 	"petertriho/nvim-scrollbar",
 	enabled = true,
-	event = { "UIEnter", "VeryLazy",},
+	event = { "UIEnter", "VeryLazy" },
 
 	dependencies = {
 		"kevinhwang91/nvim-hlslens", -- hlslens for scrollbar
@@ -33,7 +33,7 @@ return {
 		})
 
 		-- For gitsigns
-		require('gitsigns').setup()
+		require("gitsigns").setup()
 		require("scrollbar.handlers.gitsigns").setup()
 	end,
 }

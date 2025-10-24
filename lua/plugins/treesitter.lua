@@ -1,8 +1,8 @@
 return {
 	{
-		'nvim-treesitter/nvim-treesitter',
+		"nvim-treesitter/nvim-treesitter",
 		tag = "v0.9.2",
-		build = ':TSUpdate',
+		build = ":TSUpdate",
 		event = { "VeryLazy" },
 
 		init = function(plugin)
@@ -20,9 +20,26 @@ return {
 		opts = {
 
 			-- A list of parser names, or "all" (the five listed parsers should always be installed)
-			ensure_installed = { "c", "cpp", "comment", "gitignore", "html", "java", "javascript",
-				"json", "latex", "lua", "make", "markdown", "markdown_inline", "python",
-				"query", "regex", "vim", "vimdoc" },
+			ensure_installed = {
+				"c",
+				"cpp",
+				"comment",
+				"gitignore",
+				"html",
+				"java",
+				"javascript",
+				"json",
+				"latex",
+				"lua",
+				"make",
+				"markdown",
+				"markdown_inline",
+				"python",
+				"query",
+				"regex",
+				"vim",
+				"vimdoc",
+			},
 			-- ensure_installed = "all",
 			-- Install parsers synchronously (only applied to `ensure_installed`)
 			sync_install = false,
@@ -50,8 +67,9 @@ return {
 					if ok and stats and stats.size > max_filesize then
 						return true
 					end
-					local all_disabled = { "latex", }
-					local win32_disabled = { --[[ "make", ]] }
+					local all_disabled = { "latex" }
+					local win32_disabled = { --[[ "make", ]]
+					}
 					-- Disabling latex because vimtex provides highlighting.
 					-- Disabling make because the current windows parser seems to give an error constantly
 					if vim.fn.has("win32") and vim.tbl_contains(win32_disabled, lang) then
@@ -69,7 +87,7 @@ return {
 			},
 
 			indent = {
-				enable = false
+				enable = false,
 			},
 
 			incremental_selection = {
@@ -159,11 +177,11 @@ return {
 					-- and should return the mode ('v', 'V', or '<c-v>') or a table
 					-- mapping query_strings to modes.
 					selection_modes = {
-						['@parameter.outer'] = 'v', -- charwise
+						["@parameter.outer"] = "v", -- charwise
 						-- ['@function.outer'] = 'V', -- linewise
 						-- ['@class.outer'] = '<c-v>', -- blockwise
-						['@function.outer'] = 'v',
-						['@class.outer'] = 'v',
+						["@function.outer"] = "v",
+						["@class.outer"] = "v",
 					},
 					-- If you set this to `true` (default is `false`) then any textobject is
 					-- extended to include preceding or succeeding whitespace. Succeeding
@@ -175,7 +193,6 @@ return {
 					-- * selection_mode: eg 'v'
 					-- and should return true of false
 					include_surrounding_whitespace = false,
-
 				},
 
 				swap = {
@@ -191,11 +208,14 @@ return {
 
 			textsubjects = {
 				enable = true,
-				prev_selection = '<BS>', -- (Optional) keymap to select the previous selection
+				prev_selection = "<BS>", -- (Optional) keymap to select the previous selection
 				keymaps = {
-					['<CR>'] = 'textsubjects-smart',
-					['aC'] = 'textsubjects-container-outer',
-					['iC'] = { 'textsubjects-container-inner', desc = "Select inside containers (classes, functions, etc.)" },
+					["<CR>"] = "textsubjects-smart",
+					["aC"] = "textsubjects-container-outer",
+					["iC"] = {
+						"textsubjects-container-inner",
+						desc = "Select inside containers (classes, functions, etc.)",
+					},
 				},
 			},
 
@@ -222,11 +242,10 @@ return {
 			vim.wo.foldexpr = "nvim_treesitter#foldexpr()"
 			vim.wo.foldenable = false
 
-			require 'nvim-treesitter.install'.prefer_git = false -- Use curl instead. Git is slower and overloads the RAM during multiple installations
+			require("nvim-treesitter.install").prefer_git = false -- Use curl instead. Git is slower and overloads the RAM during multiple installations
 			require("nvim-treesitter.configs").setup(opts)
 		end,
 	},
-
 
 	-- Show context of the current function on the top of the editor
 	{
@@ -237,67 +256,71 @@ return {
 			vim.keymap.set("n", "[C", function()
 				require("treesitter-context").go_to_context(vim.v.count1)
 			end, { silent = true })
-			require 'treesitter-context'.setup(opts)
+			require("treesitter-context").setup(opts)
 		end,
 	},
 
 	-- Toggles splitting and joining blocks of code
 	{
-		'Wansmer/treesj',
+		"Wansmer/treesj",
 		event = "VeryLazy",
-		keys = { '<space>m' },
+		keys = { "<space>m" },
 		-- leader m for toggling
-		dependencies = { 'nvim-treesitter/nvim-treesitter' },
+		dependencies = { "nvim-treesitter/nvim-treesitter" },
 		config = function()
-			local treesj = require('treesj')
+			local treesj = require("treesj")
 			treesj.setup({
 				max_join_length = 400,
 				use_default_keymaps = false,
 			})
 			-- Keymap leader m to toggle
-			vim.keymap.set("n", "<space>m", treesj.toggle,
-				{ noremap = true, silent = true, desc = "Toggle split/join list code blocks" })
+			vim.keymap.set(
+				"n",
+				"<space>m",
+				treesj.toggle,
+				{ noremap = true, silent = true, desc = "Toggle split/join list code blocks" }
+			)
 		end,
 	},
 
 	-- Extended support for highlighting matching items. Replaces matchit and matchparen
 	-- Uses treesitter integration
 	{
-		'andymass/vim-matchup',
+		"andymass/vim-matchup",
 		-- It has to load before the rtp plugins (matchit, matchparen) loads, so BufReadPre event is not enough, it should be non-lazy
 		lazy = false,
 		enabled = false,
 		config = function()
 			vim.g.loaded_matchit = 1
 			vim.g.matchup_matchparen_offscreen = { method = "popup" }
-		end
+		end,
 	},
 
 	-- Automatically add closing tags for HTML and JSX
 	{
 		"windwp/nvim-ts-autotag",
 		event = "VeryLazy",
-		dependencies = { 'nvim-treesitter/nvim-treesitter' },
+		dependencies = { "nvim-treesitter/nvim-treesitter" },
 		opts = {},
 	},
 
 	-- Adds treesitter based context to comments, and decides style of comment accordingly
 	{
-		'JoosepAlviste/nvim-ts-context-commentstring',
+		"JoosepAlviste/nvim-ts-context-commentstring",
 		event = "VeryLazy",
 		dependencies = {
-			'nvim-treesitter/nvim-treesitter',
-			'numToStr/Comment.nvim',
+			"nvim-treesitter/nvim-treesitter",
+			"numToStr/Comment.nvim",
 		},
 		opts = {
 			enable_autocmd = false,
 		},
 		config = function(_, opts)
-			require('ts_context_commentstring').setup(opts)
-			require('Comment').setup {
-				pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
-			}
-		end
+			require("ts_context_commentstring").setup(opts)
+			require("Comment").setup({
+				pre_hook = require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook(),
+			})
+		end,
 	},
 
 	-- Structural search and replace
@@ -307,15 +330,16 @@ return {
 		event = "VeryLazy",
 		config = function()
 			-- require("ssr").setup() -- optional
-			vim.keymap.set({ "n", "x" }, "<leader>sr", function() require("ssr").open() end)
-		end
+			vim.keymap.set({ "n", "x" }, "<leader>sr", function()
+				require("ssr").open()
+			end)
+		end,
 	},
 
 	-- Provides treesitter into heredocs
 	{
-		'AckslD/nvim-FeMaco.lua',
+		"AckslD/nvim-FeMaco.lua",
 		event = "VeryLazy",
 		config = true,
 	},
-
 }

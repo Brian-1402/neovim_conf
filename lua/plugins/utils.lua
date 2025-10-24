@@ -81,8 +81,8 @@ return {
 	},
 
 	{
-		'MeanderingProgrammer/render-markdown.nvim',
-		dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, -- if you prefer nvim-web-devicons
+		"MeanderingProgrammer/render-markdown.nvim",
+		dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" }, -- if you prefer nvim-web-devicons
 		---@module 'render-markdown'
 		---@type render.md.UserConfig
 		opts = {
@@ -90,7 +90,7 @@ return {
 				-- Width of the code block background.
 				-- | block | width of the code block  |
 				-- | full  | full width of the window |
-				width = 'block',
+				width = "block",
 				right_pad = 4,
 
 				-- Whether to conceal nodes at the top and bottom of code blocks.
@@ -101,7 +101,7 @@ return {
 				-- | thick | use the same highlight as the code body              |
 				-- | thin  | when lines are empty overlay the above & below icons |
 				-- | hide  | conceal lines unless language name or icon is added  |
-				border = 'thin',
+				border = "thin",
 			},
 		},
 	},

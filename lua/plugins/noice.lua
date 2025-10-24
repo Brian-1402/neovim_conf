@@ -50,17 +50,17 @@ return {
 				},
 				-- { filter = { find = "E162" },                                   view = "mini" },
 				-- { filter = { find = "E37" },                                    view = "mini" }, --   No write since last change (add ! to override)
-				{ filter = { event = "msg_show", find = "written" },           view = "mini" },
-				{ filter = { event = "msg_show", find = "[w]" },               view = "mini" },
-				{ filter = { event = "msg_show", find = "%--" },               view = "mini" },
-				{ filter = { event = "msg_show", find = "after" },             view = "mini" },
-				{ filter = { event = "msg_show", find = "before" },            view = "mini" },
-				{ filter = { event = "msg_show", find = "fewer lines" },       view = "mini" },
-				{ filter = { event = "msg_show", find = "more lines" },        view = "mini" },
-				{ filter = { find = "No signature help" },                     view = "mini" },
+				{ filter = { event = "msg_show", find = "written" }, view = "mini" },
+				{ filter = { event = "msg_show", find = "[w]" }, view = "mini" },
+				{ filter = { event = "msg_show", find = "%--" }, view = "mini" },
+				{ filter = { event = "msg_show", find = "after" }, view = "mini" },
+				{ filter = { event = "msg_show", find = "before" }, view = "mini" },
+				{ filter = { event = "msg_show", find = "fewer lines" }, view = "mini" },
+				{ filter = { event = "msg_show", find = "more lines" }, view = "mini" },
+				{ filter = { find = "No signature help" }, view = "mini" },
 				{ filter = { event = "msg_show", find = "search hit BOTTOM" }, skip = true },
-				{ filter = { event = "msg_show", find = "search hit TOP" },    skip = true },
-				{ filter = { find = "Config Change Detected. Reloading..." },  skip = true },
+				{ filter = { event = "msg_show", find = "search hit TOP" }, skip = true },
+				{ filter = { find = "Config Change Detected. Reloading..." }, skip = true },
 				{
 					view = "popup",
 					filter = {
@@ -70,7 +70,7 @@ return {
 							{ cmdline = "^:ls" },
 							{ cmdline = "^:marks" },
 							{ cmdline = "^:hi" },
-						}
+						},
 					},
 				},
 			},
@@ -89,5 +89,5 @@ return {
 			},
 		})
 		require("telescope").load_extension("noice")
-	end
+	end,
 }

@@ -15,9 +15,9 @@ end
 
 -- List of paths to Lazy.nvim plugin spec files
 local pluginSpecFiles = {
-	'plugins.editing',
-	'plugins.treesitter',
-	'vscode_config.plugin_extras',
+	"plugins.editing",
+	"plugins.treesitter",
+	"vscode_config.plugin_extras",
 }
 
 -- Function to load and modify a plugin spec file
@@ -27,10 +27,10 @@ local function loadAndModifySpec(filePath)
 	-- Modify the values in the loaded table as needed
 	for _, plugin in ipairs(pluginSpec) do
 		-- Plugin specific modifications
-		if plugin[1] == 'nvim-treesitter/nvim-treesitter' then
+		if plugin[1] == "nvim-treesitter/nvim-treesitter" then
 			plugin.opts.highlight.enable = false
 		end
-		if plugin[1] == 'andymass/vim-matchup' then
+		if plugin[1] == "andymass/vim-matchup" then
 			plugin.enabled = false -- causing a bug which makes multiple brackets and completions on Esc
 		end
 	end
@@ -46,7 +46,6 @@ end
 
 -- printTable(mergedPluginSpec[1])
 
-
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
 	vim.fn.system({
@@ -61,4 +60,4 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 -- Pass the merged plugin spec to lazy.setup
-require('lazy').setup(mergedPluginSpec)
+require("lazy").setup(mergedPluginSpec)

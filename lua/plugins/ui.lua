@@ -35,15 +35,15 @@ return {
 	},
 
 	{
-		'unblevable/quick-scope', -- Highlights unique letter per word for faster f
+		"unblevable/quick-scope", -- Highlights unique letter per word for faster f
 		event = "VeryLazy",
 	},
 
 	{
-		'akinsho/bufferline.nvim',
+		"akinsho/bufferline.nvim",
 		enabled = false,
 		version = "*",
-		dependencies = 'nvim-tree/nvim-web-devicons',
+		dependencies = "nvim-tree/nvim-web-devicons",
 		event = "VeryLazy",
 		opts = {
 			-- diagnostics = "nvim_lsp",
@@ -51,12 +51,12 @@ return {
 		config = function(_, opts)
 			vim.opt.termguicolors = true
 			require("bufferline").setup(opts)
-		end
+		end,
 	},
 
 	-- To improve the UI used by other plugins like telescope etc.
 	{
-		'stevearc/dressing.nvim',
+		"stevearc/dressing.nvim",
 		event = "VeryLazy",
 		opts = {},
 	},
@@ -67,27 +67,27 @@ return {
 		config = function()
 			require("telescope").load_extension("notify")
 			require("notify").setup({
-			  background_colour = "#000000",
-			  merge_duplicates = true,
+				background_colour = "#000000",
+				merge_duplicates = true,
 			})
 		end,
 	},
 
 	-- A minimap plugin
 	{
-		'gorbit99/codewindow.nvim',
+		"gorbit99/codewindow.nvim",
 		enabled = false,
 		-- event = "VeryLazy",
-		keys = { "<leader>mo", "<leader>mc", "<leader>mf", "<leader>mm", },
+		keys = { "<leader>mo", "<leader>mc", "<leader>mf", "<leader>mm" },
 		config = function()
-			local codewindow = require('codewindow')
+			local codewindow = require("codewindow")
 			codewindow.setup({
 				-- use_lsp = false, -- Use the builtin LSP to show errors and warnings
 				-- use_treesitter = false, -- Use nvim-treesitter to highlight the code
 			})
 			codewindow.apply_default_keybinds()
-			vim.api.nvim_set_hl(0, 'CodewindowBorder', { fg = '#012b4d' }) -- Doesn't seem to work
-		end
+			vim.api.nvim_set_hl(0, "CodewindowBorder", { fg = "#012b4d" }) -- Doesn't seem to work
+		end,
 	},
 
 	-- Toggle maximise a split window
@@ -114,27 +114,27 @@ return {
 	},
 
 	{ -- Displays file name and more in a small hover window
-		'b0o/incline.nvim',
+		"b0o/incline.nvim",
 		enabled = false,
-		event = 'VeryLazy',
+		event = "VeryLazy",
 		dependencies = {
 			"SmiteshP/nvim-navic",
 			"nvim-tree/nvim-web-devicons",
 			"lewis6991/gitsigns.nvim",
 		},
 		config = function()
-			local devicons = require 'nvim-web-devicons'
-			require('incline').setup {
+			local devicons = require("nvim-web-devicons")
+			require("incline").setup({
 				render = function(props)
-					local filename = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(props.buf), ':t')
-					if filename == '' then
-						filename = '[No Name]'
+					local filename = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(props.buf), ":t")
+					if filename == "" then
+						filename = "[No Name]"
 					end
 					local ft_icon, ft_color = devicons.get_icon_color(filename)
 					local guibg_all = "#0f3a5c"
 
 					local function get_git_diff()
-						local icons = { removed = ' ', changed = ' ', added = ' ' }
+						local icons = { removed = " ", changed = " ", added = " " }
 						local signs = vim.b[props.buf].gitsigns_status_dict
 						local labels = {}
 						if signs == nil then
@@ -142,11 +142,11 @@ return {
 						end
 						for name, icon in pairs(icons) do
 							if tonumber(signs[name]) and signs[name] > 0 then
-								table.insert(labels, { icon .. signs[name] .. ' ', group = 'Diff' .. name })
+								table.insert(labels, { icon .. signs[name] .. " ", group = "Diff" .. name })
 							end
 						end
 						if #labels > 0 then
-							table.insert(labels, { '┊ ' })
+							table.insert(labels, { "┊ " })
 						end
 						return labels
 					end
@@ -156,27 +156,33 @@ return {
 						local label = {}
 
 						for severity, icon in pairs(icons) do
-							local n = #vim.diagnostic.get(props.buf,
-								{ severity = vim.diagnostic.severity[string.upper(severity)] })
+							local n = #vim.diagnostic.get(
+								props.buf,
+								{ severity = vim.diagnostic.severity[string.upper(severity)] }
+							)
 							if n > 0 then
-								table.insert(label, { icon .. n .. ' ', group = 'DiagnosticSign' .. severity })
+								table.insert(label, { icon .. n .. " ", group = "DiagnosticSign" .. severity })
 							end
 						end
 						if #label > 0 then
-							table.insert(label, { '┊ ' })
+							table.insert(label, { "┊ " })
 						end
 						return label
 					end
 
 					return {
-						{ get_diagnostic_label(), guibg = guibg_all, },
+						{ get_diagnostic_label(), guibg = guibg_all },
 						-- { get_git_diff(), guibg = guibg_all, },
-						{ (ft_icon or '') .. ' ', guifg = ft_color, guibg = guibg_all, },
-						{ filename .. ' ', gui = vim.bo[props.buf].modified and 'bold,italic' or 'bold', guibg = guibg_all, },
+						{ (ft_icon or "") .. " ", guifg = ft_color, guibg = guibg_all },
+						{
+							filename .. " ",
+							gui = vim.bo[props.buf].modified and "bold,italic" or "bold",
+							guibg = guibg_all,
+						},
 						-- { '┊  ' .. vim.api.nvim_win_get_number(props.win), group = 'DevIconWindows', guibg = guibg_all, },
 					}
 				end,
-			}
+			})
 		end,
 	},
 }

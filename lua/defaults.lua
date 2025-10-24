@@ -1,12 +1,12 @@
 -- Allow backspacing over everything in insert mode.
 vim.o.backspace = "indent,eol,start"
 
-vim.o.history = 500     -- keep 200 lines of command line history
-vim.o.ruler = true      -- show the cursor position all the time
-vim.o.showcmd = true    -- display incomplete commands
-vim.o.wildmenu = true   -- display completion matches in a status line
+vim.o.history = 500 -- keep 200 lines of command line history
+vim.o.ruler = true -- show the cursor position all the time
+vim.o.showcmd = true -- display incomplete commands
+vim.o.wildmenu = true -- display completion matches in a status line
 
-vim.o.ttimeout = true   -- time out for key codes
+vim.o.ttimeout = true -- time out for key codes
 vim.o.ttimeoutlen = 100 -- wait up to 100ms after Esc for special key
 
 -- Show @@@ in the last line if it is truncated.
@@ -23,7 +23,7 @@ if vim.fn.has("mouse") == 1 then
 	-- if vim.o.term:match('xterm') then
 	-- 		vim.o.mouse = 'a'
 	-- else
-	vim.o.mouse = 'nvi'
+	vim.o.mouse = "nvi"
 	-- end
 end
 
@@ -39,11 +39,11 @@ if vim.fn.has("gui_running") == 1 then
 	-- vim.o.c_comment_strings = 1
 end
 
-vim.o.backup = true                                    -- keep a backup file (restore to previous version)
+vim.o.backup = true -- keep a backup file (restore to previous version)
 vim.fn.mkdir(vim.fn.stdpath("data") .. "/backup", "p") -- make dir if it doesnt exist
 vim.o.backupdir = vim.fn.stdpath("data") .. "/backup//,."
 -- make dir if it doesnt exist
-if vim.fn.has('persistent_undo') == 1 then
+if vim.fn.has("persistent_undo") == 1 then
 	vim.o.undofile = true -- keep an undo file (undo changes after closing)
 	vim.fn.mkdir(vim.fn.stdpath("data") .. "/undo", "p")
 	vim.o.undodir = vim.fn.stdpath("data") .. "/undo//,."
@@ -113,4 +113,3 @@ end
 
 -- Previews command output in the live buffer
 vim.o.inccommand = "nosplit"
-

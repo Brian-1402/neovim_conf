@@ -1,9 +1,8 @@
-
 -- Use system clipboard for all operations by default
 -- vim.o.clipboard = "unnamedplus"
 --
 local win32yank_path = "/mnt/c/Users/brian/scoop/shims/win32yank.exe"
-if vim.fn.has('linux') then
+if vim.fn.has("linux") then
 	vim.g.clipboard = {
 		name = "win32yank-wsl",
 		copy = {
@@ -34,23 +33,12 @@ end
 -- 	}
 -- end
 
-
-
-
-
-
-
-
-
-
-
 -- Below are old code which isn't working anymore in latest neovim
 --
 -- Noticed a performance delay in wsl2 when using the clipboard. This is a fix for that.
 -- Found here: https://github.com/neovim/neovim/issues/21739#issuecomment-1399405391
--- But this still causes an error when running. 
+-- But this still causes an error when running.
 -- So workaround is to use https://github.com/EtiamNullam/deferred-clipboard.nvim
-
 
 -- local M = {}
 

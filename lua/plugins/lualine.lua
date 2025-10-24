@@ -7,14 +7,13 @@ local function trunc(trunc_width, trunc_len, hide_width, no_ellipsis)
 	return function(str)
 		local win_width = vim.fn.winwidth(0)
 		if hide_width and win_width < hide_width then
-			return ''
+			return ""
 		elseif trunc_width and trunc_len and win_width < trunc_width and #str > trunc_len then
-			return str:sub(1, trunc_len) .. (no_ellipsis and '' or '...')
+			return str:sub(1, trunc_len) .. (no_ellipsis and "" or "...")
 		end
 		return str
 	end
 end
-
 
 local function get_formatted_cwd(options)
 	options = options or {}
@@ -54,7 +53,6 @@ local function get_formatted_cwd(options)
 	return icon .. " " .. result:gsub("[/\\]+$", "")
 end
 
-
 -- Got from https://www.reddit.com/r/neovim/comments/o4bguk/comment/h2kcjxa
 local function lsp_progress()
 	local messages = vim.lsp.util.get_progress_messages()
@@ -75,7 +73,9 @@ end
 
 -- lightweight replacement for fidget.nvim
 local progressText = ""
-local function lspProgress() return progressText end
+local function lspProgress()
+	return progressText
+end
 
 vim.api.nvim_create_autocmd("LspProgress", {
 	callback = function(ctx)
@@ -115,8 +115,16 @@ return {
 				options = {
 					theme = "auto",
 					ignore_focus = {
-						"DressingInput", "DressingSelect", "lspinfo", "ccc-ui", "TelescopePrompt",
-						"checkhealth", "noice", "lazy", "mason", "qf",
+						"DressingInput",
+						"DressingSelect",
+						"lspinfo",
+						"ccc-ui",
+						"TelescopePrompt",
+						"checkhealth",
+						"noice",
+						"lazy",
+						"mason",
+						"qf",
 					},
 					refresh = {
 						statusline = 250,
@@ -143,7 +151,9 @@ return {
 						{ -- using lualine's tab display, cause it looks better than vim's
 							"tabs",
 							mode = 1,
-							cond = function() return vim.fn.tabpagenr("$") > 1 end,
+							cond = function()
+								return vim.fn.tabpagenr("$") > 1
+							end,
 						},
 					},
 					lualine_b = {
@@ -189,13 +199,12 @@ return {
 						{ "fileformat",        fmt = trunc(0, 0, 70, true) },
 						{ "filetype",          fmt = trunc(0, 0, 50, true) },
 					},
-					lualine_y = {
-					},
+					lualine_y = {},
 					lualine_z = {
 						{ "location", fmt = trunc(0, 0, 45, true) },
-					}
+					},
 				},
 			})
-		end
+		end,
 	},
 }

@@ -9,8 +9,8 @@
 return {
 
 	{
-		'bluz71/vim-nightfly-colors',
-		name = 'nightfly',
+		"bluz71/vim-nightfly-colors",
+		name = "nightfly",
 		lazy = false,
 		priority = 1000,
 		-- config = function() vim.cmd.colorscheme("nightfly") end,
@@ -20,7 +20,7 @@ return {
 		"catppuccin/nvim",
 		lazy = false,
 		priority = 1000,
-		config = function() 
+		config = function()
 			require("catppuccin").setup({
 				auto_integrations = true,
 				lsp_styles = {
@@ -57,11 +57,11 @@ return {
 		priority = 1000,
 		-- config = function() vim.cmd.colorscheme("onedark") end,
 		-- config = function()
-			-- require('onedark').setup {
-			-- 	style = 'darker'
-			-- }
-			-- Enable theme
-			-- require('onedark').load()
+		-- require('onedark').setup {
+		-- 	style = 'darker'
+		-- }
+		-- Enable theme
+		-- require('onedark').load()
 		-- end
 	},
 

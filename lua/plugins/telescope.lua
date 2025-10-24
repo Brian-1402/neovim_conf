@@ -77,7 +77,7 @@ return {
 							["<C-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
 
 							-- Show mappings for current picker
-							["<C-h>"] = "which_key"
+							["<C-h>"] = "which_key",
 						},
 					},
 				},
@@ -90,30 +90,33 @@ return {
 			-- end
 			local function find_files_include_hidden()
 				builtin.find_files({
-					find_command = { 'fd', '--type', 'f', '--hidden', '--no-ignore' }
+					find_command = { "fd", "--type", "f", "--hidden", "--no-ignore" },
 				})
 			end
 
-			vim.keymap.set('n', '<leader>fh', find_files_include_hidden,
-				{ noremap = true, silent = true, desc = "Telescope: find hidden files" })
-		end
+			vim.keymap.set(
+				"n",
+				"<leader>fh",
+				find_files_include_hidden,
+				{ noremap = true, silent = true, desc = "Telescope: find hidden files" }
+			)
+		end,
 	},
 
 	{
 		"nvim-telescope/telescope-fzf-native.nvim",
-		dependencies = { "nvim-telescope/telescope.nvim", },
+		dependencies = { "nvim-telescope/telescope.nvim" },
 		-- build = "make",
-		build =
-		"cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build",
+		build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build",
 		event = "VeryLazy",
 		config = function()
 			require("telescope").load_extension("fzf")
-		end
+		end,
 	},
 
 	{
 		"debugloop/telescope-undo.nvim",
-		dependencies = { "nvim-telescope/telescope.nvim", },
+		dependencies = { "nvim-telescope/telescope.nvim" },
 		event = "VeryLazy",
 		keys = {
 			{ -- lazy style key map
@@ -128,10 +131,9 @@ return {
 		end,
 	},
 
-
 	{
 		"cljoly/telescope-repo.nvim",
-		dependencies = { "nvim-telescope/telescope.nvim", },
+		dependencies = { "nvim-telescope/telescope.nvim" },
 		event = "VeryLazy",
 		config = function()
 			require("telescope").load_extension("repo")
@@ -142,37 +144,37 @@ return {
 		-- Automatically cd to project root. This supports telescope extension
 		"ahmedkhalf/project.nvim",
 		enabled = false,
-		dependencies = { "nvim-telescope/telescope.nvim", },
+		dependencies = { "nvim-telescope/telescope.nvim" },
 		event = "VeryLazy",
 		config = function()
-			require("project_nvim").setup {}
+			require("project_nvim").setup({})
 			require("telescope").load_extension("projects")
-		end
+		end,
 	},
 
 	{
 		"LukasPietzschmann/telescope-tabs",
-		dependencies = { "nvim-telescope/telescope.nvim", },
+		dependencies = { "nvim-telescope/telescope.nvim" },
 		event = "VeryLazy",
 		config = function()
-			require("telescope-tabs").setup {}
-		end
+			require("telescope-tabs").setup({})
+		end,
 	},
 
 	{
 		"olimorris/persisted.nvim",
 		enabled = false,
-		dependencies = { "nvim-telescope/telescope.nvim", },
+		dependencies = { "nvim-telescope/telescope.nvim" },
 		event = "VeryLazy",
 		config = function()
-			require("persisted").setup {}
+			require("persisted").setup({})
 			require("telescope").load_extension("persisted")
-		end
+		end,
 	},
 
 	{
 		"desdic/agrolens.nvim",
-		dependencies = { "nvim-telescope/telescope.nvim", },
+		dependencies = { "nvim-telescope/telescope.nvim" },
 		event = "VeryLazy",
 		config = function()
 			require("telescope").load_extension("agrolens")
@@ -181,7 +183,7 @@ return {
 
 	{
 		"nvim-telescope/telescope-ui-select.nvim",
-		dependencies = { "nvim-telescope/telescope.nvim", },
+		dependencies = { "nvim-telescope/telescope.nvim" },
 		event = "VeryLazy",
 		config = function()
 			require("telescope").load_extension("ui-select")
@@ -207,7 +209,7 @@ return {
 		event = "VeryLazy",
 		config = function()
 			require("telescope").load_extension("telescope-tabs")
-			require("telescope-tabs").setup {}
+			require("telescope-tabs").setup({})
 		end,
 	},
 
@@ -217,7 +219,7 @@ return {
 		event = "VeryLazy",
 		dependencies = {
 			"kkharji/sqlite.lua",
-			"nvim-telescope/telescope.nvim"
+			"nvim-telescope/telescope.nvim",
 		},
 		config = function()
 			require("telescope").load_extension("frecency")

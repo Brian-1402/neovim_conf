@@ -42,8 +42,8 @@ local mlsp_servers_opts = {
 			"--query-driver=/usr/bin/g++",
 			"--offset-encoding=utf-16",
 		},
-		filetypes = { 'c', 'cpp', 'objc', 'objcpp' },
-	}
+		filetypes = { "c", "cpp", "objc", "objcpp" },
+	},
 }
 
 -- Add empty opts for each server already not having any
@@ -91,7 +91,7 @@ return {
 			local navbuddy = require("nvim-navbuddy")
 			local cmp_nvim_lsp = require("cmp_nvim_lsp")
 			local preview = require("goto-preview")
-			
+
 			-- local keymap = vim.keymap -- for conciseness
 			local opts = { noremap = true, silent = true }
 
@@ -186,7 +186,6 @@ return {
 				opts.desc = "Restart LSP"
 				vim.keymap.set("n", "<leader>rs", ":LspRestart<CR>", opts) -- mapping to restart lsp if necessary
 
-
 				opts.desc = "Format current buffer (async)"
 				vim.keymap.set("n", "<leader>=", function()
 					vim.lsp.buf.format({
@@ -197,7 +196,6 @@ return {
 						end,
 					})
 				end, opts)
-
 			end
 
 			vim.api.nvim_create_autocmd("LspAttach", {
@@ -229,7 +227,6 @@ return {
 			})
 			vim.lsp.buf.hover({ border = "rounded" })
 			vim.lsp.buf.signature_help({ border = "rounded" })
-
 
 			-- Configure LSP servers.
 
@@ -383,7 +380,6 @@ return {
 				},
 			})
 
-
 			-- Keybindings for LSP/Null-ls inspection and formatting tracing
 			local opts = { noremap = true, silent = true }
 
@@ -412,29 +408,29 @@ return {
 		end,
 	},
 
---	{
---		"linux-cultist/venv-selector.nvim",
---		enabled = false,
---		branch = "regexp",
---		dependencies = { "neovim/nvim-lspconfig", "nvim-telescope/telescope.nvim", "mfussenegger/nvim-dap-python" },
---		opts = {
---			-- Your options go here
---			-- name = { "venv", "env", ".venv", ".env" },
---			auto_refresh = true,
---		},
---		event = "VeryLazy", -- Optional: needed only if you want to type `:VenvSelect` without a keymapping
---	},
+	-- {
+	-- 	"linux-cultist/venv-selector.nvim",
+	-- 	enabled = false,
+	-- 	branch = "regexp",
+	-- 	dependencies = { "neovim/nvim-lspconfig", "nvim-telescope/telescope.nvim", "mfussenegger/nvim-dap-python" },
+	-- 	opts = {
+	-- 		-- Your options go here
+	-- 		-- name = { "venv", "env", ".venv", ".env" },
+	-- 		auto_refresh = true,
+	-- 	},
+	-- 	event = "VeryLazy", -- Optional: needed only if you want to type `:VenvSelect` without a keymapping
+	-- },
 
---	{
---		"ThePrimeagen/refactoring.nvim",
---		enabled = false,
---		event = "VeryLazy",
---		dependencies = {
---			"nvim-lua/plenary.nvim",
---			"nvim-treesitter/nvim-treesitter",
---		},
---		config = function()
---			require("refactoring").setup()
---		end,
---	},
+	-- {
+	-- 	"ThePrimeagen/refactoring.nvim",
+	-- 	enabled = false,
+	-- 	event = "VeryLazy",
+	-- 	dependencies = {
+	-- 		"nvim-lua/plenary.nvim",
+	-- 		"nvim-treesitter/nvim-treesitter",
+	-- 	},
+	-- 	config = function()
+	-- 		require("refactoring").setup()
+	-- 	end,
+	-- },
 }

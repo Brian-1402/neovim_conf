@@ -72,7 +72,7 @@ return {
 		"numToStr/Comment.nvim",
 		event = "VeryLazy",
 		config = function()
-			require("Comment").setup({ ignore = "^$", })
+			require("Comment").setup({ ignore = "^$" })
 			local ft = require("Comment.ft")
 			ft.set("ahk", ";")
 			-- Remap Ctrl-/ to comment

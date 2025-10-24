@@ -1,11 +1,11 @@
-local vscode = require('vscode-neovim')
+local vscode = require("vscode-neovim")
 local opts = { noremap = true, silent = true }
 
 -- Show LSP references
 opts.desc = "Show LSP references"
 vim.keymap.set("n", "gr", function()
 	-- vscode.action('references-view.findReferences')
-	vscode.action('editor.action.referenceSearch.trigger')
+	vscode.action("editor.action.referenceSearch.trigger")
 end, opts)
 
 --[[
@@ -39,25 +39,25 @@ end, opts)
 -- Show LSP implementations
 opts.desc = "Show LSP implementations"
 vim.keymap.set("n", "gI", function()
-	vscode.action('editor.action.goToImplementation')
+	vscode.action("editor.action.goToImplementation")
 end, opts)
 
 -- Show LSP type definitions
 opts.desc = "Show LSP type definitions"
 vim.keymap.set("n", "gy", function()
-	vscode.action('editor.action.goToTypeDefinition')
+	vscode.action("editor.action.goToTypeDefinition")
 end, opts)
 
 -- Show LSP signature help
 opts.desc = "Show LSP signature help"
 vim.keymap.set("n", "gK", function()
-	vscode.action('editor.action.triggerParameterHints')
+	vscode.action("editor.action.triggerParameterHints")
 end, opts)
 
 -- See available code actions
 opts.desc = "See available code actions"
 vim.keymap.set({ "n", "v" }, "<leader>ca", function()
-	vscode.action('editor.action.quickFix')
+	vscode.action("editor.action.quickFix")
 end, opts)
 
 -- -- Run Codelens
@@ -75,7 +75,7 @@ end, opts)
 -- Source action
 opts.desc = "Source action"
 vim.keymap.set("n", "<leader>cA", function()
-	vscode.action('editor.action.sourceAction', {
+	vscode.action("editor.action.sourceAction", {
 		-- args = {
 		-- 	context = {
 		-- 		only = { "source" },
@@ -88,31 +88,31 @@ end, opts)
 -- Smart rename
 opts.desc = "Smart rename"
 vim.keymap.set("n", "<leader>rn", function()
-	vscode.action('editor.action.rename')
+	vscode.action("editor.action.rename")
 end, opts)
 
 -- Show buffer diagnostics
 opts.desc = "Show all buffers diagnostics"
 vim.keymap.set("n", "<leader>dD", function()
-	vscode.action('workbench.actions.view.problems')
+	vscode.action("workbench.actions.view.problems")
 end, opts)
 
 -- Show line diagnostics
 opts.desc = "Show line diagnostics"
 vim.keymap.set("n", "<leader>dd", function()
-	vscode.action('editor.action.showHover')
+	vscode.action("editor.action.showHover")
 end, opts)
 
 -- Go to previous diagnostic
 opts.desc = "Go to previous diagnostic"
 vim.keymap.set("n", "[d", function()
-	vscode.action('editor.action.marker.prevInFiles')
+	vscode.action("editor.action.marker.prevInFiles")
 end, opts)
 
 -- Go to next diagnostic
 opts.desc = "Go to next diagnostic"
 vim.keymap.set("n", "]d", function()
-	vscode.action('editor.action.marker.nextInFiles')
+	vscode.action("editor.action.marker.nextInFiles")
 end, opts)
 
 -- Already implemented by vscode-neovim
@@ -125,37 +125,36 @@ end, opts)
 -- Set location list to diagnostics
 opts.desc = "Set location list to diagnostics"
 vim.keymap.set("n", "<leader>q", function()
-	vscode.action('workbench.action.problems.focus')
+	vscode.action("workbench.action.problems.focus")
 end, opts)
 
 -- Format buffer
 opts.desc = "Format buffer"
 vim.keymap.set("n", "<leader>=", function()
-	vscode.action('editor.action.formatDocument')
+	vscode.action("editor.action.formatDocument")
 end, opts)
 
 -- Format selection
 opts.desc = "Format selection"
 vim.keymap.set("v", "<leader>=", function()
-	vscode.action('editor.action.formatSelection')
+	vscode.action("editor.action.formatSelection")
 end, opts)
-
 
 -- Telescope equivalent keymaps
 
 opts.desc = "Telescope: find files"
 vim.keymap.set("n", "<leader>ff", function()
-	vscode.action('workbench.action.quickOpen')
+	vscode.action("workbench.action.quickOpen")
 end, opts)
 
 opts.desc = "Telescope: live grep"
 vim.keymap.set("n", "<leader>fg", function()
-	vscode.action('workbench.action.findInFiles')
+	vscode.action("workbench.action.findInFiles")
 end, opts)
 
 opts.desc = "Telescope: buffers"
 vim.keymap.set("n", "<leader>fb", function()
-	vscode.action('workbench.action.showAllEditors')
+	vscode.action("workbench.action.showAllEditors")
 end, opts)
 
 -- opts.desc = "Telescope: help tags"
@@ -175,17 +174,15 @@ end, opts)
 
 opts.desc = "Telescope: workspaces"
 vim.keymap.set("n", "<leader>fw", function()
-	vscode.action('workbench.action.openRecent')
+	vscode.action("workbench.action.openRecent")
 end, opts)
-
-
 
 -- Other mappings
 
 -- Toggle primary sidebar with <leader>e
 opts.desc = "Toggle primary sidebar"
 vim.keymap.set("n", "<leader>e", function()
-	vscode.action('workbench.action.toggleSidebarVisibility')
+	vscode.action("workbench.action.toggleSidebarVisibility")
 end, opts)
 
 -- -- Open lazygit in terminal fullscreen with <leader>gz

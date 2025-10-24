@@ -6,9 +6,8 @@ local M = {
 function M.config()
 	if vim.fn.has("win32") == 1 then
 		local powershell_options = {
-			shell = vim.fn.executable "pwsh" == 1 and "pwsh -nologo" or "powershell",
-			shellcmdflag =
-			"-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;",
+			shell = vim.fn.executable("pwsh") == 1 and "pwsh -nologo" or "powershell",
+			shellcmdflag = "-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;",
 			shellredir = "-RedirectStandardOutput %s -NoNewWindow -Wait",
 			shellpipe = "2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode",
 			shellquote = "",
@@ -21,8 +20,8 @@ function M.config()
 	end
 	local execs = {
 		{ nil, "<M-1>", "Horizontal Terminal", "horizontal", 0.3 },
-		{ nil, "<M-2>", "Vertical Terminal",   "vertical",   0.4 },
-		{ nil, "<M-3>", "Float Terminal",      "float",      nil },
+		{ nil, "<M-2>", "Vertical Terminal", "vertical", 0.4 },
+		{ nil, "<M-3>", "Float Terminal", "float", nil },
 	}
 
 	local function get_buf_size()
@@ -50,19 +49,19 @@ function M.config()
 
 	local exec_toggle = function(opts)
 		local Terminal = require("toggleterm.terminal").Terminal
-		local term = Terminal:new { cmd = opts.cmd, count = opts.count, direction = opts.direction }
+		local term = Terminal:new({ cmd = opts.cmd, count = opts.count, direction = opts.direction })
 		term:toggle(opts.size, opts.direction)
 	end
 
 	local add_exec = function(opts)
-		local binary = opts.cmd:match "(%S+)"
+		local binary = opts.cmd:match("(%S+)")
 		if vim.fn.executable(binary) ~= 1 then
 			vim.notify("Skipping configuring executable " .. binary .. ". Please make sure it is installed properly.")
 			return
 		end
 
 		vim.keymap.set({ "n", "t" }, opts.keymap, function()
-			exec_toggle { cmd = opts.cmd, count = opts.count, direction = opts.direction, size = opts.size() }
+			exec_toggle({ cmd = opts.cmd, count = opts.count, direction = opts.direction, size = opts.size() })
 		end, { desc = opts.label, noremap = true, silent = true })
 	end
 
@@ -83,7 +82,7 @@ function M.config()
 		add_exec(opts)
 	end
 
-	require("toggleterm").setup {
+	require("toggleterm").setup({
 		size = 70,
 		open_mapping = [[<c-\>]],
 		hide_numbers = true, -- hide the number column in toggleterm buffers
@@ -96,7 +95,7 @@ function M.config()
 		direction = "float",
 		-- direction = "vertical",
 		close_on_exit = true, -- close the terminal window when the process exits
-		shell = nil,    -- change the default shell
+		shell = nil, -- change the default shell
 		float_opts = {
 			border = "rounded",
 			winblend = 0,
@@ -111,18 +110,18 @@ function M.config()
 		-- 		return term.count
 		-- 	end,
 		-- },
-	}
-	vim.cmd [[
+	})
+	vim.cmd([[
 	augroup terminal_setup | au!
 	autocmd TermOpen * nnoremap <buffer><LeftRelease> <LeftRelease>i
 	autocmd TermEnter * startinsert!
 	augroup end
-	]]
+	]])
 
 	vim.api.nvim_create_autocmd({ "TermEnter" }, {
 		pattern = { "*" },
 		callback = function()
-			vim.cmd "startinsert"
+			vim.cmd("startinsert")
 			_G.set_terminal_keymaps()
 		end,
 	})
@@ -137,7 +136,7 @@ function M.config()
 
 	-- abstract to function
 	local Terminal = require("toggleterm.terminal").Terminal
-	local lazygit = Terminal:new {
+	local lazygit = Terminal:new({
 		cmd = "lazygit",
 		dir = "git_dir",
 		direction = "float",
@@ -146,16 +145,16 @@ function M.config()
 		},
 		-- function to run on opening the terminal
 		on_open = function(term)
-			vim.cmd "startinsert!"
+			vim.cmd("startinsert!")
 			vim.api.nvim_buf_set_keymap(term.bufnr, "n", "q", "<cmd>close<CR>", { noremap = true, silent = true })
 		end,
 		-- function to run on closing the terminal
 		on_close = function(term)
-			vim.cmd "startinsert!"
+			vim.cmd("startinsert!")
 		end,
-	}
+	})
 
-	local bun_outdated = Terminal:new {
+	local bun_outdated = Terminal:new({
 		cmd = "bunx npm-check-updates@latest -ui --format group --packageManager bun",
 		dir = "git_dir",
 		direction = "float",
@@ -164,14 +163,14 @@ function M.config()
 		},
 		-- function to run on opening the terminal
 		on_open = function(term)
-			vim.cmd "startinsert!"
+			vim.cmd("startinsert!")
 			vim.api.nvim_buf_set_keymap(term.bufnr, "n", "q", "<cmd>close<CR>", { noremap = true, silent = true })
 		end,
 		-- function to run on closing the terminal
 		on_close = function(term)
-			vim.cmd "startinsert!"
+			vim.cmd("startinsert!")
 		end,
-	}
+	})
 
 	local function _lazygit_toggle()
 		lazygit:toggle()
@@ -183,7 +182,7 @@ function M.config()
 
 	-- vim.api.nvim_set_keymap("n", "<leader>gz", "<cmd>lua _lazygit_toggle()<CR>", { noremap = true, silent = true })
 	-- vim.api.nvim_set_keymap("n", "<leader>co", "<cmd>lua _bun_outdated()<CR>", { noremap = true, silent = true })
-	vim.keymap.set("t", "<C-]>", [[<C-\><C-n>]], {silent = true, noremap = true})
+	vim.keymap.set("t", "<C-]>", [[<C-\><C-n>]], { silent = true, noremap = true })
 end
 
 return M

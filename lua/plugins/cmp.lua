@@ -6,40 +6,40 @@ end
 
 return {
 	{
-		'hrsh7th/nvim-cmp',
+		"hrsh7th/nvim-cmp",
 		event = { "InsertEnter", "CmdlineEnter" },
 		dependencies = {
-			'neovim/nvim-lspconfig',
-			'saadparwaiz1/cmp_luasnip',
-			'hrsh7th/cmp-buffer',
-			'hrsh7th/cmp-path',
-			'hrsh7th/cmp-cmdline',
-			'onsails/lspkind.nvim',
+			"neovim/nvim-lspconfig",
+			"saadparwaiz1/cmp_luasnip",
+			"hrsh7th/cmp-buffer",
+			"hrsh7th/cmp-path",
+			"hrsh7th/cmp-cmdline",
+			"onsails/lspkind.nvim",
 			"micangl/cmp-vimtex",
 		},
 
 		config = function()
-			local cmp = require('cmp')
+			local cmp = require("cmp")
 			local luasnip = require("luasnip")
 			local lspkind = require("lspkind")
 
 			-- Setup luasnip
 			require("luasnip.loaders.from_vscode").lazy_load()
 
-			cmp.setup {
+			cmp.setup({
 				sources = { -- For regular insert mode global setup. For filetype specific or cmdline etc, see further below
-					{ name = "lazydev",  group_index = 0 }, -- Just for lua
-					{ name = 'luasnip',  group_index = 1 },
-					{ name = 'nvim_lsp', group_index = 2 },
-					{ name = "copilot",  group_index = 3 },
-					{ name = 'buffer',   group_index = 4 },
+					{ name = "lazydev", group_index = 0 }, -- Just for lua
+					{ name = "luasnip", group_index = 1 },
+					{ name = "nvim_lsp", group_index = 2 },
+					{ name = "copilot", group_index = 3 },
+					{ name = "buffer", group_index = 4 },
 				},
 
 				-- mapping guide: https://github.com/hrsh7th/nvim-cmp/wiki/Example-mappings#luasnip
 				mapping = cmp.mapping.preset.insert({
 
-					['<C-u>'] = cmp.mapping.scroll_docs(-4),
-					['<C-d>'] = cmp.mapping.scroll_docs(4),
+					["<C-u>"] = cmp.mapping.scroll_docs(-4),
+					["<C-d>"] = cmp.mapping.scroll_docs(4),
 					-- ['<C-f>'] = cmp_action.luasnip_jump_forward(),
 					-- ['<C-b>'] = cmp_action.luasnip_jump_backward(),
 
@@ -48,7 +48,7 @@ return {
 
 					["<C-e>"] = cmp.mapping.abort(), -- close completion window
 
-					['<C-Tab>'] = cmp.mapping(function(fallback)
+					["<C-Tab>"] = cmp.mapping(function(fallback)
 						if not cmp.visible() then
 							cmp.complete() -- trigger opening completion menu
 						else
@@ -56,17 +56,17 @@ return {
 						end
 					end),
 
-					['<Tab>'] = cmp.mapping(function(fallback)
-						if cmp.visible() then        -- and has_words_before() then
-							cmp.select_next_item({ behavior = 'insert' }) -- Select and also insert entry
+					["<Tab>"] = cmp.mapping(function(fallback)
+						if cmp.visible() then -- and has_words_before() then
+							cmp.select_next_item({ behavior = "insert" }) -- Select and also insert entry
 						else
 							fallback()
 						end
 					end, { "i", "s" }),
 
-					['<S-Tab>'] = cmp.mapping(function(fallback)
+					["<S-Tab>"] = cmp.mapping(function(fallback)
 						if cmp.visible() then -- and has_words_before() then
-							cmp.select_prev_item({ behavior = 'insert' })
+							cmp.select_prev_item({ behavior = "insert" })
 						else
 							fallback()
 						end
@@ -84,7 +84,7 @@ return {
 						end
 					end, { "i", "s" }),
 
-					['<C-k>'] = cmp.mapping(function(fallback)
+					["<C-k>"] = cmp.mapping(function(fallback)
 						-- if cmp.visible() then
 						-- 	cmp.select_prev_item({behavior = 'insert'})
 						if luasnip.jumpable(-1) then
@@ -95,7 +95,7 @@ return {
 					end, { "i", "s" }),
 
 					-- confirm selection
-					['<CR>'] = cmp.mapping.confirm({
+					["<CR>"] = cmp.mapping.confirm({
 						behavior = cmp.ConfirmBehavior.Replace,
 						select = false,
 					}),
@@ -106,13 +106,13 @@ return {
 
 				formatting = {
 					expandable_indicator = true,
-					fields = { 'abbr', 'kind', 'menu' },
+					fields = { "abbr", "kind", "menu" },
 					format = lspkind.cmp_format({
 						mode = "symbol",
 						max_width = 50,
-						ellipsis_char = '...',
-						symbol_map = { Copilot = "" }
-					})
+						ellipsis_char = "...",
+						symbol_map = { Copilot = "" },
+					}),
 				},
 
 				sorting = {
@@ -144,50 +144,49 @@ return {
 					completion = cmp.config.window.bordered(),
 					documentation = cmp.config.window.bordered(),
 				},
-
-			}
+			})
 
 			cmp.setup.filetype("tex", {
 				sources = {
 					{ name = "copilot", group_index = 2 },
-					{ name = 'vimtex' },
-					{ name = 'luasnip' },
-					{ name = 'buffer' },
+					{ name = "vimtex" },
+					{ name = "luasnip" },
+					{ name = "buffer" },
 				},
 			})
 
 			-- `/` cmdline setup.
-			cmp.setup.cmdline('/', {
+			cmp.setup.cmdline("/", {
 				mapping = cmp.mapping.preset.cmdline(),
 				completion = { autocomplete = false },
 				sources = {
-					{ name = 'buffer' }
-				}
+					{ name = "buffer" },
+				},
 			})
 
 			-- `:` cmdline setup.
-			cmp.setup.cmdline(':', {
+			cmp.setup.cmdline(":", {
 				mapping = cmp.mapping.preset.cmdline(),
 				-- completion = { autocomplete = false }, -- To prevent completion in cmdline to pop up always. comment it for always autocomplete.
 				sources = cmp.config.sources({
-					{ name = 'path' }
+					{ name = "path" },
 				}, {
 					{
-						name = 'cmdline',
+						name = "cmdline",
 						option = {
-							ignore_cmds = { 'Man', '!' }
-						}
-					}
-				})
+							ignore_cmds = { "Man", "!" },
+						},
+					},
+				}),
 			})
 		end,
 	},
 
 	{
-		'saadparwaiz1/cmp_luasnip',
+		"saadparwaiz1/cmp_luasnip",
 		lazy = true,
 		dependencies = {
-			{ 'L3MON4D3/LuaSnip', build = "make install_jsregexp", },
+			{ "L3MON4D3/LuaSnip", build = "make install_jsregexp" },
 		},
 	},
 
@@ -203,7 +202,7 @@ return {
 		dependencies = { "zbirenbaum/copilot.lua" },
 		config = function()
 			require("copilot_cmp").setup()
-		end
+		end,
 	},
 
 	{
@@ -217,5 +216,4 @@ return {
 			})
 		end,
 	},
-
 }

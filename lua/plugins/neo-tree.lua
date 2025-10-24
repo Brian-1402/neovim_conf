@@ -10,19 +10,19 @@ return {
 		"MunifTanjim/nui.nvim",
 		-- "3rd/image.nvim",        -- Optional image support in preview window: See `# Preview Mode` for more information
 		{
-			's1n7ax/nvim-window-picker',
-			version = '2.*',
+			"s1n7ax/nvim-window-picker",
+			version = "2.*",
 			config = function()
-				require 'window-picker'.setup({
+				require("window-picker").setup({
 					filter_rules = {
 						include_current_win = false,
 						autoselect_one = true,
 						-- filter using buffer options
 						bo = {
 							-- if the file type is one of following, the window will be ignored
-							filetype = { 'neo-tree', "neo-tree-popup", "notify" },
+							filetype = { "neo-tree", "neo-tree-popup", "notify" },
 							-- if the buffer type is one of following, the window will be ignored
-							buftype = { 'terminal', "quickfix" },
+							buftype = { "terminal", "quickfix" },
 						},
 					},
 				})
@@ -34,7 +34,7 @@ return {
 		{
 			"<leader>fe",
 			function()
-				require("neo-tree.command").execute({ position = 'left', toggle = true, })
+				require("neo-tree.command").execute({ position = "left", toggle = true })
 			end,
 			desc = "Explorer NeoTree (root dir)",
 		},
@@ -49,7 +49,7 @@ return {
 			"<leader>e",
 			desc = "Pop up NeoTree (root dir)",
 			function()
-				require("neo-tree.command").execute({ position = 'float', reveal = true, toggle = true })
+				require("neo-tree.command").execute({ position = "float", reveal = true, toggle = true })
 			end,
 			remap = true,
 		},

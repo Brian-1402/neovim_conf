@@ -1,9 +1,9 @@
 -- Assuming you have the following tables
 -- local plugins = {...} -- list of all plugins used by lazy.nvim
 local windows_disabled_plugins = { ... } -- list of plugins to be disabled on Windows
-local unix_disabled_plugins = { ... }  -- list of plugins to be disabled on Unix
-local minimal_setup = { ... }          -- list of plugins to be enabled in minimal setup
-local is_minimal = true or false       -- boolean to indicate if minimal setup is enabled
+local unix_disabled_plugins = { ... } -- list of plugins to be disabled on Unix
+local minimal_setup = { ... } -- list of plugins to be enabled in minimal setup
+local is_minimal = true or false -- boolean to indicate if minimal setup is enabled
 
 -- Function to check if a plugin is in a list
 local function isInList(list, plugin)
@@ -14,7 +14,6 @@ local function isInList(list, plugin)
 	end
 	return false
 end
-
 
 -- While iterating through plugins, could check whether it is string or table.
 -- Can avoid this by making your custom spec normalizing function which runs on all and generates a full spec table of all plugins
@@ -49,7 +48,7 @@ local function configurePlugins(plugins, windows_disabled_plugins, unix_disabled
 	if is_minimal then
 		enableMinimalSetup(plugins, minimal_setup)
 	else
-		if vim.fn.has('win32') == 1 then
+		if vim.fn.has("win32") == 1 then
 			disablePlugins(plugins, windows_disabled_plugins)
 		else
 			disablePlugins(plugins, unix_disabled_plugins)
@@ -61,18 +60,18 @@ end
 configurePlugins(plugins, windows_disabled_plugins, unix_disabled_plugins, minimal_setup, is_minimal)
 -- List of paths to Lazy.nvim plugin spec files
 local pluginSpecFiles = {
-	'plugins.alpha',
-	'plugins.cmp',
-	'plugins.editing',
-	'plugins.ibl',
-	'plugins.lsp',
-	'plugins.neoscroll',
-	'plugins.neo-tree',
-	'plugins.nvim-scrollbar',
-	'plugins.telescope',
-	'plugins.treesitter',
-	'plugins.ui',
-	'plugins.utils',
+	"plugins.alpha",
+	"plugins.cmp",
+	"plugins.editing",
+	"plugins.ibl",
+	"plugins.lsp",
+	"plugins.neoscroll",
+	"plugins.neo-tree",
+	"plugins.nvim-scrollbar",
+	"plugins.telescope",
+	"plugins.treesitter",
+	"plugins.ui",
+	"plugins.utils",
 }
 
 -- -- Will replace the above with below automated script
